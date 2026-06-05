@@ -1,9 +1,11 @@
-package a4.dogsignal.home
+package a4.dogsignal.ui.home
+
+import a4.dogsignal.ui.DognalTabState
 
 internal data class HomeUiState(
     val title: String,
     val subtitle: String,
-    val tabs: List<HomeTabState>,
+    val tabs: List<DognalTabState>,
     val selectedTabIndex: Int,
     val statusCard: HomeStatusCardState,
     val summaryCards: List<HomeSummaryCardState>,
@@ -14,14 +16,14 @@ internal data class HomeUiState(
             title = "도그널",
             subtitle = "오늘의 배변·패드 상태",
             tabs = listOf(
-                HomeTabState("홈"),
-                HomeTabState("기록"),
-                HomeTabState("설정"),
+                DognalTabState("홈"),
+                DognalTabState("기록"),
+                DognalTabState("설정"),
             ),
             selectedTabIndex = 0,
             statusCard = HomeStatusCardState(
                 title = "마지막 배변 감지 시간",
-                description = "마지막 기록 14분 전"
+                description = "마지막 기록 14분 전",
             ),
             summaryCards = listOf(
                 HomeSummaryCardState(
@@ -39,10 +41,6 @@ internal data class HomeUiState(
         )
     }
 }
-
-internal data class HomeTabState(
-    val label: String,
-)
 
 internal data class HomeStatusCardState(
     val title: String,

@@ -1,13 +1,13 @@
-package a4.dogsignal.home
+package a4.dogsignal.ui.home
 
-import a4.dogsignal.theme.dognalTypography
-import androidx.compose.foundation.Canvas
+import a4.dogsignal.ui.DognalTabs
+import a4.dogsignal.ui.theme.DognalColors
+import a4.dogsignal.ui.theme.dognalTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +41,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun HomeScreen(
     state: HomeUiState = HomeUiState.preview(),
+    onTabClick: (Int) -> Unit = {},
     onRecordClick: () -> Unit = {},
 ) {
     Column(
@@ -65,6 +61,7 @@ internal fun HomeScreen(
         DognalTabs(
             tabs = state.tabs,
             selectedTabIndex = state.selectedTabIndex,
+            onTabClick = onTabClick,
         )
         Spacer(Modifier.height(21.dp))
         StatusCard(state.statusCard)
@@ -99,52 +96,6 @@ private fun HomeHeader(
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
             lineHeight = 21.sp,
-        )
-    }
-}
-
-@Composable
-private fun HomeTabs(
-    tabs: List<HomeTabState>,
-    selectedTabIndex: Int,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom,
-    ) {
-        tabs.forEachIndexed { index, tab ->
-            HomeTab(
-                label = tab.label,
-                selected = index == selectedTabIndex,
-            )
-        }
-    }
-}
-
-@Composable
-private fun HomeTab(
-    label: String,
-    selected: Boolean,
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = label,
-            color = if (selected) HomeColors.TextPrimary else HomeColors.TextMuted,
-            style = MaterialTheme.typography.labelLarge,
-            fontSize = 13.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-            lineHeight = 16.sp,
-        )
-        Box(
-            modifier = Modifier
-                .width(if (selected) 69.dp else 0.dp)
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(if (selected) HomeColors.Green else Color.Transparent),
         )
     }
 }
