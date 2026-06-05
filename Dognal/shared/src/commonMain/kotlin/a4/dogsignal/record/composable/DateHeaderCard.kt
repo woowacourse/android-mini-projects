@@ -1,0 +1,63 @@
+package a4.dogsignal.record.composable
+
+import a4.dogsignal.theme.AppTypography
+import a4.dogsignal.theme.Divider
+import a4.dogsignal.theme.TextPrimary
+import a4.dogsignal.theme.TextSecondary
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+
+@Composable
+fun DateHeaderCard(
+    date: LocalDate,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .height(48.dp)
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(15.dp))
+            .background(color = Color.White)
+            .border(width = 2.dp, color = Divider, shape = RoundedCornerShape(15.dp))
+            .padding(start = 25.dp, end = 42.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "오늘",
+            color = TextPrimary,
+            style = AppTypography.titleLarge
+        )
+
+        Text(
+            text = date.toString(),
+            color = TextSecondary,
+            style = AppTypography.titleMedium,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DateHeaderCardPreview() {
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    DateHeaderCard(date = today.date)
+}
