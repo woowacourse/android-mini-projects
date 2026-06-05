@@ -1,6 +1,7 @@
-package a4.dogsignal.connection
+package a4.dogsignal.ui.connection
 
-import a4.dogsignal.theme.dognalTypography
+import a4.dogsignal.ui.theme.DognalColors
+import a4.dogsignal.ui.theme.dognalTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -76,7 +77,7 @@ private fun Header(
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(
             text = title,
-            color = DeviceConnectionColors.TextPrimary,
+            color = DognalColors.TextPrimary,
             style = MaterialTheme.typography.headlineMedium,
             fontSize = 27.sp,
             fontWeight = FontWeight.Bold,
@@ -84,7 +85,7 @@ private fun Header(
         )
         Text(
             text = description,
-            color = DeviceConnectionColors.TextSecondary,
+            color = DognalColors.TextSecondary,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
             lineHeight = 21.sp,
@@ -99,10 +100,10 @@ private fun DeviceCard(state: DeviceCardState) {
             .fillMaxWidth()
             .height(132.dp)
             .clip(RoundedCornerShape(28.dp))
-            .background(DeviceConnectionColors.DeviceCard)
+            .background(DognalColors.WarmBackground)
             .border(
                 width = 1.dp,
-                color = DeviceConnectionColors.DeviceCardStroke,
+                color = DognalColors.WarmOutline,
                 shape = RoundedCornerShape(28.dp),
             )
             .padding(horizontal = 28.dp),
@@ -117,7 +118,7 @@ private fun DeviceCard(state: DeviceCardState) {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
                 text = state.title,
-                color = DeviceConnectionColors.TextPrimary,
+                color = DognalColors.TextPrimary,
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -125,7 +126,7 @@ private fun DeviceCard(state: DeviceCardState) {
             )
             Text(
                 text = state.description,
-                color = DeviceConnectionColors.TextSecondary,
+                color = DognalColors.TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 13.sp,
                 lineHeight = 19.sp,
@@ -151,7 +152,7 @@ private fun ConnectionStep(step: ConnectionStepState) {
             .height(58.dp)
             .clip(RoundedCornerShape(18.dp))
             .background(Color.White)
-            .border(1.dp, DeviceConnectionColors.Stroke, RoundedCornerShape(18.dp))
+            .border(1.dp, DognalColors.Outline, RoundedCornerShape(18.dp))
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -211,8 +212,8 @@ private fun ConnectButton(
             .height(54.dp),
         shape = RoundedCornerShape(18.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = DeviceConnectionColors.Button,
-            contentColor = androidx.compose.ui.graphics.Color.White,
+            containerColor = DognalColors.Primary,
+            contentColor = Color.White,
         ),
     ) {
         Text(

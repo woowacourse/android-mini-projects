@@ -62,7 +62,7 @@ internal fun HomeScreen(
             subtitle = state.subtitle,
         )
         Spacer(Modifier.height(28.dp))
-        HomeTabs(
+        DognalTabs(
             tabs = state.tabs,
             selectedTabIndex = state.selectedTabIndex,
         )
@@ -87,7 +87,7 @@ private fun HomeHeader(
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
             text = title,
-            color = HomeColors.TextPrimary,
+            color = DognalColors.TextPrimary,
             style = MaterialTheme.typography.headlineMedium,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
@@ -95,7 +95,7 @@ private fun HomeHeader(
         )
         Text(
             text = subtitle,
-            color = HomeColors.TextSecondary,
+            color = DognalColors.TextSecondary,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
             lineHeight = 21.sp,
@@ -157,7 +157,7 @@ private fun StatusCard(state: HomeStatusCardState) {
             .height(118.dp)
             .clip(RoundedCornerShape(30.dp))
             .background(Color.White)
-            .border(1.dp, HomeColors.Stroke, RoundedCornerShape(30.dp))
+            .border(1.dp, DognalColors.Outline, RoundedCornerShape(30.dp))
             .padding(horizontal = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(20.dp),
@@ -173,7 +173,7 @@ private fun StatusCard(state: HomeStatusCardState) {
         ) {
             Text(
                 text = state.title,
-                color = HomeColors.TextPrimary,
+                color = DognalColors.TextPrimary,
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -181,7 +181,7 @@ private fun StatusCard(state: HomeStatusCardState) {
             )
             Text(
                 text = state.description,
-                color = HomeColors.TextSecondary,
+                color = DognalColors.TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 13.sp,
                 lineHeight = 18.sp,
@@ -251,7 +251,7 @@ private fun RecordButton(
             .fillMaxWidth()
             .height(72.dp)
             .clip(RoundedCornerShape(24.dp))
-            .background(HomeColors.Dark)
+            .background(DognalColors.TextPrimary)
             .clickable(onClick = onClick)
             .padding(horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -294,8 +294,8 @@ private data class SummaryPalette(
 
 private fun HomeSummaryTone.palette(): SummaryPalette = when (this) {
     HomeSummaryTone.Warm -> SummaryPalette(
-        background = HomeColors.WarmBackground,
-        stroke = HomeColors.WarmStroke,
+        background = DognalColors.WarmBackground,
+        stroke = DognalColors.WarmOutline,
         label = HomeColors.WarmLabel,
         value = HomeColors.WarmText,
     )
