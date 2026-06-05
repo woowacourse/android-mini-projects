@@ -1,6 +1,7 @@
 package a4.dogsignal.ui.home
 
 import a4.dogsignal.theme.AppTheme
+import a4.dogsignal.ui.component.DognalTabState
 import a4.dogsignal.ui.component.DognalTabs
 import a4.dogsignal.ui.home.composable.HomeHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun HomeScreen(
-    state: HomeUiState = HomeUiState.preview(),
+    state: HomeUiState,
     onTabClick: (Int) -> Unit = {},
     onRecordClick: () -> Unit = {},
 ) {
@@ -63,6 +64,34 @@ internal fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     AppTheme {
-        HomeScreen()
+        HomeScreen(
+            state = HomeUiState(
+                title = "도그널",
+                subtitle = "오늘의 배변·패드 상태",
+                tabs = listOf(
+                    DognalTabState("홈"),
+                    DognalTabState("기록"),
+                    DognalTabState("설정"),
+                ),
+                selectedTabIndex = 0,
+                statusCard = HomeStatusCardState(
+                    title = "마지막 배변 감지 시간",
+                    description = "마지막 기록 14분 전",
+                ),
+                summaryCards = listOf(
+                    HomeSummaryCardState(
+                        label = "소변",
+                        value = "4회",
+                        tone = HomeSummaryTone.Warm,
+                    ),
+                    HomeSummaryCardState(
+                        label = "대변",
+                        value = "1회",
+                        tone = HomeSummaryTone.Cool,
+                    ),
+                ),
+                actionLabel = "감지 시 LED 점등",
+            )
+        )
     }
 }
