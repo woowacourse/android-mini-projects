@@ -1,4 +1,4 @@
-package a4.dogsignal.connection
+package a4.dogsignal.ui.connection
 
 internal data class DeviceConnectionUiState(
     val title: String,
