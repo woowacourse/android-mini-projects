@@ -1,0 +1,19 @@
+package a4.dogsignal.common
+
+import a4.dogsignal.model.RecordType
+import a4.dogsignal.theme.AccentOrange
+import a4.dogsignal.theme.AccentPurple
+import a4.dogsignal.theme.BrandPrimary
+import androidx.compose.ui.graphics.Color
+
+fun RecordType.toColor(): Color = when (this) {
+    RecordType.URINE -> AccentOrange
+    RecordType.PAD   -> BrandPrimary
+    RecordType.STOOL -> AccentPurple
+}
+
+fun RecordType.toLabel(): String = when (this) {
+    RecordType.URINE -> "소변"
+    RecordType.PAD   -> "패드 방문"
+    RecordType.STOOL -> "대변"
+}
