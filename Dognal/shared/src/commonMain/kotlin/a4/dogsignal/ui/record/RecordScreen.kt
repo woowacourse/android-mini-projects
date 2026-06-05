@@ -1,11 +1,11 @@
-package a4.dogsignal.record
+package a4.dogsignal.ui.record
 
 import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.record.composable.AddRecordButton
-import a4.dogsignal.record.composable.DateHeaderCard
-import a4.dogsignal.record.composable.RecordHeader
-import a4.dogsignal.record.composable.RecordTimelineGroup
+import a4.dogsignal.ui.record.composable.AddRecordButton
+import a4.dogsignal.ui.record.composable.DateHeaderCard
+import a4.dogsignal.ui.record.composable.RecordHeader
+import a4.dogsignal.ui.record.composable.RecordTimelineGroup
 import a4.dogsignal.theme.RecordScreenBackground
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,6 +1,8 @@
-package a4.dogsignal.ui
+package a4.dogsignal.ui.component
 
-import a4.dogsignal.ui.theme.DognalColors
+import a4.dogsignal.theme.BrandPrimary
+import a4.dogsignal.theme.TextDisabled
+import a4.dogsignal.theme.TextPrimary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +59,7 @@ private fun DognalTab(
     ) {
         Text(
             text = label,
-            color = if (selected) DognalColors.TextPrimary else DognalColors.TextTertiary,
+            color = if (selected) TextPrimary else TextDisabled,
             style = MaterialTheme.typography.labelLarge,
             fontSize = 13.sp,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
@@ -68,7 +70,7 @@ private fun DognalTab(
                 .width(if (selected) 69.dp else 0.dp)
                 .height(4.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(if (selected) DognalColors.Primary else Color.Transparent),
+                .background(if (selected) BrandPrimary else Color.Transparent),
         )
     }
 }

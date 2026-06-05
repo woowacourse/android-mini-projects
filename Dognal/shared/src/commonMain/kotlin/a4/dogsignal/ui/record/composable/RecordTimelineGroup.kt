@@ -1,9 +1,8 @@
-package a4.dogsignal.record.composable
+package a4.dogsignal.ui.record.composable
 
 import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable

@@ -1,13 +1,13 @@
-package a4.dogsignal.record.composable
+package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.common.toColor
-import a4.dogsignal.common.toLabel
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.theme.AppTypography
+import a4.dogsignal.theme.AppTheme
 import a4.dogsignal.theme.BorderLight
 import a4.dogsignal.theme.Divider
 import a4.dogsignal.theme.TextPrimary
 import a4.dogsignal.theme.TextSecondary
+import a4.dogsignal.ui.record.toColor
+import a4.dogsignal.ui.record.toLabel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,7 +67,7 @@ fun RecordTimelineItem(
             Text(
                 text = time.toString(),
                 color = TextSecondary,
-                style = AppTypography.bodySmall,
+                style = MaterialTheme.typography.bodySmall,
             )
 
             Box(
@@ -81,7 +82,7 @@ fun RecordTimelineItem(
                 Text(
                     text = recordType.toLabel(),
                     color = TextPrimary,
-                    style = AppTypography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(top = 14.dp)
                 )
             }
@@ -93,8 +94,10 @@ fun RecordTimelineItem(
 )
 @Composable
 private fun RecordTimelineItemPreview() {
-    RecordTimelineItem(
-        time = LocalTime(14, 44),
-        recordType = RecordType.PAD
-    )
+    AppTheme {
+        RecordTimelineItem(
+            time = LocalTime(14, 44),
+            recordType = RecordType.PAD,
+        )
+    }
 }

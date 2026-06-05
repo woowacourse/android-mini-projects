@@ -1,12 +1,13 @@
-package a4.dogsignal.record.composable
+package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.theme.AppTypography
+import a4.dogsignal.theme.AppTheme
 import a4.dogsignal.theme.TextPrimary
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +33,7 @@ fun AddRecordButton(
     ) {
         Text(
             text = "수동 기록 추가",
-            style = AppTypography.labelLarge,
+            style = MaterialTheme.typography.labelLarge,
         )
     }
 }
@@ -40,5 +41,7 @@ fun AddRecordButton(
 @Preview(showBackground = true)
 @Composable
 private fun AddRecordButtonPreview() {
-    AddRecordButton(onClick = {})
+    AppTheme {
+        AddRecordButton(onClick = {})
+    }
 }

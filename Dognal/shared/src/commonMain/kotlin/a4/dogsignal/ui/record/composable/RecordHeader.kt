@@ -1,10 +1,11 @@
-package a4.dogsignal.record.composable
+package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.theme.AppTypography
+import a4.dogsignal.theme.AppTheme
 import a4.dogsignal.theme.TextPrimary
 import a4.dogsignal.theme.TextSecondary
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,13 +21,13 @@ fun RecordHeader(modifier: Modifier = Modifier) {
         Text(
             text = "배변 기록",
             color = TextPrimary,
-            style = AppTypography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
         )
 
         Text(
             text = "수정 가능한 타임라인",
             color = TextSecondary,
-            style = AppTypography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
         )
     }
 }
@@ -34,5 +35,7 @@ fun RecordHeader(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun RecordHeaderPreview() {
-    RecordHeader()
+    AppTheme {
+        RecordHeader()
+    }
 }

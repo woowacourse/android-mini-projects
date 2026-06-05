@@ -15,5 +15,7 @@ val AccentPurple = Color(0xFF7E67D9)
 
 // Surface / Border
 val RecordScreenBackground = Color(0xFFF8FAFF)
+val WarmSurface = Color(0xFFFFF6EC)
 val Divider = Color(0xFFE8EEF2)
+val WarmBorder = Color(0xFFFFE0C6)
 val BorderLight = Color(0xFFDCE4EA)

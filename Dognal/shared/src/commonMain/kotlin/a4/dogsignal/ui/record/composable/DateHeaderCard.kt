@@ -1,6 +1,6 @@
-package a4.dogsignal.record.composable
+package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.theme.AppTypography
+import a4.dogsignal.theme.AppTheme
 import a4.dogsignal.theme.Divider
 import a4.dogsignal.theme.TextPrimary
 import a4.dogsignal.theme.TextSecondary
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,13 +45,13 @@ fun DateHeaderCard(
         Text(
             text = "오늘",
             color = TextPrimary,
-            style = AppTypography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
 
         Text(
             text = date.toString(),
             color = TextSecondary,
-            style = AppTypography.titleMedium,
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }
@@ -59,5 +60,7 @@ fun DateHeaderCard(
 @Composable
 private fun DateHeaderCardPreview() {
     val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    DateHeaderCard(date = today.date)
+    AppTheme {
+        DateHeaderCard(date = today.date)
+    }
 }
