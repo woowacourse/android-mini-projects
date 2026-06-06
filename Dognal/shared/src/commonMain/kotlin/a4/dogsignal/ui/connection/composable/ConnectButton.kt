@@ -1,6 +1,6 @@
 package a4.dogsignal.ui.connection.composable
 
-import a4.dogsignal.theme.BrandPrimary
+import a4.dogsignal.ui.theme.BrandPrimary
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape

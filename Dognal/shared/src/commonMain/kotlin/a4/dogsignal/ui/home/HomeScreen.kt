@@ -1,6 +1,6 @@
 package a4.dogsignal.ui.home
 
-import a4.dogsignal.theme.AppTheme
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.component.DognalTabState
 import a4.dogsignal.ui.component.DognalTabs
 import a4.dogsignal.ui.home.composable.HomeHeader

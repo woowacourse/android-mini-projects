@@ -1,9 +1,9 @@
 package a4.dogsignal.ui.record
 
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.theme.AccentOrange
-import a4.dogsignal.theme.AccentPurple
-import a4.dogsignal.theme.BrandPrimary
+import a4.dogsignal.ui.theme.AccentOrange
+import a4.dogsignal.ui.theme.AccentPurple
+import a4.dogsignal.ui.theme.BrandPrimary
 import androidx.compose.ui.graphics.Color
 
 fun RecordType.toColor(): Color = when (this) {

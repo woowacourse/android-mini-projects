@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.connection
 
-import a4.dogsignal.theme.AppTheme
-import a4.dogsignal.theme.RecordScreenBackground
+import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.RecordScreenBackground
 import a4.dogsignal.ui.connection.composable.ConnectButton
 import a4.dogsignal.ui.connection.composable.ConnectionHeader
 import a4.dogsignal.ui.connection.composable.ConnectionStepList

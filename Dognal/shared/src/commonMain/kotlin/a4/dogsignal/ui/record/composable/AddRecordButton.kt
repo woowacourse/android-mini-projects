@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.theme.AppTheme
-import a4.dogsignal.theme.TextPrimary
+import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.TextPrimary
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape

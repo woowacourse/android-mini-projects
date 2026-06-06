@@ -1,9 +1,9 @@
 package a4.dogsignal.ui.record.composable
 
-import a4.dogsignal.theme.AppTheme
-import a4.dogsignal.theme.Divider
-import a4.dogsignal.theme.TextPrimary
-import a4.dogsignal.theme.TextSecondary
+import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.Divider
+import a4.dogsignal.ui.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextSecondary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

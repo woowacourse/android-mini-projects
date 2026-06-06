@@ -1,9 +1,9 @@
 package a4.dogsignal.ui.connection.composable
 
-import a4.dogsignal.theme.TextPrimary
-import a4.dogsignal.theme.TextSecondary
-import a4.dogsignal.theme.WarmBorder
-import a4.dogsignal.theme.WarmSurface
+import a4.dogsignal.ui.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextSecondary
+import a4.dogsignal.ui.theme.WarmBorder
+import a4.dogsignal.ui.theme.WarmSurface
 import a4.dogsignal.ui.connection.DeviceCardState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

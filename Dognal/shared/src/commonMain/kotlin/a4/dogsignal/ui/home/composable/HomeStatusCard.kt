@@ -1,8 +1,8 @@
 package a4.dogsignal.ui.home.composable
 
-import a4.dogsignal.theme.Divider
-import a4.dogsignal.theme.TextPrimary
-import a4.dogsignal.theme.TextSecondary
+import a4.dogsignal.ui.theme.Divider
+import a4.dogsignal.ui.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextSecondary
 import a4.dogsignal.ui.home.HomeStatusCardState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

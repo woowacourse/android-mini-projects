@@ -6,7 +6,7 @@ import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordHeader
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
-import a4.dogsignal.theme.RecordScreenBackground
+import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,9 +1,9 @@
 package a4.dogsignal.ui.home.composable
 
-import a4.dogsignal.theme.AccentOrange
-import a4.dogsignal.theme.AccentPurple
-import a4.dogsignal.theme.WarmBorder
-import a4.dogsignal.theme.WarmSurface
+import a4.dogsignal.ui.theme.AccentOrange
+import a4.dogsignal.ui.theme.AccentPurple
+import a4.dogsignal.ui.theme.WarmBorder
+import a4.dogsignal.ui.theme.WarmSurface
 import a4.dogsignal.ui.home.HomeColors
 import a4.dogsignal.ui.home.HomeSummaryCardState
 import a4.dogsignal.ui.home.HomeSummaryTone

@@ -1,6 +1,6 @@
 package a4.dogsignal.ui.connection.composable
 
-import a4.dogsignal.theme.Divider
+import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.connection.ConnectionStepState
 import a4.dogsignal.ui.connection.ConnectionStepStatus
 import a4.dogsignal.ui.connection.DeviceConnectionColors

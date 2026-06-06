@@ -1,4 +1,4 @@
-package a4.dogsignal.theme
+package a4.dogsignal.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,6 +1,6 @@
 package a4.dogsignal.ui.home.composable
 
-import a4.dogsignal.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.home.HomeColors
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

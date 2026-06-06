@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.home.composable
 
-import a4.dogsignal.theme.TextPrimary
-import a4.dogsignal.theme.TextSecondary
+import a4.dogsignal.ui.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextSecondary
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme

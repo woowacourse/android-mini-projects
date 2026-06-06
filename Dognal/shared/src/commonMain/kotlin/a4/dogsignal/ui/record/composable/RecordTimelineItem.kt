@@ -1,11 +1,11 @@
 package a4.dogsignal.ui.record.composable
 
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.theme.AppTheme
-import a4.dogsignal.theme.BorderLight
-import a4.dogsignal.theme.Divider
-import a4.dogsignal.theme.TextPrimary
-import a4.dogsignal.theme.TextSecondary
+import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.BorderLight
+import a4.dogsignal.ui.theme.Divider
+import a4.dogsignal.ui.theme.TextPrimary
+import a4.dogsignal.ui.theme.TextSecondary
 import a4.dogsignal.ui.record.toColor
 import a4.dogsignal.ui.record.toLabel
 import androidx.compose.foundation.background

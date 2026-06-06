@@ -1,8 +1,8 @@
 package a4.dogsignal.ui.component
 
-import a4.dogsignal.theme.BrandPrimary
-import a4.dogsignal.theme.TextDisabled
-import a4.dogsignal.theme.TextPrimary
+import a4.dogsignal.ui.theme.BrandPrimary
+import a4.dogsignal.ui.theme.TextDisabled
+import a4.dogsignal.ui.theme.TextPrimary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
