@@ -27,7 +27,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
 @Composable
-fun DateHeaderCard(
+internal fun DateHeaderCard(
     date: LocalDate,
     modifier: Modifier = Modifier,
 ) {

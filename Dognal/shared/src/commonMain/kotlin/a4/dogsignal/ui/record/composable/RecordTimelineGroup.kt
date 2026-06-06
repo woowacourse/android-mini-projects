@@ -14,7 +14,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun RecordTimelineGroup(
+internal fun RecordTimelineGroup(
     recordList: List<Record>,
     modifier: Modifier = Modifier,
 ) {

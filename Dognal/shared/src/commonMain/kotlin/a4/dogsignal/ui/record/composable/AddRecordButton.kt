@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddRecordButton(
+internal fun AddRecordButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun RecordTimelineItem(
+internal fun RecordTimelineItem(
     time: LocalTime,
     recordType: RecordType,
     modifier: Modifier = Modifier

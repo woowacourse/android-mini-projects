@@ -22,7 +22,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun RecordScreen(
+internal fun RecordScreen(
     date: LocalDate,
     recordList: List<Record>,
     onAddRecordClick: () -> Unit,
