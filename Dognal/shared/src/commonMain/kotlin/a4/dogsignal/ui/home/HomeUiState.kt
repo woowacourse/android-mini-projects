@@ -1,11 +1,9 @@
 package a4.dogsignal.ui.home
 
-import a4.dogsignal.ui.component.DognalTabState
-
 internal data class HomeUiState(
     val title: String,
     val subtitle: String,
-    val tabs: List<DognalTabState>,
+    val tabs: List<String>,
     val selectedTabIndex: Int,
     val statusCard: HomeStatusCardState,
     val summaryCards: List<HomeSummaryCardState>,

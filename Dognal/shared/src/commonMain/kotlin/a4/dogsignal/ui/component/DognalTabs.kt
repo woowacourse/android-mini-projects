@@ -21,12 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun DognalTabs(
-    tabs: List<DognalTabState>,
+    tabs: List<String>,
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -34,11 +35,10 @@ internal fun DognalTabs(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom,
     ) {
         tabs.forEachIndexed { index, tab ->
             DognalTab(
-                label = tab.label,
+                label = tab,
                 selected = index == selectedTabIndex,
                 onClick = { onTabClick(index) },
             )
@@ -61,16 +61,26 @@ private fun DognalTab(
             text = label,
             color = if (selected) TextPrimary else TextDisabled,
             style = MaterialTheme.typography.labelLarge,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             lineHeight = 16.sp,
         )
         Box(
             modifier = Modifier
-                .width(if (selected) 69.dp else 0.dp)
+                .width(42.dp)
                 .height(4.dp)
                 .clip(RoundedCornerShape(2.dp))
                 .background(if (selected) BrandPrimary else Color.Transparent),
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DognalTabsPreview() {
+    DognalTabs(
+        tabs = listOf("홈", "기록"),
+        selectedTabIndex = 0,
+        onTabClick = {},
+    )
 }
