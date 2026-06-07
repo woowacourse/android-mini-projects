@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.record
 
-import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
+import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordHeader
@@ -12,20 +12,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import a4.dogsignal.model.Record
 
 @Composable
 internal fun RecordScreen(
-    date: LocalDate,
-    recordList: List<Record>,
+    state: RecordUiState,
     onAddRecordClick: () -> Unit,
+    onTabClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -43,14 +46,19 @@ internal fun RecordScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            RecordHeader(
-                modifier = Modifier.padding(start = 16.dp, top = 20.dp)
+            RecordHeader(Modifier.padding(start = 16.dp, top = 20.dp))
+            Spacer(Modifier.height(15.dp))
+            DognalTabs(
+                tabs = state.tabs,
+                selectedTabIndex = state.selectedTabIndex,
+                onTabClick = onTabClick,
+                modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
             )
             Spacer(Modifier.height(30.dp))
-            DateHeaderCard(date = date, modifier = Modifier.padding(horizontal = 16.dp))
+            DateHeaderCard(date = state.date, modifier = Modifier.padding(horizontal = 16.dp))
             Spacer(Modifier.height(32.dp))
             RecordTimelineGroup(
-                recordList = recordList,
+                recordList = state.recordList,
                 modifier = Modifier.padding(start = 28.dp, end = 16.dp)
             )
         }
@@ -61,19 +69,22 @@ internal fun RecordScreen(
 @Composable
 private fun RecordScreenPreview() {
     val date = LocalDate(2026, 6, 5)
-    val recordList = listOf(
-        Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.STOOL),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-    )
-
     RecordScreen(
-        date = LocalDate(2026, 6, 5),
-        recordList = recordList,
-        onAddRecordClick = {}
+        state = RecordUiState(
+            tabs = listOf("홈", "기록"),
+            selectedTabIndex = 1,
+            date = date,
+            recordList = listOf(
+                Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.STOOL),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+            ),
+        ),
+        onAddRecordClick = {},
+        onTabClick = {},
     )
 }

@@ -4,6 +4,7 @@ import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
+import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,13 +45,13 @@ internal fun DateHeaderCard(
         Text(
             text = "오늘",
             color = TextPrimary,
-            style = MaterialTheme.typography.titleLarge,
+            style = appTypography().labelLarge,
         )
 
         Text(
             text = date.toString(),
             color = TextSecondary,
-            style = MaterialTheme.typography.titleMedium,
+            style = appTypography().labelSmall,
         )
     }
 }

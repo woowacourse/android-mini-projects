@@ -1,13 +1,14 @@
 package a4.dogsignal.ui.record.composable
 
 import a4.dogsignal.model.RecordType
+import a4.dogsignal.ui.common.toColor
+import a4.dogsignal.ui.common.toLabel
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BorderLight
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.common.toColor
-import a4.dogsignal.ui.common.toLabel
+import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.datetime.LocalTime
 
 @Composable
@@ -68,6 +71,8 @@ internal fun RecordTimelineItem(
                 text = time.toString(),
                 color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp
             )
 
             Box(
@@ -82,7 +87,7 @@ internal fun RecordTimelineItem(
                 Text(
                     text = recordType.toLabel(),
                     color = TextPrimary,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = appTypography().bodyLarge,
                     modifier = Modifier.padding(top = 14.dp)
                 )
             }
@@ -90,7 +95,8 @@ internal fun RecordTimelineItem(
     }
 }
 
-@Preview(showBackground = true
+@Preview(
+    showBackground = true
 )
 @Composable
 private fun RecordTimelineItemPreview() {
