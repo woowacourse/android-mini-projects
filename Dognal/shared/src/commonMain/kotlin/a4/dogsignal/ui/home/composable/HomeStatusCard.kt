@@ -1,10 +1,10 @@
 package a4.dogsignal.ui.home.composable
 
 import a4.dogsignal.ui.home.HomeStatusCardState
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,12 +58,12 @@ internal fun HomeStatusCard(
             Text(
                 text = state.title,
                 color = TextPrimary,
-                style = appTypography().bodyLarge,
+                style = MaterialTheme.typography.bodyLarge,
             )
             Text(
                 text = state.description,
                 color = TextSecondary,
-                style = appTypography().bodySmall,
+                style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -73,10 +74,12 @@ internal fun HomeStatusCard(
 @Preview
 @Composable
 private fun HomeStatusCardPreview() {
-    HomeStatusCard(
-        state = HomeStatusCardState(
-            title = "마지막 배변 감지 시간",
-            description = "마지막 기록 14분 전"
+    AppTheme {
+        HomeStatusCard(
+            state = HomeStatusCardState(
+                title = "마지막 배변 감지 시간",
+                description = "마지막 기록 14분 전"
+            )
         )
-    )
+    }
 }

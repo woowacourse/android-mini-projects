@@ -1,11 +1,11 @@
 package a4.dogsignal.ui.connection.composable
 
 import a4.dogsignal.ui.connection.DeviceCardState
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
 import a4.dogsignal.ui.theme.WarmBorder
 import a4.dogsignal.ui.theme.WarmSurface
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,12 +58,12 @@ internal fun DeviceCard(
             Text(
                 text = state.title,
                 color = TextPrimary,
-                style = appTypography().titleLarge
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 text = state.description,
                 color = TextSecondary,
-                style = appTypography().bodySmall
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
@@ -71,10 +72,12 @@ internal fun DeviceCard(
 @Preview(showBackground = true)
 @Composable
 private fun DeviceCardPreview() {
-    DeviceCard(
-        state = DeviceCardState(
-            title = "Arduino 키트 연결",
-            description = "로드셀 · 초음파",
-        ),
-    )
+    AppTheme {
+        DeviceCard(
+            state = DeviceCardState(
+                title = "Arduino 키트 연결",
+                description = "로드셀 · 초음파",
+            ),
+        )
+    }
 }

@@ -1,10 +1,11 @@
 package a4.dogsignal.ui.connection.composable
 
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,12 +25,12 @@ internal fun ConnectionHeader(
         Text(
             text = title,
             color = TextPrimary,
-            style = appTypography().headlineLarge
+            style = MaterialTheme.typography.headlineLarge
         )
         Text(
             text = description,
             color = TextSecondary,
-            style = appTypography().headlineSmall
+            style = MaterialTheme.typography.headlineSmall
         )
     }
 }
@@ -37,8 +38,10 @@ internal fun ConnectionHeader(
 @Preview(showBackground = true)
 @Composable
 private fun ConnectionHeaderPreview() {
-    ConnectionHeader(
-        title = "기기연결",
-        description = "센서 키트를 앱과 연결해요",
-    )
+    AppTheme {
+        ConnectionHeader(
+            title = "기기연결",
+            description = "센서 키트를 앱과 연결해요",
+        )
+    }
 }

@@ -3,10 +3,10 @@ package a4.dogsignal.ui.connection.composable
 import a4.dogsignal.ui.connection.ConnectionStepState
 import a4.dogsignal.ui.connection.ConnectionStepStatus
 import a4.dogsignal.ui.connection.DeviceConnectionColors
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextTertiary
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,7 +42,7 @@ internal fun ConnectionStepList(steps: List<ConnectionStepState>) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
             text = "연결 전 체크",
-            style = appTypography().titleMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = TextPrimary
         )
 
@@ -112,11 +112,13 @@ private fun StepStatusIcon(status: ConnectionStepStatus) {
 @Preview(showBackground = true)
 @Composable
 private fun ConnectionStepListPreview() {
-    ConnectionStepList(
-        steps = listOf(
-            ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
-            ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
-            ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
-        ),
-    )
+    AppTheme {
+        ConnectionStepList(
+            steps = listOf(
+                ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
+                ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
+                ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
+            ),
+        )
+    }
 }

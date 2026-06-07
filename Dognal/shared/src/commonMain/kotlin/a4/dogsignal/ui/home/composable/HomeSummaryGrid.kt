@@ -4,13 +4,13 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.home.HomeSummaryCardState
 import a4.dogsignal.ui.common.toColor
 import a4.dogsignal.ui.common.toLabel
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandStroke
 import a4.dogsignal.ui.theme.BrandSurface
 import a4.dogsignal.ui.theme.CoolBackground
 import a4.dogsignal.ui.theme.CoolStroke
 import a4.dogsignal.ui.theme.WarmBorder
 import a4.dogsignal.ui.theme.WarmSurface
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -66,7 +67,7 @@ private fun HomeSummaryCard(
         Text(
             text = state.recordType.toLabel(),
             color = palette.label,
-            style = appTypography().labelLarge
+            style = MaterialTheme.typography.labelLarge
         )
         Text(
             text = "${state.count}회",
@@ -113,20 +114,22 @@ private fun RecordType.palette(): SummaryPalette = when (this) {
 @Preview
 @Composable
 private fun HomeSummaryGridPreview() {
-    HomeSummaryGrid(
-        cards = listOf(
-            HomeSummaryCardState(
-                recordType = RecordType.URINE,
-                count = 2,
+    AppTheme {
+        HomeSummaryGrid(
+            cards = listOf(
+                HomeSummaryCardState(
+                    recordType = RecordType.URINE,
+                    count = 2,
+                ),
+                HomeSummaryCardState(
+                    recordType = RecordType.STOOL,
+                    count = 2,
+                ),
+                HomeSummaryCardState(
+                    recordType = RecordType.PAD,
+                    count = 2,
+                ),
             ),
-            HomeSummaryCardState(
-                recordType = RecordType.STOOL,
-                count = 2,
-            ),
-            HomeSummaryCardState(
-                recordType = RecordType.PAD,
-                count = 2,
-            ),
-        ),
-    )
+        )
+    }
 }

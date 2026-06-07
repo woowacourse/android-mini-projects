@@ -8,7 +8,6 @@ import a4.dogsignal.ui.theme.BorderLight
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -87,7 +86,7 @@ internal fun RecordTimelineItem(
                 Text(
                     text = recordType.toLabel(),
                     color = TextPrimary,
-                    style = appTypography().bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(top = 14.dp)
                 )
             }
