@@ -66,12 +66,12 @@ private fun HomeSummaryCard(
     ) {
         Text(
             text = state.recordType.toLabel(),
-            color = palette.label,
+            color = palette.textColor,
             style = MaterialTheme.typography.labelLarge
         )
         Text(
             text = "${state.count}회",
-            color = palette.value,
+            color = palette.textColor,
             fontSize = 36.sp,
             fontWeight = FontWeight.ExtraBold,
             lineHeight = 36.sp,
@@ -84,30 +84,26 @@ private fun HomeSummaryCard(
 private data class SummaryPalette(
     val background: Color,
     val stroke: Color,
-    val label: Color,
-    val value: Color,
+    val textColor: Color,
 )
 
 private fun RecordType.palette(): SummaryPalette = when (this) {
     RecordType.URINE -> SummaryPalette(
         background = WarmSurface,
         stroke = WarmBorder,
-        label = toColor(),
-        value = toColor(),
+        textColor = toColor(),
     )
 
     RecordType.STOOL -> SummaryPalette(
         background = CoolBackground,
         stroke = CoolStroke,
-        label = toColor(),
-        value = toColor(),
+        textColor = toColor(),
     )
 
     RecordType.PAD -> SummaryPalette(
         background = BrandSurface,
         stroke = BrandStroke,
-        label = toColor(),
-        value = toColor(),
+        textColor = toColor(),
     )
 }
 
