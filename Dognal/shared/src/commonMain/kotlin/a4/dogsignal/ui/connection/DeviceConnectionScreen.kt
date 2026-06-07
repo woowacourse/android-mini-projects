@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.connection
 
+import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.connection.composable.ConnectButton
-import a4.dogsignal.ui.connection.composable.ConnectionHeader
 import a4.dogsignal.ui.connection.composable.ConnectionStepList
 import a4.dogsignal.ui.connection.composable.DeviceCard
 import a4.dogsignal.ui.theme.AppTheme
@@ -35,7 +35,10 @@ internal fun DeviceConnectionScreen(
             .padding(horizontal = 31.dp),
     ) {
         Spacer(Modifier.height(28.dp))
-        ConnectionHeader(state.title, state.description)
+        ScreenHeader(
+            title = "기기연결",
+            subtitle = "센서 키트를 앱과 연결해요",
+        )
         Spacer(Modifier.height(32.dp))
         DeviceCard(state.deviceCard)
         Spacer(Modifier.height(28.dp))
@@ -55,8 +58,6 @@ private fun DeviceConnectionScreenPreview() {
     AppTheme {
         DeviceConnectionScreen(
             state = DeviceConnectionUiState(
-                title = "기기연결",
-                description = "센서 키트를 앱과 연결해요",
                 deviceCard = DeviceCardState(
                     title = "Arduino 키트 연결",
                     description = "로드셀 · 초음파",

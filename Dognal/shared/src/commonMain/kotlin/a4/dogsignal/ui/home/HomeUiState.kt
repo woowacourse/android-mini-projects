@@ -4,8 +4,6 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 
 internal data class HomeUiState(
-    val title: String,
-    val subtitle: String,
     val selectedTab: DognalTab,
     val statusCard: HomeStatusCardState,
     val summaryCards: List<HomeSummaryCardState>,

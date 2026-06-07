@@ -3,9 +3,10 @@ package a4.dogsignal.ui.record
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
+import a4.dogsignal.ui.common.component.ScreenHeader
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
-import a4.dogsignal.ui.record.composable.RecordHeader
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
 import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,11 @@ internal fun RecordScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            RecordHeader(Modifier.padding(start = 16.dp, top = 20.dp))
+            ScreenHeader(
+                title = "배변 기록",
+                subtitle = "수정 가능한 타임라인",
+                modifier = Modifier.padding(start = 16.dp, top = 20.dp)
+            )
             Spacer(Modifier.height(15.dp))
             DognalTabs(
                 selectedTab = state.selectedTab,
@@ -69,21 +74,23 @@ internal fun RecordScreen(
 @Composable
 private fun RecordScreenPreview() {
     val date = LocalDate(2026, 6, 5)
-    RecordScreen(
-        state = RecordUiState(
-            selectedTab = DognalTab.RECORD,
-            date = date,
-            recordList = listOf(
-                Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.STOOL),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+    AppTheme {
+        RecordScreen(
+            state = RecordUiState(
+                selectedTab = DognalTab.RECORD,
+                date = date,
+                recordList = listOf(
+                    Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.STOOL),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                ),
             ),
-        ),
-        onAddRecordClick = {},
-        onTabClick = {},
-    )
+            onAddRecordClick = {},
+            onTabClick = {},
+        )
+    }
 }

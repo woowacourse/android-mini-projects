@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.home.composable
+package a4.dogsignal.ui.common.component
 
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.TextPrimary
@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun HomeHeader(
+fun ScreenHeader(
     title: String,
     subtitle: String,
+    modifier: Modifier = Modifier,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
+    ) {
         Text(
             text = title,
             color = TextPrimary,
@@ -32,11 +37,11 @@ internal fun HomeHeader(
 
 @Preview(showBackground = true)
 @Composable
-private fun HomeHeaderPreview() {
+private fun ScreenHeaderPreview() {
     AppTheme {
-        HomeHeader(
-            title = "Mong의 하루",
-            subtitle = "오늘의 배변·패드 상태",
+        ScreenHeader(
+            title = "제목",
+            subtitle = "부제목 입니다",
         )
     }
 }

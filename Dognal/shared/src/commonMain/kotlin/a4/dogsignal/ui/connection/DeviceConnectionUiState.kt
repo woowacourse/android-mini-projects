@@ -1,8 +1,6 @@
 package a4.dogsignal.ui.connection
 
 internal data class DeviceConnectionUiState(
-    val title: String,
-    val description: String,
     val deviceCard: DeviceCardState,
     val steps: List<ConnectionStepState>,
     val actionLabel: String,

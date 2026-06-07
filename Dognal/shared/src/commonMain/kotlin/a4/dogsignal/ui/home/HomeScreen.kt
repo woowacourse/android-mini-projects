@@ -5,7 +5,7 @@ import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.HomeBackground
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
-import a4.dogsignal.ui.home.composable.HomeHeader
+import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
 import a4.dogsignal.ui.home.composable.HomeStatusCard
 import a4.dogsignal.ui.home.composable.HomeSummaryGrid
@@ -41,9 +41,9 @@ internal fun HomeScreen(
             .padding(horizontal = 31.dp),
     ) {
         Spacer(Modifier.height(28.dp))
-        HomeHeader(
-            title = state.title,
-            subtitle = state.subtitle,
+        ScreenHeader(
+            title = "도그널",
+            subtitle = "오늘의 배변·패드 상태",
         )
         Spacer(Modifier.height(28.dp))
         DognalTabs(
@@ -70,8 +70,6 @@ private fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
             state = HomeUiState(
-                title = "도그널",
-                subtitle = "오늘의 배변·패드 상태",
                 selectedTab = DognalTab.HOME,
                 statusCard = HomeStatusCardState(
                     title = "마지막 배변 감지 시간",
