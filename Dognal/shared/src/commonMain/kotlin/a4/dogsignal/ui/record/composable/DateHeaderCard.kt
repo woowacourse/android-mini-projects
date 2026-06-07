@@ -21,14 +21,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
 
 @Composable
 internal fun DateHeaderCard(
-    date: LocalDate,
+    label: String,
+    date: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -43,13 +40,13 @@ internal fun DateHeaderCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "오늘",
+            text = label,
             color = TextPrimary,
             style = MaterialTheme.typography.labelLarge,
         )
 
         Text(
-            text = date.toString(),
+            text = date,
             color = TextSecondary,
             style = MaterialTheme.typography.labelSmall,
         )
@@ -59,8 +56,10 @@ internal fun DateHeaderCard(
 @Preview
 @Composable
 private fun DateHeaderCardPreview() {
-    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     AppTheme {
-        DateHeaderCard(date = today.date)
+        DateHeaderCard(
+            label = "오늘",
+            date = "2026-06-05"
+        )
     }
 }

@@ -1,13 +1,14 @@
 package a4.dogsignal.ui.record
 
+import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.common.component.ScreenHeader
-import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
-import a4.dogsignal.model.Record
 
 @Composable
 internal fun RecordScreen(
@@ -60,7 +60,11 @@ internal fun RecordScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
             )
             Spacer(Modifier.height(30.dp))
-            DateHeaderCard(date = state.date, modifier = Modifier.padding(horizontal = 16.dp))
+            DateHeaderCard(
+                label = state.dateLabel,
+                date = state.dateValue,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
             Spacer(Modifier.height(32.dp))
             RecordTimelineGroup(
                 recordList = state.recordList,
@@ -78,15 +82,34 @@ private fun RecordScreenPreview() {
         RecordScreen(
             state = RecordUiState(
                 selectedTab = DognalTab.RECORD,
-                date = date,
+                dateLabel = "오늘",
+                dateValue = date.toString(),
                 recordList = listOf(
                     Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.STOOL),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-                    Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.URINE
+                    ),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.URINE
+                    ),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.STOOL
+                    ),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.URINE
+                    ),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.URINE
+                    ),
+                    Record(
+                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                        type = RecordType.URINE
+                    ),
                 ),
             ),
             onAddRecordClick = {},
