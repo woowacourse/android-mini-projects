@@ -25,29 +25,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+internal enum class DognalTab(val label: String) {
+    HOME("홈"),
+    RECORD("기록"),
+}
+
 @Composable
 internal fun DognalTabs(
-    tabs: List<String>,
-    selectedTabIndex: Int,
-    onTabClick: (Int) -> Unit,
+    selectedTab: DognalTab,
+    onTabClick: (DognalTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        tabs.forEachIndexed { index, tab ->
-            DognalTab(
-                label = tab,
-                selected = index == selectedTabIndex,
-                onClick = { onTabClick(index) },
+        DognalTab.entries.forEach { tab ->
+            DognalTabItem(
+                label = tab.label,
+                selected = tab == selectedTab,
+                onClick = { onTabClick(tab) },
             )
         }
     }
 }
 
 @Composable
-private fun DognalTab(
+private fun DognalTabItem(
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -79,8 +83,7 @@ private fun DognalTab(
 @Composable
 private fun DognalTabsPreview() {
     DognalTabs(
-        tabs = listOf("홈", "기록"),
-        selectedTabIndex = 0,
+        selectedTab = DognalTab.HOME,
         onTabClick = {},
     )
 }

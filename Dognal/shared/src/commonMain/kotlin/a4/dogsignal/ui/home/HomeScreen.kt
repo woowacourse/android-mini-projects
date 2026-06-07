@@ -3,6 +3,7 @@ package a4.dogsignal.ui.home
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.HomeBackground
+import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.home.composable.HomeHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
@@ -28,7 +29,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun HomeScreen(
     state: HomeUiState,
-    onTabClick: (Int) -> Unit = {},
+    onTabClick: (DognalTab) -> Unit = {},
     onRecordClick: () -> Unit = {},
 ) {
     Column(
@@ -46,8 +47,7 @@ internal fun HomeScreen(
         )
         Spacer(Modifier.height(28.dp))
         DognalTabs(
-            tabs = state.tabs,
-            selectedTabIndex = state.selectedTabIndex,
+            selectedTab = state.selectedTab,
             onTabClick = onTabClick,
             modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
         )
@@ -72,8 +72,7 @@ private fun HomeScreenPreview() {
             state = HomeUiState(
                 title = "도그널",
                 subtitle = "오늘의 배변·패드 상태",
-                tabs = listOf("홈", "기록"),
-                selectedTabIndex = 0,
+                selectedTab = DognalTab.HOME,
                 statusCard = HomeStatusCardState(
                     title = "마지막 배변 감지 시간",
                     description = "마지막 기록 14분 전",

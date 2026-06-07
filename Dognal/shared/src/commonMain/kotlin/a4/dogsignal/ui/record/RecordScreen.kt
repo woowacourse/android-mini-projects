@@ -1,6 +1,7 @@
 package a4.dogsignal.ui.record
 
 import a4.dogsignal.model.RecordType
+import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
@@ -28,7 +29,7 @@ import a4.dogsignal.model.Record
 internal fun RecordScreen(
     state: RecordUiState,
     onAddRecordClick: () -> Unit,
-    onTabClick: (Int) -> Unit,
+    onTabClick: (DognalTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -49,8 +50,7 @@ internal fun RecordScreen(
             RecordHeader(Modifier.padding(start = 16.dp, top = 20.dp))
             Spacer(Modifier.height(15.dp))
             DognalTabs(
-                tabs = state.tabs,
-                selectedTabIndex = state.selectedTabIndex,
+                selectedTab = state.selectedTab,
                 onTabClick = onTabClick,
                 modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
             )
@@ -71,8 +71,7 @@ private fun RecordScreenPreview() {
     val date = LocalDate(2026, 6, 5)
     RecordScreen(
         state = RecordUiState(
-            tabs = listOf("홈", "기록"),
-            selectedTabIndex = 1,
+            selectedTab = DognalTab.RECORD,
             date = date,
             recordList = listOf(
                 Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
