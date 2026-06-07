@@ -1,6 +1,8 @@
 package a4.dogsignal.ui.home
 
+import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.HomeBackground
 import a4.dogsignal.ui.component.DognalTabs
 import a4.dogsignal.ui.home.composable.HomeHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
@@ -15,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +34,7 @@ internal fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(HomeColors.Background)
+            .background(HomeBackground)
             .windowInsetsPadding(WindowInsets.statusBars)
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 31.dp),
@@ -45,6 +49,7 @@ internal fun HomeScreen(
             tabs = state.tabs,
             selectedTabIndex = state.selectedTabIndex,
             onTabClick = onTabClick,
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
         )
         Spacer(Modifier.height(21.dp))
         HomeStatusCard(state.statusCard)
@@ -67,7 +72,7 @@ private fun HomeScreenPreview() {
             state = HomeUiState(
                 title = "도그널",
                 subtitle = "오늘의 배변·패드 상태",
-                tabs = listOf("홈", "기록", "설정"),
+                tabs = listOf("홈", "기록"),
                 selectedTabIndex = 0,
                 statusCard = HomeStatusCardState(
                     title = "마지막 배변 감지 시간",
@@ -75,14 +80,12 @@ private fun HomeScreenPreview() {
                 ),
                 summaryCards = listOf(
                     HomeSummaryCardState(
-                        label = "소변",
-                        value = "4회",
-                        tone = HomeSummaryTone.Warm,
+                        recordType = RecordType.URINE,
+                        count = 4,
                     ),
                     HomeSummaryCardState(
-                        label = "대변",
-                        value = "1회",
-                        tone = HomeSummaryTone.Cool,
+                        recordType = RecordType.STOOL,
+                        count = 1,
                     ),
                 ),
                 actionLabel = "감지 시 LED 점등",

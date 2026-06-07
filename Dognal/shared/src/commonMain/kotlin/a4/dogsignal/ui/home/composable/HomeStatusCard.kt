@@ -1,9 +1,10 @@
 package a4.dogsignal.ui.home.composable
 
+import a4.dogsignal.ui.home.HomeStatusCardState
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.home.HomeStatusCardState
+import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,25 +16,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dognal.shared.generated.resources.Res
 import dognal.shared.generated.resources.dogFoot
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun HomeStatusCard(state: HomeStatusCardState) {
+internal fun HomeStatusCard(
+    state: HomeStatusCardState,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(118.dp)
             .clip(RoundedCornerShape(30.dp))
@@ -55,20 +57,26 @@ internal fun HomeStatusCard(state: HomeStatusCardState) {
             Text(
                 text = state.title,
                 color = TextPrimary,
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 23.sp,
+                style = appTypography().bodyLarge,
             )
             Text(
                 text = state.description,
                 color = TextSecondary,
-                style = MaterialTheme.typography.bodySmall,
-                fontSize = 13.sp,
-                lineHeight = 18.sp,
+                style = appTypography().bodySmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun HomeStatusCardPreview() {
+    HomeStatusCard(
+        state = HomeStatusCardState(
+            title = "마지막 배변 감지 시간",
+            description = "마지막 기록 14분 전"
+        )
+    )
 }

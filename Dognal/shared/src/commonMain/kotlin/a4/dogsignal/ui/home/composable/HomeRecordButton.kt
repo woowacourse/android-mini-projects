@@ -1,7 +1,7 @@
 package a4.dogsignal.ui.home.composable
 
 import a4.dogsignal.ui.theme.TextPrimary
-import a4.dogsignal.ui.home.HomeColors
+import a4.dogsignal.ui.theme.TextSecondary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dognal.shared.generated.resources.Res
@@ -63,11 +64,20 @@ internal fun HomeRecordButton(
             )
             Text(
                 text = "대소변을 감지할 시 LED가 켜져요",
-                color = HomeColors.FooterText,
+                color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun HomeRecordButtonPreview() {
+    HomeRecordButton(
+        label = "감지 시 LED 점등",
+        onClick = {},
+    )
 }

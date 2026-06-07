@@ -1,5 +1,7 @@
 package a4.dogsignal.ui.home
 
+import a4.dogsignal.model.RecordType
+
 internal data class HomeUiState(
     val title: String,
     val subtitle: String,
@@ -16,12 +18,6 @@ internal data class HomeStatusCardState(
 )
 
 internal data class HomeSummaryCardState(
-    val label: String,
-    val value: String,
-    val tone: HomeSummaryTone,
+    val recordType: RecordType,
+    val count: Int,
 )
-
-internal enum class HomeSummaryTone {
-    Warm,
-    Cool,
-}

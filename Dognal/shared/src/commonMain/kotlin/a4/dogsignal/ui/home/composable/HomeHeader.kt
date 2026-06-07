@@ -2,14 +2,13 @@ package a4.dogsignal.ui.home.composable
 
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
+import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun HomeHeader(
@@ -20,17 +19,21 @@ internal fun HomeHeader(
         Text(
             text = title,
             color = TextPrimary,
-            style = MaterialTheme.typography.headlineMedium,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            lineHeight = 34.sp,
+            style = appTypography().headlineLarge
         )
         Text(
             text = subtitle,
             color = TextSecondary,
-            style = MaterialTheme.typography.bodyMedium,
-            fontSize = 14.sp,
-            lineHeight = 21.sp,
+            style = appTypography().headlineSmall
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeHeaderPreview() {
+    HomeHeader(
+        title = "Mong의 하루",
+        subtitle = "오늘의 배변·패드 상태",
+    )
 }
