@@ -30,7 +30,6 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun HomeRecordButton(
-    label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,7 +54,7 @@ internal fun HomeRecordButton(
             verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(
-                text = label,
+                text = "감지 시 LED 점등",
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 17.sp,
@@ -77,7 +76,6 @@ internal fun HomeRecordButton(
 @Composable
 private fun HomeRecordButtonPreview() {
     HomeRecordButton(
-        label = "감지 시 LED 점등",
         onClick = {},
     )
 }

@@ -57,7 +57,6 @@ internal fun HomeScreen(
         HomeSummaryGrid(state.summaryCards)
         Spacer(Modifier.weight(1f))
         HomeRecordButton(
-            label = state.actionLabel,
             onClick = onRecordClick,
             modifier = Modifier.padding(bottom = 30.dp),
         )
@@ -85,7 +84,6 @@ private fun HomeScreenPreview() {
                         count = 1,
                     ),
                 ),
-                actionLabel = "감지 시 LED 점등",
             )
         )
     }

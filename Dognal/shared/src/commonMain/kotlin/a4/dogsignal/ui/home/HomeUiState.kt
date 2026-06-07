@@ -7,7 +7,6 @@ internal data class HomeUiState(
     val selectedTab: DognalTab,
     val statusCard: HomeStatusCardState,
     val summaryCards: List<HomeSummaryCardState>,
-    val actionLabel: String,
 )
 
 internal data class HomeStatusCardState(
