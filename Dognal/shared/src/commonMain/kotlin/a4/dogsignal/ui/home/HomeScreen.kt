@@ -1,14 +1,14 @@
 package a4.dogsignal.ui.home
 
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.ui.theme.AppTheme
-import a4.dogsignal.ui.theme.HomeBackground
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
 import a4.dogsignal.ui.home.composable.HomeStatusCard
 import a4.dogsignal.ui.home.composable.HomeSummaryGrid
+import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.HomeBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,12 +33,13 @@ internal fun HomeScreen(
     onRecordClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(HomeBackground)
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .windowInsetsPadding(WindowInsets.navigationBars)
-            .padding(horizontal = 31.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(HomeBackground)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .windowInsetsPadding(WindowInsets.navigationBars)
+                .padding(horizontal = 31.dp),
     ) {
         Spacer(Modifier.height(28.dp))
         ScreenHeader(
@@ -49,7 +50,7 @@ internal fun HomeScreen(
         DognalTabs(
             selectedTab = state.selectedTab,
             onTabClick = onTabClick,
-            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
         )
         Spacer(Modifier.height(21.dp))
         HomeStatusCard(state.statusCard)
@@ -68,23 +69,26 @@ internal fun HomeScreen(
 private fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
-            state = HomeUiState(
-                selectedTab = DognalTab.HOME,
-                statusCard = HomeStatusCardState(
-                    title = "마지막 배변 감지 시간",
-                    description = "마지막 기록 14분 전",
+            state =
+                HomeUiState(
+                    selectedTab = DognalTab.HOME,
+                    statusCard =
+                        HomeStatusCardState(
+                            title = "마지막 배변 감지 시간",
+                            description = "마지막 기록 14분 전",
+                        ),
+                    summaryCards =
+                        listOf(
+                            HomeSummaryCardState(
+                                recordType = RecordType.URINE,
+                                count = 4,
+                            ),
+                            HomeSummaryCardState(
+                                recordType = RecordType.STOOL,
+                                count = 1,
+                            ),
+                        ),
                 ),
-                summaryCards = listOf(
-                    HomeSummaryCardState(
-                        recordType = RecordType.URINE,
-                        count = 4,
-                    ),
-                    HomeSummaryCardState(
-                        recordType = RecordType.STOOL,
-                        count = 1,
-                    ),
-                ),
-            )
         )
     }
 }

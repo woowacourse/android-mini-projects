@@ -20,17 +20,17 @@ fun ScreenHeader(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = title,
             color = TextPrimary,
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
         )
         Text(
             text = subtitle,
             color = TextSecondary,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
         )
     }
 }

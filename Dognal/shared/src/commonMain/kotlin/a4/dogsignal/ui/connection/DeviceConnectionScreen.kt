@@ -27,12 +27,13 @@ internal fun DeviceConnectionScreen(
     onConnectClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(RecordScreenBackground)
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .windowInsetsPadding(WindowInsets.navigationBars)
-            .padding(horizontal = 31.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(RecordScreenBackground)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .windowInsetsPadding(WindowInsets.navigationBars)
+                .padding(horizontal = 31.dp),
     ) {
         Spacer(Modifier.height(28.dp))
         ScreenHeader(
@@ -57,18 +58,21 @@ internal fun DeviceConnectionScreen(
 private fun DeviceConnectionScreenPreview() {
     AppTheme {
         DeviceConnectionScreen(
-            state = DeviceConnectionUiState(
-                deviceCard = DeviceCardState(
-                    title = "Arduino 키트 연결",
-                    description = "로드셀 · 초음파",
+            state =
+                DeviceConnectionUiState(
+                    deviceCard =
+                        DeviceCardState(
+                            title = "Arduino 키트 연결",
+                            description = "로드셀 · 초음파",
+                        ),
+                    steps =
+                        listOf(
+                            ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
+                            ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
+                            ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
+                        ),
+                    actionLabel = "기기 연결하기",
                 ),
-                steps = listOf(
-                    ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
-                    ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
-                    ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
-                ),
-                actionLabel = "기기 연결하기",
-            )
         )
     }
 }

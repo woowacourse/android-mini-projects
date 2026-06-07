@@ -20,12 +20,12 @@ internal fun RecordTimelineGroup(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(recordList) { record ->
             RecordTimelineItem(
                 time = record.dateTime.time,
-                recordType = record.type
+                recordType = record.type,
             )
         }
     }
@@ -35,12 +35,13 @@ internal fun RecordTimelineGroup(
 @Composable
 private fun RecordTimelineGroupPreview() {
     val date = LocalDate(2026, 6, 5)
-    val recordList = listOf(
-        Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-        Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
-    )
+    val recordList =
+        listOf(
+            Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+            Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+        )
 
     RecordTimelineGroup(
-        recordList
+        recordList,
     )
 }

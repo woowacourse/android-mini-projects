@@ -23,14 +23,16 @@ internal fun ConnectButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(54.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(54.dp),
         shape = RoundedCornerShape(18.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = BrandPrimary,
-            contentColor = Color.White,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = BrandPrimary,
+                contentColor = Color.White,
+            ),
     ) {
         Text(
             text = label,

@@ -1,9 +1,9 @@
 package a4.dogsignal.ui.home.composable
 
 import a4.dogsignal.model.RecordType
-import a4.dogsignal.ui.home.HomeSummaryCardState
 import a4.dogsignal.ui.common.toColor
 import a4.dogsignal.ui.common.toLabel
+import a4.dogsignal.ui.home.HomeSummaryCardState
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandStroke
 import a4.dogsignal.ui.theme.BrandSurface
@@ -56,18 +56,19 @@ private fun HomeSummaryCard(
 ) {
     val palette = state.recordType.palette()
     Column(
-        modifier = modifier
-            .height(112.dp)
-            .clip(RoundedCornerShape(24.dp))
-            .background(palette.background)
-            .border(1.dp, palette.stroke, RoundedCornerShape(24.dp))
-            .padding(horizontal = 22.dp, vertical = 20.dp),
+        modifier =
+            modifier
+                .height(112.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(palette.background)
+                .border(1.dp, palette.stroke, RoundedCornerShape(24.dp))
+                .padding(horizontal = 22.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             text = state.recordType.toLabel(),
             color = palette.textColor,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
         )
         Text(
             text = "${state.count}회",
@@ -87,45 +88,50 @@ private data class SummaryPalette(
     val textColor: Color,
 )
 
-private fun RecordType.palette(): SummaryPalette = when (this) {
-    RecordType.URINE -> SummaryPalette(
-        background = WarmSurface,
-        stroke = WarmBorder,
-        textColor = toColor(),
-    )
+private fun RecordType.palette(): SummaryPalette =
+    when (this) {
+        RecordType.URINE ->
+            SummaryPalette(
+                background = WarmSurface,
+                stroke = WarmBorder,
+                textColor = toColor(),
+            )
 
-    RecordType.STOOL -> SummaryPalette(
-        background = CoolBackground,
-        stroke = CoolStroke,
-        textColor = toColor(),
-    )
+        RecordType.STOOL ->
+            SummaryPalette(
+                background = CoolBackground,
+                stroke = CoolStroke,
+                textColor = toColor(),
+            )
 
-    RecordType.PAD -> SummaryPalette(
-        background = BrandSurface,
-        stroke = BrandStroke,
-        textColor = toColor(),
-    )
-}
+        RecordType.PAD ->
+            SummaryPalette(
+                background = BrandSurface,
+                stroke = BrandStroke,
+                textColor = toColor(),
+            )
+    }
 
 @Preview
 @Composable
 private fun HomeSummaryGridPreview() {
     AppTheme {
         HomeSummaryGrid(
-            cards = listOf(
-                HomeSummaryCardState(
-                    recordType = RecordType.URINE,
-                    count = 2,
+            cards =
+                listOf(
+                    HomeSummaryCardState(
+                        recordType = RecordType.URINE,
+                        count = 2,
+                    ),
+                    HomeSummaryCardState(
+                        recordType = RecordType.STOOL,
+                        count = 2,
+                    ),
+                    HomeSummaryCardState(
+                        recordType = RecordType.PAD,
+                        count = 2,
+                    ),
                 ),
-                HomeSummaryCardState(
-                    recordType = RecordType.STOOL,
-                    count = 2,
-                ),
-                HomeSummaryCardState(
-                    recordType = RecordType.PAD,
-                    count = 2,
-                ),
-            ),
         )
     }
 }

@@ -38,56 +38,59 @@ import kotlinx.datetime.LocalTime
 internal fun RecordTimelineItem(
     time: LocalTime,
     recordType: RecordType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth().height(100.dp),
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Column(
             modifier = Modifier.padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Box(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clip(CircleShape)
-                    .background(recordType.toColor())
+                modifier =
+                    Modifier
+                        .size(16.dp)
+                        .clip(CircleShape)
+                        .background(recordType.toColor()),
             )
             Box(
-                modifier = Modifier
-                    .width(2.dp)
-                    .weight(1f)
-                    .background(BorderLight)
+                modifier =
+                    Modifier
+                        .width(2.dp)
+                        .weight(1f)
+                        .background(BorderLight),
             )
         }
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(
                 text = time.toString(),
                 color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                fontSize = 12.sp,
             )
 
             Box(
-                modifier = Modifier
-                    .height(64.dp)
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .border(width = 1.dp, color = Divider, shape = RoundedCornerShape(20.dp))
-                    .background(color = Color.White)
-                    .padding(start = 22.dp),
+                modifier =
+                    Modifier
+                        .height(64.dp)
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .border(width = 1.dp, color = Divider, shape = RoundedCornerShape(20.dp))
+                        .background(color = Color.White)
+                        .padding(start = 22.dp),
             ) {
                 Text(
                     text = recordType.toLabel(),
                     color = TextPrimary,
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = 14.dp)
+                    modifier = Modifier.padding(top = 14.dp),
                 )
             }
         }
@@ -95,7 +98,7 @@ internal fun RecordTimelineItem(
 }
 
 @Preview(
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun RecordTimelineItemPreview() {

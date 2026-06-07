@@ -43,7 +43,7 @@ internal fun ConnectionStepList(steps: List<ConnectionStepState>) {
             text = "연결 전 체크",
             style = MaterialTheme.typography.titleMedium,
             color = TextPrimary,
-            modifier = Modifier.padding(bottom = 11.dp)
+            modifier = Modifier.padding(bottom = 11.dp),
         )
 
         steps.forEach { step ->
@@ -55,13 +55,14 @@ internal fun ConnectionStepList(steps: List<ConnectionStepState>) {
 @Composable
 private fun ConnectionStep(step: ConnectionStepState) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(58.dp)
-            .clip(RoundedCornerShape(18.dp))
-            .background(Color.White)
-            .border(1.dp, Divider, RoundedCornerShape(18.dp))
-            .padding(horizontal = 14.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(58.dp)
+                .clip(RoundedCornerShape(18.dp))
+                .background(Color.White)
+                .border(1.dp, Divider, RoundedCornerShape(18.dp))
+                .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -80,29 +81,33 @@ private fun ConnectionStep(step: ConnectionStepState) {
 
 @Composable
 private fun StepStatusIcon(status: ConnectionStepStatus) {
-    val background = when (status) {
-        ConnectionStepStatus.Done -> DeviceConnectionColors.SuccessBackground
-        ConnectionStepStatus.Waiting -> DeviceConnectionColors.WaitingBackground
-    }
+    val background =
+        when (status) {
+            ConnectionStepStatus.Done -> DeviceConnectionColors.SuccessBackground
+            ConnectionStepStatus.Waiting -> DeviceConnectionColors.WaitingBackground
+        }
     Box(
-        modifier = Modifier
-            .size(24.dp)
-            .clip(CircleShape)
-            .background(background),
+        modifier =
+            Modifier
+                .size(24.dp)
+                .clip(CircleShape)
+                .background(background),
         contentAlignment = Alignment.Center,
     ) {
         when (status) {
-            ConnectionStepStatus.Done -> Image(
-                painter = painterResource(Res.drawable.check),
-                contentDescription = null,
-                modifier = Modifier.size(14.dp),
-            )
+            ConnectionStepStatus.Done ->
+                Image(
+                    painter = painterResource(Res.drawable.check),
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                )
 
-            ConnectionStepStatus.Waiting -> Image(
-                painter = painterResource(Res.drawable.exclamation),
-                contentDescription = null,
-                modifier = Modifier.size(14.dp),
-            )
+            ConnectionStepStatus.Waiting ->
+                Image(
+                    painter = painterResource(Res.drawable.exclamation),
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                )
         }
     }
 }
@@ -112,11 +117,12 @@ private fun StepStatusIcon(status: ConnectionStepStatus) {
 private fun ConnectionStepListPreview() {
     AppTheme {
         ConnectionStepList(
-            steps = listOf(
-                ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
-                ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
-                ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
-            ),
+            steps =
+                listOf(
+                    ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
+                    ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
+                    ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
+                ),
         )
     }
 }

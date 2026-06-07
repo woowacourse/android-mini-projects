@@ -33,16 +33,17 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun HomeStatusCard(
     state: HomeStatusCardState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(118.dp)
-            .clip(RoundedCornerShape(30.dp))
-            .background(Color.White)
-            .border(1.dp, Divider, RoundedCornerShape(30.dp))
-            .padding(horizontal = 25.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(118.dp)
+                .clip(RoundedCornerShape(30.dp))
+                .background(Color.White)
+                .border(1.dp, Divider, RoundedCornerShape(30.dp))
+                .padding(horizontal = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -76,10 +77,11 @@ internal fun HomeStatusCard(
 private fun HomeStatusCardPreview() {
     AppTheme {
         HomeStatusCard(
-            state = HomeStatusCardState(
-                title = "마지막 배변 감지 시간",
-                description = "마지막 기록 14분 전"
-            )
+            state =
+                HomeStatusCardState(
+                    title = "마지막 배변 감지 시간",
+                    description = "마지막 기록 14분 전",
+                ),
         )
     }
 }

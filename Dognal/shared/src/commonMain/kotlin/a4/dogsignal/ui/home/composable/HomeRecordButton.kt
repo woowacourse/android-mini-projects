@@ -34,13 +34,14 @@ internal fun HomeRecordButton(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(72.dp)
-            .clip(RoundedCornerShape(24.dp))
-            .background(TextPrimary)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 28.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(TextPrimary)
+                .clickable(onClick = onClick)
+                .padding(horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {

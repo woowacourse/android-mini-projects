@@ -35,17 +35,18 @@ internal fun DeviceCard(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(132.dp)
-            .clip(RoundedCornerShape(28.dp))
-            .background(WarmSurface)
-            .border(
-                width = 1.dp,
-                color = WarmBorder,
-                shape = RoundedCornerShape(28.dp),
-            )
-            .padding(horizontal = 28.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(132.dp)
+                .clip(RoundedCornerShape(28.dp))
+                .background(WarmSurface)
+                .border(
+                    width = 1.dp,
+                    color = WarmBorder,
+                    shape = RoundedCornerShape(28.dp),
+                )
+                .padding(horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -58,12 +59,12 @@ internal fun DeviceCard(
             Text(
                 text = state.title,
                 color = TextPrimary,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             Text(
                 text = state.description,
                 color = TextSecondary,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
             )
         }
     }
@@ -74,10 +75,11 @@ internal fun DeviceCard(
 private fun DeviceCardPreview() {
     AppTheme {
         DeviceCard(
-            state = DeviceCardState(
-                title = "Arduino 키트 연결",
-                description = "로드셀 · 초음파",
-            ),
+            state =
+                DeviceCardState(
+                    title = "Arduino 키트 연결",
+                    description = "로드셀 · 초음파",
+                ),
         )
     }
 }

@@ -22,14 +22,15 @@ internal fun AddRecordButton(
 ) {
     Button(
         onClick = onClick,
-        colors = ButtonColors(
-            containerColor = TextPrimary,
-            contentColor = Color.White,
-            disabledContainerColor = Color.Gray,
-            disabledContentColor = Color.LightGray
-        ),
+        colors =
+            ButtonColors(
+                containerColor = TextPrimary,
+                contentColor = Color.White,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = Color.LightGray,
+            ),
         modifier = modifier.fillMaxWidth().height(48.dp),
-        shape = RoundedCornerShape(15.dp)
+        shape = RoundedCornerShape(15.dp),
     ) {
         Text(
             text = "수동 기록 추가",

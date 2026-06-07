@@ -29,15 +29,16 @@ internal fun DateHeaderCard(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(15.dp))
-            .background(color = Color.White)
-            .border(width = 2.dp, color = Divider, shape = RoundedCornerShape(15.dp))
-            .padding(start = 25.dp, end = 42.dp),
+        modifier =
+            modifier
+                .height(48.dp)
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(15.dp))
+                .background(color = Color.White)
+                .border(width = 2.dp, color = Divider, shape = RoundedCornerShape(15.dp))
+                .padding(start = 25.dp, end = 42.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
@@ -59,7 +60,7 @@ private fun DateHeaderCardPreview() {
     AppTheme {
         DateHeaderCard(
             label = "오늘",
-            date = "2026-06-05"
+            date = "2026-06-05",
         )
     }
 }

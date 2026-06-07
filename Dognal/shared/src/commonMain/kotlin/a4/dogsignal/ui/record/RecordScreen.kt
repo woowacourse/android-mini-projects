@@ -38,37 +38,39 @@ internal fun RecordScreen(
         containerColor = RecordScreenBackground,
         bottomBar = {
             AddRecordButton(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 38.dp),
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 38.dp),
                 onClick = onAddRecordClick,
             )
-        }
+        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .padding(innerPadding),
         ) {
             ScreenHeader(
                 title = "배변 기록",
                 subtitle = "수정 가능한 타임라인",
-                modifier = Modifier.padding(start = 16.dp, top = 20.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 20.dp),
             )
             Spacer(Modifier.height(15.dp))
             DognalTabs(
                 selectedTab = state.selectedTab,
                 onTabClick = onTabClick,
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
             )
             Spacer(Modifier.height(30.dp))
             DateHeaderCard(
                 label = state.dateLabel,
                 date = state.dateValue,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(Modifier.height(32.dp))
             RecordTimelineGroup(
                 recordList = state.recordList,
-                modifier = Modifier.padding(start = 28.dp, end = 16.dp)
+                modifier = Modifier.padding(start = 28.dp, end = 16.dp),
             )
         }
     }
@@ -80,38 +82,40 @@ private fun RecordScreenPreview() {
     val date = LocalDate(2026, 6, 5)
     AppTheme {
         RecordScreen(
-            state = RecordUiState(
-                selectedTab = DognalTab.RECORD,
-                dateLabel = "오늘",
-                dateValue = date.toString(),
-                recordList = listOf(
-                    Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.URINE
-                    ),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.URINE
-                    ),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.STOOL
-                    ),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.URINE
-                    ),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.URINE
-                    ),
-                    Record(
-                        dateTime = LocalDateTime(date, LocalTime(1, 20)),
-                        type = RecordType.URINE
-                    ),
+            state =
+                RecordUiState(
+                    selectedTab = DognalTab.RECORD,
+                    dateLabel = "오늘",
+                    dateValue = date.toString(),
+                    recordList =
+                        listOf(
+                            Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.URINE,
+                            ),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.URINE,
+                            ),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.STOOL,
+                            ),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.URINE,
+                            ),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.URINE,
+                            ),
+                            Record(
+                                dateTime = LocalDateTime(date, LocalTime(1, 20)),
+                                type = RecordType.URINE,
+                            ),
+                        ),
                 ),
-            ),
             onAddRecordClick = {},
             onTabClick = {},
         )

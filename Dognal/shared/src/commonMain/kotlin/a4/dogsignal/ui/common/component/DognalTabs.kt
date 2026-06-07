@@ -70,11 +70,12 @@ private fun DognalTabItem(
             lineHeight = 16.sp,
         )
         Box(
-            modifier = Modifier
-                .width(42.dp)
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(if (selected) BrandPrimary else Color.Transparent),
+            modifier =
+                Modifier
+                    .width(42.dp)
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(if (selected) BrandPrimary else Color.Transparent),
         )
     }
 }
