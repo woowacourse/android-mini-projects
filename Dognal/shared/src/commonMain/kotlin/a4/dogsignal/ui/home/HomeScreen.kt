@@ -3,7 +3,7 @@ package a4.dogsignal.ui.home
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.HomeBackground
-import a4.dogsignal.ui.component.DognalTabs
+import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.home.composable.HomeHeader
 import a4.dogsignal.ui.home.composable.HomeRecordButton
 import a4.dogsignal.ui.home.composable.HomeStatusCard

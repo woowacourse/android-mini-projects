@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.component
+package a4.dogsignal.ui.common.component
 
 import a4.dogsignal.ui.theme.BrandPrimary
 import a4.dogsignal.ui.theme.TextDisabled

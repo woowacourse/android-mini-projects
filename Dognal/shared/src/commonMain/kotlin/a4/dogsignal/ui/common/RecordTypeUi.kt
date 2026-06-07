@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.record
+package a4.dogsignal.ui.common
 
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.theme.AccentOrange

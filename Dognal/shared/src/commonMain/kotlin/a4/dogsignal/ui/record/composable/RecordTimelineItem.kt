@@ -6,8 +6,8 @@ import a4.dogsignal.ui.theme.BorderLight
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
-import a4.dogsignal.ui.record.toColor
-import a4.dogsignal.ui.record.toLabel
+import a4.dogsignal.ui.common.toColor
+import a4.dogsignal.ui.common.toLabel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

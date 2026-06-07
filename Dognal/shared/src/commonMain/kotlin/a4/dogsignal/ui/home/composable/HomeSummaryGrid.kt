@@ -2,8 +2,8 @@ package a4.dogsignal.ui.home.composable
 
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.home.HomeSummaryCardState
-import a4.dogsignal.ui.record.toColor
-import a4.dogsignal.ui.record.toLabel
+import a4.dogsignal.ui.common.toColor
+import a4.dogsignal.ui.common.toLabel
 import a4.dogsignal.ui.theme.BrandStroke
 import a4.dogsignal.ui.theme.BrandSurface
 import a4.dogsignal.ui.theme.CoolBackground
