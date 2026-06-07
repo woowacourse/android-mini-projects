@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,10 +42,9 @@ internal fun ConnectionStepList(steps: List<ConnectionStepState>) {
         Text(
             text = "연결 전 체크",
             style = MaterialTheme.typography.titleMedium,
-            color = TextPrimary
+            color = TextPrimary,
+            modifier = Modifier.padding(bottom = 11.dp)
         )
-
-        Spacer(modifier = Modifier.height(11.dp))
 
         steps.forEach { step ->
             ConnectionStep(step)
