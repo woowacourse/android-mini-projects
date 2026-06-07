@@ -45,7 +45,7 @@ internal fun RecordTimelineItem(
         horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Column(
-            modifier = modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
