@@ -1,20 +1,18 @@
 package a4.dogsignal.ui.connection.composable
 
 import a4.dogsignal.ui.theme.BrandPrimary
+import a4.dogsignal.ui.theme.appTypography
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun ConnectButton(
@@ -35,10 +33,16 @@ internal fun ConnectButton(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.titleMedium,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
+            style = appTypography().bodyLarge,
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ConnectButtonPreview() {
+    ConnectButton(
+        label = "기기 연결하기",
+        onClick = {},
+    )
 }

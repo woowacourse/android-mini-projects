@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 // Text
 val TextPrimary = Color(0xFF263238)
 val TextSecondary = Color(0xFF7A8A94)
-val TextTertiary = Color(0xFF50606A)
+val TextTertiary = Color(0xFF42515A)
 val TextDisabled = Color(0xFF9AA9B2)
 
 // Brand / Accent
