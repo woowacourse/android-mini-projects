@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -6,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ktlint)
+    id("com.codingfeline.buildkonfig") version "0.21.2"
 }
 
 kotlin {
@@ -39,6 +41,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.ui.tooling)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -50,6 +53,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.supabase.postgrest)
+            implementation(libs.ktor.client.core)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)     // ← 2번 (iOS 엔진)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -64,5 +72,26 @@ dependencies {
 ktlint {
     filter {
         exclude("**/build/**")
+    }
+}
+
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+
+buildkonfig {
+    packageName = "a4.dogsignal"
+    defaultConfigs {
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "SUPABASE_URL",
+            localProps.getProperty("SUPABASE_URL") ?: "",
+        )
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "SUPABASE_KEY",
+            localProps.getProperty("SUPABASE_KEY") ?: "",
+        )
     }
 }
