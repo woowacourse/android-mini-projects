@@ -47,15 +47,14 @@ internal fun RecordScreen(
     ) { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .padding(innerPadding),
+                Modifier.padding(innerPadding).padding(horizontal = 31.dp),
         ) {
             ScreenHeader(
                 title = "배변 기록",
                 subtitle = "수정 가능한 타임라인",
-                modifier = Modifier.padding(start = 16.dp, top = 20.dp),
+                modifier = Modifier.padding(top = 28.dp),
             )
-            Spacer(Modifier.height(15.dp))
+            Spacer(Modifier.height(28.dp))
             DognalTabs(
                 selectedTab = state.selectedTab,
                 onTabClick = onTabClick,
@@ -65,12 +64,11 @@ internal fun RecordScreen(
             DateHeaderCard(
                 label = state.dateLabel,
                 date = state.dateValue,
-                modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(Modifier.height(32.dp))
             RecordTimelineGroup(
                 recordList = state.recordList,
-                modifier = Modifier.padding(start = 28.dp, end = 16.dp),
+                modifier = Modifier.padding(start = 15.dp),
             )
         }
     }
