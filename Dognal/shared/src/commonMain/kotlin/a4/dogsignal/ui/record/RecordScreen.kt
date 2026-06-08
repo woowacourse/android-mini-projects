@@ -89,28 +89,38 @@ private fun RecordScreenPreview() {
                     dateValue = date.toString(),
                     recordList =
                         listOf(
-                            Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
                             Record(
+                                id = "1",
+                                dateTime = LocalDateTime(date, LocalTime(2, 5)),
+                                type = RecordType.PAD,
+                            ),
+                            Record(
+                                id = "2",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
                             ),
                             Record(
+                                id = "3",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
                             ),
                             Record(
+                                id = "4",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.STOOL,
                             ),
                             Record(
+                                id = "5",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
                             ),
                             Record(
+                                id = "6",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
                             ),
                             Record(
+                                id = "7",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
                             ),
