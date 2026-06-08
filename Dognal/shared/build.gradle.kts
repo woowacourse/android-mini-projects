@@ -55,9 +55,10 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.supabase.postgrest)
             implementation(libs.ktor.client.core)
+            implementation(libs.supabase.realtime)
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)     // ← 2번 (iOS 엔진)
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
