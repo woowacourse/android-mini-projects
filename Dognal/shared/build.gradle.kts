@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ktlint)
     id("com.codingfeline.buildkonfig") version "0.21.2"
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 kotlin {
@@ -42,6 +43,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.ui.tooling)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -57,6 +59,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.supabase.realtime)
             implementation(libs.navigation.compose)
+            implementation(libs.supabase.auth)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
