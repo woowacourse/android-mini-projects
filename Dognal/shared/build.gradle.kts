@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.supabase.postgrest)
             implementation(libs.ktor.client.core)
             implementation(libs.supabase.realtime)
+            implementation(libs.navigation.compose)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
