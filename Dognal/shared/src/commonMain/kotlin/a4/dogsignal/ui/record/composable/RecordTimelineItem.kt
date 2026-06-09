@@ -32,11 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.datetime.LocalTime
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.number
 
 @Composable
 internal fun RecordTimelineItem(
-    time: LocalTime,
+    dateTime: LocalDateTime,
     recordType: RecordType,
     modifier: Modifier = Modifier,
 ) {
@@ -69,7 +70,8 @@ internal fun RecordTimelineItem(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(
-                text = time.toString(),
+                text = "${dateTime.month.number}월 ${dateTime.day}일 " +
+                    "${dateTime.hour}:${dateTime.minute.toString().padStart(2, '0')}",
                 color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
@@ -104,7 +106,7 @@ internal fun RecordTimelineItem(
 private fun RecordTimelineItemPreview() {
     AppTheme {
         RecordTimelineItem(
-            time = LocalTime(14, 44),
+            dateTime = LocalDateTime(2026, 6, 9, 14, 44),
             recordType = RecordType.PAD,
         )
     }

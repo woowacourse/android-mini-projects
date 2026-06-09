@@ -24,7 +24,7 @@ internal fun RecordTimelineGroup(
     ) {
         items(items = recordList, key = { it.id }) { record ->
             RecordTimelineItem(
-                time = record.dateTime.time,
+                dateTime = record.dateTime,
                 recordType = record.type,
             )
         }
