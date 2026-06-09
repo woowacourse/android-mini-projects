@@ -11,12 +11,14 @@ import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.RecordScreenBackground
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -87,10 +89,19 @@ internal fun RecordScreen(
                 date = state.dateValue,
             )
             Spacer(Modifier.height(32.dp))
-            RecordTimelineGroup(
-                recordList = state.recordList,
-                modifier = Modifier.padding(start = 15.dp),
-            )
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                RecordTimelineGroup(
+                    recordList = state.recordList,
+                    modifier = Modifier.padding(start = 15.dp),
+                )
+            }
         }
     }
 }

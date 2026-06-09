@@ -23,13 +23,17 @@ internal class RecordViewModel(
 
     private fun loadRecords() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             println("RecordViewModel: DEV_USER_ID = '${BuildKonfig.DEV_USER_ID}'")
             runCatching { repository.getRecords(BuildKonfig.DEV_USER_ID) }
                 .onSuccess { records ->
                     println("RecordViewModel: 불러온 기록 수 = ${records.size}")
-                    _uiState.update { it.copy(recordList = records) }
+                    _uiState.update { it.copy(recordList = records, isLoading = false) }
                 }
-                .onFailure { e -> println("RecordViewModel: loadRecords 실패 - ${e.message}") }
+                .onFailure { e ->
+                    println("RecordViewModel: loadRecords 실패 - ${e.message}")
+                    _uiState.update { it.copy(isLoading = false) }
+                }
         }
     }
 
