@@ -98,5 +98,10 @@ buildkonfig {
             "SUPABASE_KEY",
             localProps.getProperty("SUPABASE_KEY") ?: "",
         )
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "DEV_USER_ID",
+            localProps.getProperty("DEV_USER_ID") ?: "",
+        )
     }
 }

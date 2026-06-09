@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.record
 
+import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
@@ -18,13 +19,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+
+@Composable
+internal fun RecordScreen(
+    repository: RecordRepository,
+    onAddRecordClick: () -> Unit,
+    onTabClick: (DognalTab) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val viewModel: RecordViewModel = viewModel { RecordViewModel(repository) }
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    RecordScreen(
+        state = state,
+        onAddRecordClick = onAddRecordClick,
+        onTabClick = onTabClick,
+        modifier = modifier,
+    )
+}
 
 @Composable
 internal fun RecordScreen(

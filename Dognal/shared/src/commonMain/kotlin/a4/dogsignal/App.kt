@@ -1,13 +1,16 @@
 package a4.dogsignal
 
+import a4.dogsignal.data.network.RecordDataSource
+import a4.dogsignal.data.repository.RecordRepository
+import a4.dogsignal.di.createSupabase
 import a4.dogsignal.ui.common.component.DognalTab
-import a4.dogsignal.ui.home.HomeStatusCardState
 import a4.dogsignal.ui.home.HomeScreen
+import a4.dogsignal.ui.home.HomeStatusCardState
 import a4.dogsignal.ui.home.HomeUiState
 import a4.dogsignal.ui.record.RecordScreen
-import a4.dogsignal.ui.record.RecordUiState
 import a4.dogsignal.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -16,6 +19,11 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun App() {
+    val supabase = remember { createSupabase() }
+    val recordDataSource = remember { RecordDataSource(supabase) }
+
+    val recordRepository = RecordRepository(recordDataSource)
+
     AppTheme {
         val navController = rememberNavController()
         NavHost(
@@ -35,12 +43,7 @@ fun App() {
             }
             composable(DognalTab.RECORD.name) {
                 RecordScreen(
-                    state = RecordUiState(
-                        selectedTab = DognalTab.RECORD,
-                        dateLabel = "오늘",
-                        dateValue = "",
-                        recordList = emptyList(),
-                    ),
+                    repository = recordRepository,
                     onAddRecordClick = {},
                     onTabClick = { tab -> navController.navigateToTab(tab) },
                 )
