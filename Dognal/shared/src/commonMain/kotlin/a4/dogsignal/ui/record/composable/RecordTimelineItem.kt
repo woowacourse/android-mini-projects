@@ -70,8 +70,9 @@ internal fun RecordTimelineItem(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(
-                text = "${dateTime.month.number}월 ${dateTime.day}일 " +
-                    "${dateTime.hour}:${dateTime.minute.toString().padStart(2, '0')}",
+                text =
+                    "${dateTime.month.number}월 ${dateTime.day}일 " +
+                        "${dateTime.hour}:${dateTime.minute.toString().padStart(2, '0')}",
                 color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,

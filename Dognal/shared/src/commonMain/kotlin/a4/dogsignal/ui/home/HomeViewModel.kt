@@ -1,6 +1,5 @@
 package a4.dogsignal.ui.home
 
-import a4.dogsignal.BuildKonfig
 import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
@@ -19,6 +18,7 @@ import kotlin.time.Clock
 
 internal class HomeViewModel(
     private val repository: RecordRepository,
+    private val deviceId: String,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(initialUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -29,17 +29,19 @@ internal class HomeViewModel(
 
     private fun loadTodayRecords() {
         viewModelScope.launch {
-            runCatching { repository.getTodayRecords(BuildKonfig.DEV_USER_ID) }
+            runCatching { repository.getTodayRecords(deviceId) }
                 .onSuccess { records ->
-                    val lastDetectedDescription = records.firstOrNull()
-                        ?.let { formatTimeDiff(it.dateTime) }
-                        ?: "오늘 감지 없음"
+                    val lastDetectedDescription =
+                        records.firstOrNull()
+                            ?.let { formatTimeDiff(it.dateTime) }
+                            ?: "오늘 감지 없음"
                     _uiState.update {
                         it.copy(
-                            statusCard = HomeStatusCardState(
-                                title = "오늘 상태",
-                                description = lastDetectedDescription,
-                            ),
+                            statusCard =
+                                HomeStatusCardState(
+                                    title = "오늘 상태",
+                                    description = lastDetectedDescription,
+                                ),
                             summaryCards = buildSummaryCards(records),
                         )
                     }

@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.supabase.realtime)
             implementation(libs.navigation.compose)
             implementation(libs.supabase.auth)
+            implementation(libs.multiplatform.settings.no.arg)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -80,10 +81,11 @@ ktlint {
     }
 }
 
-val localProps = Properties().apply {
-    val f = rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
-}
+val localProps =
+    Properties().apply {
+        val f = rootProject.file("local.properties")
+        if (f.exists()) f.inputStream().use { load(it) }
+    }
 
 buildkonfig {
     packageName = "a4.dogsignal"
@@ -97,11 +99,6 @@ buildkonfig {
             com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
             "SUPABASE_KEY",
             localProps.getProperty("SUPABASE_KEY") ?: "",
-        )
-        buildConfigField(
-            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
-            "DEV_USER_ID",
-            localProps.getProperty("DEV_USER_ID") ?: "",
         )
     }
 }

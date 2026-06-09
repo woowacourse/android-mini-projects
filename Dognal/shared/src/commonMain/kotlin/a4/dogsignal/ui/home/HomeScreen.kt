@@ -33,10 +33,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 internal fun HomeScreen(
     repository: RecordRepository,
+    deviceId: String,
     onTabClick: (DognalTab) -> Unit,
     onAlertClick: () -> Unit = {},
 ) {
-    val viewModel: HomeViewModel = viewModel { HomeViewModel(repository) }
+    val viewModel: HomeViewModel = viewModel { HomeViewModel(repository, deviceId) }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
         state = state,

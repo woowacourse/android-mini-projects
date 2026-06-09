@@ -35,11 +35,12 @@ import kotlinx.datetime.LocalTime
 @Composable
 internal fun RecordScreen(
     repository: RecordRepository,
+    deviceId: String,
     onAddRecordClick: () -> Unit,
     onTabClick: (DognalTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: RecordViewModel = viewModel { RecordViewModel(repository) }
+    val viewModel: RecordViewModel = viewModel { RecordViewModel(repository, deviceId) }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     RecordScreen(
         state = state,

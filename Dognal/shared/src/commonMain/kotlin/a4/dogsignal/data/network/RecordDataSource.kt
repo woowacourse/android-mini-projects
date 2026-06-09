@@ -9,11 +9,11 @@ import io.github.jan.supabase.postgrest.query.Order
 class RecordDataSource(
     private val supabase: SupabaseClient,
 ) {
-    suspend fun getRecords(userId: String): List<RecordDto> {
+    suspend fun getRecords(deviceId: String): List<RecordDto> {
         return supabase.from("potty_records")
             .select(columns = Columns.list("id", "record_type", "occurred_at")) {
                 filter {
-                    eq("user_id", userId)
+                    eq("device_id", deviceId)
                 }
                 order("occurred_at", Order.DESCENDING)
                 limit(50)
@@ -22,14 +22,14 @@ class RecordDataSource(
     }
 
     suspend fun getRecordsBetween(
-        userId: String,
+        deviceId: String,
         from: kotlin.time.Instant,
         until: kotlin.time.Instant,
     ): List<RecordDto> {
         return supabase.from("potty_records")
             .select(columns = Columns.list("id", "record_type", "occurred_at")) {
                 filter {
-                    eq("user_id", userId)
+                    eq("device_id", deviceId)
                     gte("occurred_at", from.toString())
                     lt("occurred_at", until.toString())
                 }

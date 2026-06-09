@@ -14,17 +14,17 @@ import kotlin.time.Clock
 class RecordRepository(
     private val dataSource: RecordDataSource,
 ) {
-    suspend fun getRecords(userId: String): List<Record> {
-        return dataSource.getRecords(userId)
+    suspend fun getRecords(deviceId: String): List<Record> {
+        return dataSource.getRecords(deviceId)
             .map { it.toDomain() }
     }
 
-    suspend fun getTodayRecords(userId: String): List<Record> {
+    suspend fun getTodayRecords(deviceId: String): List<Record> {
         val tz = TimeZone.currentSystemDefault()
         val today = Clock.System.now().toLocalDateTime(tz).date
         val from = today.atStartOfDayIn(tz)
         val until = today.plus(1, DateTimeUnit.DAY).atStartOfDayIn(tz)
-        return dataSource.getRecordsBetween(userId, from, until).map { it.toDomain() }
+        return dataSource.getRecordsBetween(deviceId, from, until).map { it.toDomain() }
     }
 }
 

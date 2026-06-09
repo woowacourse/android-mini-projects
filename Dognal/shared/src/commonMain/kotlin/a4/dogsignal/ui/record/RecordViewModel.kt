@@ -1,6 +1,5 @@
 package a4.dogsignal.ui.record
 
-import a4.dogsignal.BuildKonfig
 import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.ui.common.component.DognalTab
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import kotlinx.coroutines.launch
 
 internal class RecordViewModel(
     private val repository: RecordRepository,
+    private val deviceId: String,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(initialUiState())
     val uiState: StateFlow<RecordUiState> = _uiState.asStateFlow()
@@ -24,10 +24,8 @@ internal class RecordViewModel(
     private fun loadRecords() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            println("RecordViewModel: DEV_USER_ID = '${BuildKonfig.DEV_USER_ID}'")
-            runCatching { repository.getRecords(BuildKonfig.DEV_USER_ID) }
+            runCatching { repository.getRecords(deviceId) }
                 .onSuccess { records ->
-                    println("RecordViewModel: 불러온 기록 수 = ${records.size}")
                     _uiState.update { it.copy(recordList = records, isLoading = false) }
                 }
                 .onFailure { e ->
