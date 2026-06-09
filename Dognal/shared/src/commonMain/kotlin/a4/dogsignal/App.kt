@@ -5,8 +5,6 @@ import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.di.createSupabase
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.home.HomeScreen
-import a4.dogsignal.ui.home.HomeStatusCardState
-import a4.dogsignal.ui.home.HomeUiState
 import a4.dogsignal.ui.record.RecordScreen
 import a4.dogsignal.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
@@ -32,13 +30,9 @@ fun App() {
         ) {
             composable(DognalTab.HOME.name) {
                 HomeScreen(
-                    state = HomeUiState(
-                        selectedTab = DognalTab.HOME,
-                        statusCard = HomeStatusCardState("", ""),
-                        summaryCards = emptyList(),
-                    ),
+                    repository = recordRepository,
                     onTabClick = { tab -> navController.navigateToTab(tab) },
-                    onRecordClick = { navController.navigateToTab(DognalTab.RECORD) },
+                    onAlertClick = {},
                 )
             }
             composable(DognalTab.RECORD.name) {

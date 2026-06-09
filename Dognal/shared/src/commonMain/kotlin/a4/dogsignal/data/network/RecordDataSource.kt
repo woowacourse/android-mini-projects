@@ -20,4 +20,21 @@ class RecordDataSource(
             }
             .decodeList<RecordDto>()
     }
+
+    suspend fun getRecordsBetween(
+        userId: String,
+        from: kotlin.time.Instant,
+        until: kotlin.time.Instant,
+    ): List<RecordDto> {
+        return supabase.from("potty_records")
+            .select(columns = Columns.list("id", "record_type", "occurred_at")) {
+                filter {
+                    eq("user_id", userId)
+                    gte("occurred_at", from.toString())
+                    lt("occurred_at", until.toString())
+                }
+                order("occurred_at", Order.DESCENDING)
+            }
+            .decodeList<RecordDto>()
+    }
 }

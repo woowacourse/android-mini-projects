@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.home
 
+import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
@@ -21,16 +22,34 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+@Composable
+internal fun HomeScreen(
+    repository: RecordRepository,
+    onTabClick: (DognalTab) -> Unit,
+    onAlertClick: () -> Unit = {},
+) {
+    val viewModel: HomeViewModel = viewModel { HomeViewModel(repository) }
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    HomeScreen(
+        state = state,
+        onTabClick = onTabClick,
+        onAlertClick = onAlertClick,
+    )
+}
 
 @Composable
 internal fun HomeScreen(
     state: HomeUiState,
     onTabClick: (DognalTab) -> Unit = {},
-    onRecordClick: () -> Unit = {},
+    onAlertClick: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -58,7 +77,7 @@ internal fun HomeScreen(
         HomeSummaryGrid(state.summaryCards)
         Spacer(Modifier.weight(1f))
         HomeRecordButton(
-            onClick = onRecordClick,
+            onClick = onAlertClick,
             modifier = Modifier.padding(bottom = 30.dp),
         )
     }
