@@ -16,6 +16,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,15 +37,22 @@ internal fun HomeSummaryGrid(
     cards: List<HomeSummaryCardState>,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    Column(
+        verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = modifier,
     ) {
-        cards.forEach { card ->
-            HomeSummaryCard(
-                state = card,
-                modifier = Modifier.weight(1f),
-            )
+        cards.chunked(2).forEach { rowCards ->
+            Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                rowCards.forEach { card ->
+                    HomeSummaryCard(
+                        state = card,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (rowCards.size < 2) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         }
     }
 }
