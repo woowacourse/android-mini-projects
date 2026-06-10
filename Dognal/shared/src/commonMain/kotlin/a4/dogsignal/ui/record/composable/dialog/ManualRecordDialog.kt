@@ -33,6 +33,8 @@ internal fun ManualRecordDialog(
     manualRecordDialogState: ManualRecordDialogState,
     onDismissRequest: () -> Unit,
     onRecordTypeClick: (RecordType) -> Unit,
+    onDateClick: () -> Unit,
+    onTimeClick: () -> Unit,
     onMemoChange: (String) -> Unit,
     onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
@@ -42,6 +44,8 @@ internal fun ManualRecordDialog(
         ManualRecordDialogContent(
             state = manualRecordDialogState,
             onRecordTypeClick = onRecordTypeClick,
+            onDateClick = onDateClick,
+            onTimeClick = onTimeClick,
             onMemoChange = onMemoChange,
             onCancelClick = onCancelClick,
             onSaveClick = onSaveClick,
@@ -54,6 +58,8 @@ internal fun ManualRecordDialog(
 private fun ManualRecordDialogContent(
     state: ManualRecordDialogState,
     onRecordTypeClick: (RecordType) -> Unit,
+    onDateClick: () -> Unit,
+    onTimeClick: () -> Unit,
     onMemoChange: (String) -> Unit,
     onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
@@ -87,7 +93,11 @@ private fun ManualRecordDialogContent(
                 onRecordTypeClick = onRecordTypeClick,
             )
             Spacer(Modifier.height(27.dp))
-            DialogDateTimeRow(dateTime = state.dateTime)
+            DialogDateTimeRow(
+                dateTime = state.dateTime,
+                onDateClick = onDateClick,
+                onTimeClick = onTimeClick,
+            )
             Spacer(Modifier.height(24.dp))
             Text(
                 text = "메모",
@@ -125,6 +135,8 @@ private fun ManualRecordDialogContentPreview() {
                     memo = "",
                 ),
             onRecordTypeClick = {},
+            onDateClick = {},
+            onTimeClick = {},
             onMemoChange = {},
             onCancelClick = {},
             onSaveClick = {},

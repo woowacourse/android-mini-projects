@@ -7,6 +7,7 @@ import a4.dogsignal.ui.theme.TextTertiary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun DialogDateTimeRow(
     dateTime: LocalDateTime,
+    onDateClick: () -> Unit,
+    onTimeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -41,11 +44,13 @@ internal fun DialogDateTimeRow(
         DialogDateTimeField(
             label = "날짜",
             value = ManualRecordDateTimeFormatter.formatDate(dateTime.date),
+            onClick = onDateClick,
             modifier = Modifier.weight(1f),
         )
         DialogDateTimeField(
             label = "시간",
             value = ManualRecordDateTimeFormatter.formatTime(dateTime.time),
+            onClick = onTimeClick,
             modifier = Modifier.weight(1f),
         )
     }
@@ -55,6 +60,7 @@ internal fun DialogDateTimeRow(
 private fun DialogDateTimeField(
     label: String,
     value: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -75,6 +81,7 @@ private fun DialogDateTimeField(
                     .clip(RoundedCornerShape(20.dp))
                     .background(Color(0xFFF8FAFC))
                     .border(1.dp, Divider, RoundedCornerShape(20.dp))
+                    .clickable(onClick = onClick)
                     .padding(start = 21.dp, end = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

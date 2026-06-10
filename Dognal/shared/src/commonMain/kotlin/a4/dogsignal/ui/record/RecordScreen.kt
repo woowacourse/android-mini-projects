@@ -8,6 +8,8 @@ import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePicker
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePickerState
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialog
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialogState
 import a4.dogsignal.ui.theme.AppTheme
@@ -35,9 +37,16 @@ internal fun RecordScreen(
     state: RecordUiState,
     isManualRecordDialogVisible: Boolean,
     manualRecordDialogState: ManualRecordDialogState,
+    manualRecordDateTimePickerState: ManualRecordDateTimePickerState?,
     onAddRecordClick: () -> Unit,
     onManualRecordDismiss: () -> Unit,
     onManualRecordTypeClick: (RecordType) -> Unit,
+    onManualRecordDateClick: () -> Unit,
+    onManualRecordTimeClick: () -> Unit,
+    onManualRecordPickerDateChange: (LocalDate) -> Unit,
+    onManualRecordPickerTimeChange: (LocalTime) -> Unit,
+    onManualRecordPickerDismiss: () -> Unit,
+    onManualRecordPickerConfirm: () -> Unit,
     onManualRecordMemoChange: (String) -> Unit,
     onManualRecordSaveClick: () -> Unit,
     onTabClick: (DognalTab) -> Unit,
@@ -96,11 +105,20 @@ internal fun RecordScreen(
             manualRecordDialogState = manualRecordDialogState,
             onDismissRequest = onManualRecordDismiss,
             onRecordTypeClick = onManualRecordTypeClick,
+            onDateClick = onManualRecordDateClick,
+            onTimeClick = onManualRecordTimeClick,
             onMemoChange = onManualRecordMemoChange,
             onCancelClick = onManualRecordDismiss,
             onSaveClick = onManualRecordSaveClick,
         )
     }
+    ManualRecordDateTimePicker(
+        state = manualRecordDateTimePickerState,
+        onDateChange = onManualRecordPickerDateChange,
+        onTimeChange = onManualRecordPickerTimeChange,
+        onDismissRequest = onManualRecordPickerDismiss,
+        onConfirmClick = onManualRecordPickerConfirm,
+    )
 }
 
 @Preview(showBackground = true)
@@ -160,9 +178,16 @@ private fun RecordScreenPreview() {
                     dateTime = LocalDateTime(date, LocalTime(15, 40)),
                     memo = "",
                 ),
+            manualRecordDateTimePickerState = null,
             onAddRecordClick = {},
             onManualRecordDismiss = {},
             onManualRecordTypeClick = {},
+            onManualRecordDateClick = {},
+            onManualRecordTimeClick = {},
+            onManualRecordPickerDateChange = {},
+            onManualRecordPickerTimeChange = {},
+            onManualRecordPickerDismiss = {},
+            onManualRecordPickerConfirm = {},
             onManualRecordMemoChange = {},
             onManualRecordSaveClick = {},
             onTabClick = {},
