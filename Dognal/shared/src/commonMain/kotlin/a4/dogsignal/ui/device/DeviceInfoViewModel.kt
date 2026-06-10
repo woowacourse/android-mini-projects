@@ -34,7 +34,10 @@ internal class DeviceInfoViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             runCatching { deviceRepository.authenticate(state.code, state.secret) }
-                .onSuccess { deviceId -> _navigationEvent.send(deviceId) }
+                .onSuccess { deviceId ->
+                    _uiState.update { it.copy(isLoading = false) }
+                    _navigationEvent.send(deviceId)
+                }
                 .onFailure {
                     _uiState.update {
                         it.copy(isLoading = false, error = "코드 또는 시크릿이 올바르지 않습니다.")

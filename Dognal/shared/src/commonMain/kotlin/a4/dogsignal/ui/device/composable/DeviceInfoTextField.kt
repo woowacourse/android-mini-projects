@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.Device.composable
+package a4.dogsignal.ui.device.composable
 
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
@@ -32,7 +32,7 @@ import dognal.shared.generated.resources.people
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun UserInfoTextField(
+internal fun DeviceInfoTextField(
     label: String,
     value: String,
     placeholder: String,
@@ -91,9 +91,9 @@ internal fun UserInfoTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun UserInfoTextFieldPreview() {
+private fun DeviceInfoTextFieldPreview() {
     AppTheme {
-        UserInfoTextField(
+        DeviceInfoTextField(
             label = "아이디",
             value = "romi_romi",
             placeholder = "romi_romi",

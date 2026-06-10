@@ -25,3 +25,6 @@ val WarmBorder = Color(0xFFFFE0C6)
 val CoolStroke = Color(0xFFE2D8FF)
 val BrandStroke = Color(0xFFDAECE7)
 val BorderLight = Color(0xFFDCE4EA)
+
+// State
+val ErrorRed = Color(0xFFE53935)

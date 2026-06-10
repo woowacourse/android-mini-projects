@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.Device.composable
+package a4.dogsignal.ui.device.composable
 
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.DeviceSuccessSurface
