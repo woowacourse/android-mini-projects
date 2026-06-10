@@ -4,6 +4,7 @@ import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePickerState
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialogState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ internal fun RecordRoute(
     val hideManualRecordDialog = {
         isManualRecordDialogVisible = false
         manualRecordDateTimePickerState = null
+        viewModel.clearManualRecordError()
     }
 
     val hideManualRecordDateTimePicker = {
@@ -47,12 +49,19 @@ internal fun RecordRoute(
         manualRecordDateTimePickerState = null
     }
 
+    LaunchedEffect(viewModel) {
+        viewModel.manualRecordSavedEvent.collect {
+            hideManualRecordDialog()
+        }
+    }
+
     RecordScreen(
         state = state,
         isManualRecordDialogVisible = isManualRecordDialogVisible,
         manualRecordDialogState = manualRecordDialogState,
         manualRecordDateTimePickerState = manualRecordDateTimePickerState,
         onAddRecordClick = {
+            viewModel.clearManualRecordError()
             manualRecordDialogState = ManualRecordDialogState.initial(currentDateTime())
             manualRecordDateTimePickerState = null
             isManualRecordDialogVisible = true
@@ -84,7 +93,13 @@ internal fun RecordRoute(
             manualRecordDialogState =
                 manualRecordDialogState.copy(memo = memo)
         },
-        onManualRecordSaveClick = hideManualRecordDialog,
+        onManualRecordSaveClick = {
+            viewModel.saveManualRecord(
+                type = manualRecordDialogState.selectedRecordType,
+                dateTime = manualRecordDialogState.dateTime,
+                memo = manualRecordDialogState.memo,
+            )
+        },
         onTabClick = onTabClick,
         modifier = modifier,
     )

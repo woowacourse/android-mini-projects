@@ -103,6 +103,8 @@ internal fun RecordScreen(
     if (isManualRecordDialogVisible) {
         ManualRecordDialog(
             manualRecordDialogState = manualRecordDialogState,
+            isSaving = state.isSavingManualRecord,
+            errorMessage = state.manualRecordErrorMessage,
             onDismissRequest = onManualRecordDismiss,
             onRecordTypeClick = onManualRecordTypeClick,
             onDateClick = onManualRecordDateClick,

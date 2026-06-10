@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 internal fun DialogActionButtons(
     onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
+    isSaveEnabled: Boolean,
+    saveText: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -37,10 +39,11 @@ internal fun DialogActionButtons(
             modifier = Modifier.weight(1f),
         )
         DialogActionButton(
-            text = "기록 저장",
+            text = saveText,
             containerColor = BrandPrimary,
             contentColor = Color.White,
             onClick = onSaveClick,
+            enabled = isSaveEnabled,
             modifier = Modifier.weight(1f),
         )
     }
@@ -52,6 +55,7 @@ private fun DialogActionButton(
     containerColor: Color,
     contentColor: Color,
     onClick: () -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -60,7 +64,7 @@ private fun DialogActionButton(
                 .height(48.dp)
                 .clip(RoundedCornerShape(18.dp))
                 .background(containerColor)
-                .clickable(onClick = onClick),
+                .clickable(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Text(

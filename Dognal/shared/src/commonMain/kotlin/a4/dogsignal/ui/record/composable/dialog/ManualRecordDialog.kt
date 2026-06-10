@@ -7,6 +7,7 @@ import a4.dogsignal.ui.record.composable.dialog.composable.DialogHeader
 import a4.dogsignal.ui.record.composable.dialog.composable.DialogMemoField
 import a4.dogsignal.ui.record.composable.dialog.composable.DialogRecordTypeRow
 import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.ErrorRed
 import a4.dogsignal.ui.theme.TextTertiary
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,8 @@ import kotlinx.datetime.LocalTime
 @Composable
 internal fun ManualRecordDialog(
     manualRecordDialogState: ManualRecordDialogState,
+    isSaving: Boolean,
+    errorMessage: String?,
     onDismissRequest: () -> Unit,
     onRecordTypeClick: (RecordType) -> Unit,
     onDateClick: () -> Unit,
@@ -43,6 +46,8 @@ internal fun ManualRecordDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         ManualRecordDialogContent(
             state = manualRecordDialogState,
+            isSaving = isSaving,
+            errorMessage = errorMessage,
             onRecordTypeClick = onRecordTypeClick,
             onDateClick = onDateClick,
             onTimeClick = onTimeClick,
@@ -57,6 +62,8 @@ internal fun ManualRecordDialog(
 @Composable
 private fun ManualRecordDialogContent(
     state: ManualRecordDialogState,
+    isSaving: Boolean,
+    errorMessage: String?,
     onRecordTypeClick: (RecordType) -> Unit,
     onDateClick: () -> Unit,
     onTimeClick: () -> Unit,
@@ -110,10 +117,20 @@ private fun ManualRecordDialogContent(
                 value = state.memo,
                 onValueChange = onMemoChange,
             )
+            if (errorMessage != null) {
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = errorMessage,
+                    color = ErrorRed,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
             Spacer(Modifier.height(27.dp))
             DialogActionButtons(
                 onCancelClick = onCancelClick,
                 onSaveClick = onSaveClick,
+                isSaveEnabled = !isSaving,
+                saveText = if (isSaving) "저장 중..." else "기록 저장",
             )
         }
     }
@@ -134,6 +151,8 @@ private fun ManualRecordDialogContentPreview() {
                         ),
                     memo = "",
                 ),
+            isSaving = false,
+            errorMessage = null,
             onRecordTypeClick = {},
             onDateClick = {},
             onTimeClick = {},
