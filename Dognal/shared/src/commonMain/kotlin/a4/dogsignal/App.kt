@@ -9,7 +9,8 @@ import a4.dogsignal.di.createSupabase
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.device.DeviceInfoScreen
 import a4.dogsignal.ui.home.HomeScreen
-import a4.dogsignal.ui.record.RecordScreen
+import a4.dogsignal.ui.record.RecordRoute
+import a4.dogsignal.ui.record.RecordViewModel
 import a4.dogsignal.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -76,10 +78,13 @@ fun App() {
             }
             composable(DognalTab.RECORD.name) {
                 val currentDeviceId = deviceId ?: return@composable
-                RecordScreen(
-                    repository = recordRepository,
-                    deviceId = currentDeviceId,
-                    onAddRecordClick = {},
+                val recordViewModel: RecordViewModel =
+                    viewModel {
+                        RecordViewModel(recordRepository, currentDeviceId)
+                    }
+
+                RecordRoute(
+                    viewModel = recordViewModel,
                     onTabClick = { tab -> navController.navigateToTab(tab) },
                 )
             }

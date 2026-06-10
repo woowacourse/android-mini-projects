@@ -5,6 +5,7 @@ import a4.dogsignal.ui.device.composable.DeviceInfoHeader
 import a4.dogsignal.ui.device.composable.DeviceInfoPrimaryButton
 import a4.dogsignal.ui.device.composable.DeviceInfoTextField
 import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.ErrorRed
 import a4.dogsignal.ui.theme.HomeBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import a4.dogsignal.ui.theme.ErrorRed
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
