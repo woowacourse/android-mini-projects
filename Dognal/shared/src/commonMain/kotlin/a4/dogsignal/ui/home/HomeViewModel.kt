@@ -23,11 +23,7 @@ internal class HomeViewModel(
     private val _uiState = MutableStateFlow(initialUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    init {
-        loadTodayRecords()
-    }
-
-    private fun loadTodayRecords() {
+    fun refreshTodayRecords() {
         viewModelScope.launch {
             runCatching { repository.getTodayRecords(deviceId) }
                 .onSuccess { records ->
