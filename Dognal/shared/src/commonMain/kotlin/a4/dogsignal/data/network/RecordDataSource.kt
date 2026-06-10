@@ -11,7 +11,7 @@ class RecordDataSource(
 ) {
     suspend fun getRecords(deviceId: String): List<RecordDto> {
         return supabase.from("potty_records")
-            .select(columns = Columns.list("id", "record_type", "occurred_at")) {
+            .select(columns = Columns.list("id", "record_type", "occurred_at", "note")) {
                 filter {
                     eq("device_id", deviceId)
                 }
@@ -27,7 +27,7 @@ class RecordDataSource(
         until: kotlin.time.Instant,
     ): List<RecordDto> {
         return supabase.from("potty_records")
-            .select(columns = Columns.list("id", "record_type", "occurred_at")) {
+            .select(columns = Columns.list("id", "record_type", "occurred_at", "note")) {
                 filter {
                     eq("device_id", deviceId)
                     gte("occurred_at", from.toString())

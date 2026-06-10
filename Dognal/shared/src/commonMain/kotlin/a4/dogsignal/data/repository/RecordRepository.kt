@@ -33,6 +33,7 @@ private fun RecordDto.toDomain(): Record =
         id = id,
         type = recordType.toRecordType(),
         dateTime = occurredAt.toLocalDateTime(TimeZone.currentSystemDefault()),
+        note = note,
     )
 
 private fun String.toRecordType(): RecordType =

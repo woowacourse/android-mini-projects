@@ -5,11 +5,14 @@ import a4.dogsignal.ui.common.toColor
 import a4.dogsignal.ui.common.toLabel
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BorderLight
+import a4.dogsignal.ui.theme.BrandPrimary
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
+import a4.dogsignal.ui.theme.TextTertiary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +43,9 @@ import kotlinx.datetime.number
 internal fun RecordTimelineItem(
     dateTime: LocalDateTime,
     recordType: RecordType,
+    onEditClick: () -> Unit,
     modifier: Modifier = Modifier,
+    note: String? = null,
 ) {
     Row(
         modifier = modifier.fillMaxWidth().height(100.dp),
@@ -79,21 +85,45 @@ internal fun RecordTimelineItem(
                 fontSize = 12.sp,
             )
 
-            Box(
-                modifier =
-                    Modifier
-                        .height(64.dp)
-                        .fillMaxWidth()
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .border(width = 1.dp, color = Divider, shape = RoundedCornerShape(20.dp))
-                        .background(color = Color.White)
-                        .padding(start = 22.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .border(width = 1.dp, color = Divider, shape = RoundedCornerShape(20.dp))
+                    .background(color = Color.White)
+                    .padding(horizontal = 22.dp),
             ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Text(
+                        text = recordType.toLabel(),
+                        color = TextPrimary,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = 13.dp)
+                    )
+
+                    if (note != null) {
+                        Text(
+                            text = note,
+                            color = TextTertiary,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+
                 Text(
-                    text = recordType.toLabel(),
-                    color = TextPrimary,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = 14.dp),
+                    text = "수정",
+                    color = BrandPrimary,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .clickable(onClick = onEditClick)
+                        .align(Alignment.CenterVertically),
                 )
             }
         }
@@ -109,6 +139,8 @@ private fun RecordTimelineItemPreview() {
         RecordTimelineItem(
             dateTime = LocalDateTime(2026, 6, 9, 14, 44),
             recordType = RecordType.PAD,
+            note = "메모하는 공간입니다.메모하는 공간입니다.메모하는 공간입니다.메모하는 공간입니다.",
+            onEditClick = {}
         )
     }
 }

@@ -16,6 +16,7 @@ import kotlinx.datetime.LocalTime
 @Composable
 internal fun RecordTimelineGroup(
     recordList: List<Record>,
+    onEditClick: (Record) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -26,6 +27,8 @@ internal fun RecordTimelineGroup(
             RecordTimelineItem(
                 dateTime = record.dateTime,
                 recordType = record.type,
+                note = record.note,
+                onEditClick = { onEditClick(record) },
             )
         }
     }
@@ -41,6 +44,7 @@ private fun RecordTimelineGroupPreview() {
             Record(id = "2", dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
         )
     RecordTimelineGroup(
-        recordList,
+        recordList = recordList,
+        onEditClick = {},
     )
 }

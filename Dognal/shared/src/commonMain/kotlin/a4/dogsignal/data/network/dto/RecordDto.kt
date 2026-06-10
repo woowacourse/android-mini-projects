@@ -9,4 +9,5 @@ data class RecordDto(
     val id: String,
     @SerialName("record_type") val recordType: String,
     @SerialName("occurred_at") val occurredAt: Instant,
+    val note: String? = null,
 )

@@ -100,6 +100,7 @@ internal fun RecordScreen(
             } else {
                 RecordTimelineGroup(
                     recordList = state.recordList,
+                    onEditClick = {},
                     modifier = Modifier.padding(start = 15.dp),
                 )
             }
@@ -124,6 +125,7 @@ private fun RecordScreenPreview() {
                                 id = "1",
                                 dateTime = LocalDateTime(date, LocalTime(2, 5)),
                                 type = RecordType.PAD,
+                                note = "힘겨워 보였음"
                             ),
                             Record(
                                 id = "2",
@@ -134,6 +136,7 @@ private fun RecordScreenPreview() {
                                 id = "3",
                                 dateTime = LocalDateTime(date, LocalTime(1, 20)),
                                 type = RecordType.URINE,
+                                note = "양 많음"
                             ),
                             Record(
                                 id = "4",
