@@ -17,14 +17,26 @@ class StoolDetector {
 public:
   StoolDetector();
 
-  bool begin(float baselineDistanceCm);
-  DetectionResult update(float distanceCm);
+  bool begin(float baselineWeightG, float baselineDistanceCm);
+  DetectionResult update(float weightG, float distanceCm);
 
-  float getBaselineCm();
+  float getBaselineWeightG();
+  float getBaselineDistanceCm();
+  float getVisitBaselineWeightG();
+  float getVisitBaselineDistanceCm();
+  float getLastResidualDeltaG();
+  float getLastHeightDeltaCm();
   const char* getStateName();
 
 private:
-  float baselineCm;
+  float baselineWeightG;
+  float baselineDistanceCm;
+  float visitBaselineWeightG;
+  float visitBaselineDistanceCm;
+  float postExitWeightG;
+  float postExitDistanceCm;
+  float lastResidualDeltaG;
+  float lastHeightDeltaCm;
 
   DetectorState state;
 
@@ -32,12 +44,21 @@ private:
   unsigned long visitEndCandidateAt;
   unsigned long visitStartedAt;
   unsigned long visitEndedAt;
-  unsigned long stoolCandidateStartedAt;
+  unsigned long postExitStartedAt;
   unsigned long clearStartedAt;
+  unsigned long baselineStableStartedAt;
+  unsigned long lastBaselineCalibratedAt;
+  bool baselineRefreshRequested;
 
-  bool isDogPresent(float distanceCm);
-  bool isStoolCandidate(float distanceCm);
-  bool isPadClear(float distanceCm);
+  bool hasValidSample(float weightG, float distanceCm);
+  bool isVisitEnterCandidate(float weightG);
+  bool isDogAbsent(float weightG);
+  bool isBaselineStable(float weightG, float distanceCm);
+  bool canUpdateBaseline(unsigned long now);
+  void updateBaselineCalibration(unsigned long now, float weightG, float distanceCm);
+  void setBaseline(float weightG, float distanceCm, unsigned long now);
+  void startVisit(unsigned long now);
+  const char* classifyPostExit(float weightG, float distanceCm);
 
   DetectionResult noEvent();
   DetectionResult event(const char* eventType);

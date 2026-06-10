@@ -16,7 +16,8 @@ public:
 private:
   UltrasonicSensor& sensor;
   int sampleCount;
-  int collectedCount;
+  int attemptedCount;
+  int validCount;
   float sumCm;
   float lastAverageCm;
   bool averageReady;

@@ -1,11 +1,13 @@
 #include <Arduino.h>
+#include "../config/detection_config.h"
 #include "../config/timing.h"
 #include "distance_sampler.h"
 
 DistanceSampler::DistanceSampler(UltrasonicSensor& sensor, int sampleCount)
   : sensor(sensor) {
   this->sampleCount = sampleCount;
-  collectedCount = 0;
+  attemptedCount = 0;
+  validCount = 0;
   sumCm = 0.0;
   lastAverageCm = -1.0;
   averageReady = false;
@@ -13,7 +15,8 @@ DistanceSampler::DistanceSampler(UltrasonicSensor& sensor, int sampleCount)
 }
 
 void DistanceSampler::begin() {
-  collectedCount = 0;
+  attemptedCount = 0;
+  validCount = 0;
   sumCm = 0.0;
   lastAverageCm = -1.0;
   averageReady = false;
@@ -28,16 +31,20 @@ void DistanceSampler::update(unsigned long now) {
   lastSampleAt = now;
 
   float distanceCm = sensor.readCm();
-  if (distanceCm >= 2.0 && distanceCm <= 250.0) {
+  attemptedCount++;
+
+  if (distanceCm >= ULTRASONIC_MIN_VALID_DISTANCE_CM &&
+      distanceCm <= ULTRASONIC_PAD_MAX_DISTANCE_CM) {
     sumCm += distanceCm;
-    collectedCount++;
+    validCount++;
   }
 
-  if (collectedCount >= sampleCount) {
-    lastAverageCm = sumCm / collectedCount;
+  if (attemptedCount >= sampleCount) {
+    lastAverageCm = validCount > 0 ? sumCm / validCount : -1.0;
     averageReady = true;
     sumCm = 0.0;
-    collectedCount = 0;
+    attemptedCount = 0;
+    validCount = 0;
   }
 }
 

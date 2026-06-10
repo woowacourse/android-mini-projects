@@ -9,7 +9,7 @@
 
 AppController::AppController()
   : ultrasonicSensor(TRIG_PIN, ECHO_PIN),
-    distanceSampler(ultrasonicSensor, 5),
+    distanceSampler(ultrasonicSensor, MOVING_AVERAGE_WINDOW),
     loadCellSensor(LOAD_CELL_DOUT_PIN, LOAD_CELL_SCK_PIN),
     supabaseClient(SUPABASE_URL, SUPABASE_API_KEY, DEVICE_CODE, DEVICE_SECRET),
     eventSender(sequenceStore, supabaseClient),
@@ -66,7 +66,7 @@ void AppController::beginHardware() {
   );
 
   Serial.println("Calibrating empty pad baseline...");
-  Serial.println("센서 아래에 아무것도 두지 말고 기다리세요.");
+  Serial.println("패드 위에 강아지가 없는 상태로 기다리세요.");
 }
 
 void AppController::beginServices() {
@@ -137,24 +137,34 @@ void AppController::updateSensors(unsigned long now) {
   }
 
   float distanceCm = distanceSampler.readAverageCm();
-  handleDistanceSample(distanceCm);
+  float weightG = isLoadCellReady ? loadCellSensor.readWeightG(MOVING_AVERAGE_WINDOW) : NAN;
+
+  handleSensorSample(weightG, distanceCm);
 }
 
-void AppController::handleDistanceSample(float distanceCm) {
+void AppController::handleSensorSample(float weightG, float distanceCm) {
   lastDistanceCm = distanceCm;
-  lastWeightGram = isLoadCellReady ? loadCellSensor.readWeightG(5) : NAN;
+  lastWeightGram = weightG;
 
   if (!isCalibrationComplete) {
-    isDetectorReady = stoolDetector.begin(distanceCm);
+    isDetectorReady = stoolDetector.begin(weightG, distanceCm);
+    if (!isDetectorReady) {
+      return;
+    }
+
     isCalibrationComplete = true;
     return;
   }
 
-  if (!isDeviceReadySent || eventSender.hasPendingEvent()) {
+  if (!isDetectorReady) {
     return;
   }
 
-  DetectionResult result = stoolDetector.update(distanceCm);
+  if (eventSender.hasPendingEvent()) {
+    return;
+  }
+
+  DetectionResult result = stoolDetector.update(weightG, distanceCm);
 
   if (result.hasEvent) {
     eventSender.queueEvent(result.eventType);
@@ -197,8 +207,16 @@ void AppController::printRuntimeDebug() {
     Serial.print(" cm");
   }
 
-  Serial.print(" | Baseline: ");
-  Serial.print(stoolDetector.getBaselineCm(), 1);
+  Serial.print(" | Baseline weight: ");
+  if (isnan(stoolDetector.getBaselineWeightG())) {
+    Serial.print("N/A");
+  } else {
+    Serial.print(stoolDetector.getBaselineWeightG(), 1);
+    Serial.print(" g");
+  }
+
+  Serial.print(" | Baseline distance: ");
+  Serial.print(stoolDetector.getBaselineDistanceCm(), 1);
   Serial.print(" cm");
 
   Serial.print(" | Detector: ");

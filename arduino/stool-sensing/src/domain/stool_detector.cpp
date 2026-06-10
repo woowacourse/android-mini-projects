@@ -5,58 +5,56 @@
 #include "event_types.h"
 
 StoolDetector::StoolDetector() {
-  baselineCm = -1.0;
+  baselineWeightG = NAN;
+  baselineDistanceCm = -1.0;
+  visitBaselineWeightG = NAN;
+  visitBaselineDistanceCm = -1.0;
+  postExitWeightG = NAN;
+  postExitDistanceCm = -1.0;
+  lastResidualDeltaG = NAN;
+  lastHeightDeltaCm = NAN;
+
   state = DETECTOR_IDLE;
 
   visitStartCandidateAt = 0;
   visitEndCandidateAt = 0;
   visitStartedAt = 0;
   visitEndedAt = 0;
-  stoolCandidateStartedAt = 0;
+  postExitStartedAt = 0;
   clearStartedAt = 0;
+  baselineStableStartedAt = 0;
+  lastBaselineCalibratedAt = 0;
+  baselineRefreshRequested = false;
 }
 
-bool StoolDetector::begin(float baselineDistanceCm) {
-  if (baselineDistanceCm < 0) {
+bool StoolDetector::begin(float baselineWeightG, float baselineDistanceCm) {
+  if (!hasValidSample(baselineWeightG, baselineDistanceCm)) {
     Serial.println("Baseline calibration failed.");
     return false;
   }
 
-  baselineCm = baselineDistanceCm;
-
-  Serial.print("Baseline distance: ");
-  Serial.print(baselineCm, 1);
-  Serial.println(" cm");
-
+  setBaseline(baselineWeightG, baselineDistanceCm, millis());
   return true;
 }
 
-DetectionResult StoolDetector::update(float distanceCm) {
-  if (distanceCm < 0 || baselineCm < 0) {
+DetectionResult StoolDetector::update(float weightG, float distanceCm) {
+  if (!hasValidSample(weightG, distanceCm)) {
     return noEvent();
   }
 
   unsigned long now = millis();
 
-  bool dogPresent = isDogPresent(distanceCm);
-  bool stoolCandidate = isStoolCandidate(distanceCm);
-  bool padClear = isPadClear(distanceCm);
-
   switch (state) {
     case DETECTOR_IDLE:
-      if (dogPresent) {
+      updateBaselineCalibration(now, weightG, distanceCm);
+
+      if (isVisitEnterCandidate(weightG)) {
         if (visitStartCandidateAt == 0) {
           visitStartCandidateAt = now;
         }
 
         if (now - visitStartCandidateAt >= VISIT_START_HOLD_MS) {
-          state = DETECTOR_VISIT_ACTIVE;
-          visitStartedAt = now;
-          visitEndCandidateAt = 0;
-          stoolCandidateStartedAt = 0;
-          clearStartedAt = 0;
-
-          Serial.println("Visit started.");
+          startVisit(now);
         }
       } else {
         visitStartCandidateAt = 0;
@@ -64,28 +62,19 @@ DetectionResult StoolDetector::update(float distanceCm) {
       break;
 
     case DETECTOR_VISIT_ACTIVE:
-      if (!dogPresent) {
+      if (isDogAbsent(weightG)) {
         if (visitEndCandidateAt == 0) {
           visitEndCandidateAt = now;
         }
 
-        if (now - visitEndCandidateAt >= VISIT_END_HOLD_MS) {
-          unsigned long visitDuration = now - visitStartedAt;
-
-          if (visitDuration < MIN_VISIT_MS) {
-            Serial.println("Visit too short. Ignored.");
-            state = DETECTOR_IDLE;
-            visitStartCandidateAt = 0;
-            visitEndCandidateAt = 0;
-            visitStartedAt = 0;
-            break;
-          }
-
+        if (now - visitEndCandidateAt >= EXIT_HOLD_MS) {
           visitEndedAt = now;
-          stoolCandidateStartedAt = 0;
+          postExitStartedAt = now;
+          postExitWeightG = weightG;
+          postExitDistanceCm = distanceCm;
           state = DETECTOR_POST_VISIT_CHECK;
 
-          Serial.println("Visit ended. Start post-visit check.");
+          Serial.println("Visit ended. Stabilizing post-exit sensors.");
         }
       } else {
         visitEndCandidateAt = 0;
@@ -93,44 +82,36 @@ DetectionResult StoolDetector::update(float distanceCm) {
       break;
 
     case DETECTOR_POST_VISIT_CHECK:
-      if (dogPresent) {
-        Serial.println("Dog returned. Back to visit active.");
+      if (isVisitEnterCandidate(weightG)) {
+        Serial.println("Dog returned during post-exit check. Back to visit active.");
         state = DETECTOR_VISIT_ACTIVE;
         visitEndCandidateAt = 0;
-        stoolCandidateStartedAt = 0;
+        postExitStartedAt = 0;
         break;
       }
 
-      if (stoolCandidate) {
-        if (stoolCandidateStartedAt == 0) {
-          stoolCandidateStartedAt = now;
-          Serial.println("Stool candidate started.");
-        }
+      postExitWeightG = weightG;
+      postExitDistanceCm = distanceCm;
 
-        if (now - stoolCandidateStartedAt >= STOOL_HOLD_MS) {
-          Serial.println("Final result: STOOL_DETECTED");
+      if (now - postExitStartedAt >= POST_EXIT_STABILIZE_MS) {
+        const char* eventType = classifyPostExit(postExitWeightG, postExitDistanceCm);
 
-          state = DETECTOR_LOCKED;
-          clearStartedAt = 0;
-
-          return event(EVENT_STOOL_DETECTED);
-        }
-      } else {
-        stoolCandidateStartedAt = 0;
-      }
-
-      if (now - visitEndedAt >= POST_VISIT_DECIDE_MS) {
-        Serial.println("Final result: VISIT_DETECTED");
+        Serial.print("Final result: ");
+        Serial.println(eventType);
 
         state = DETECTOR_LOCKED;
         clearStartedAt = 0;
+        baselineStableStartedAt = 0;
+        baselineRefreshRequested = true;
 
-        return event(EVENT_VISIT_DETECTED);
+        return event(eventType);
       }
       break;
 
     case DETECTOR_LOCKED:
-      if (padClear) {
+      if (isDogAbsent(weightG)) {
+        updateBaselineCalibration(now, weightG, distanceCm);
+
         if (clearStartedAt == 0) {
           clearStartedAt = now;
           Serial.println("Pad clear timer started.");
@@ -144,11 +125,13 @@ DetectionResult StoolDetector::update(float distanceCm) {
           visitEndCandidateAt = 0;
           visitStartedAt = 0;
           visitEndedAt = 0;
-          stoolCandidateStartedAt = 0;
+          postExitStartedAt = 0;
           clearStartedAt = 0;
+          baselineStableStartedAt = 0;
         }
       } else {
         clearStartedAt = 0;
+        baselineStableStartedAt = 0;
       }
       break;
   }
@@ -156,28 +139,134 @@ DetectionResult StoolDetector::update(float distanceCm) {
   return noEvent();
 }
 
-bool StoolDetector::isDogPresent(float distanceCm) {
-  float delta = baselineCm - distanceCm;
-
-  return distanceCm <= DOG_PRESENT_ABSOLUTE_CM ||
-         delta >= DOG_BODY_DELTA_CM;
+bool StoolDetector::hasValidSample(float weightG, float distanceCm) {
+  return !isnan(weightG) && distanceCm >= 0;
 }
 
-bool StoolDetector::isStoolCandidate(float distanceCm) {
-  float delta = baselineCm - distanceCm;
-
-  return distanceCm > DOG_PRESENT_ABSOLUTE_CM &&
-         delta >= STOOL_MIN_DELTA_CM &&
-         delta <= STOOL_MAX_DELTA_CM;
+bool StoolDetector::isVisitEnterCandidate(float weightG) {
+  return weightG - baselineWeightG >= VISIT_ENTER_DELTA_G;
 }
 
-bool StoolDetector::isPadClear(float distanceCm) {
-  float delta = fabs(baselineCm - distanceCm);
-  return delta <= PAD_CLEAR_DELTA_CM;
+bool StoolDetector::isDogAbsent(float weightG) {
+  float referenceWeightG = isnan(visitBaselineWeightG) ? baselineWeightG : visitBaselineWeightG;
+  return weightG - referenceWeightG < DOG_ABSENCE_DELTA_G;
 }
 
-float StoolDetector::getBaselineCm() {
-  return baselineCm;
+bool StoolDetector::isBaselineStable(float weightG, float distanceCm) {
+  return fabs(weightG - baselineWeightG) <= BASELINE_WEIGHT_STABLE_DELTA_G &&
+         fabs(distanceCm - baselineDistanceCm) <= BASELINE_DISTANCE_STABLE_DELTA_CM;
+}
+
+bool StoolDetector::canUpdateBaseline(unsigned long now) {
+  return baselineRefreshRequested ||
+         now - lastBaselineCalibratedAt >= CALIBRATION_INTERVAL_MS;
+}
+
+void StoolDetector::updateBaselineCalibration(unsigned long now, float weightG, float distanceCm) {
+  if (!canUpdateBaseline(now)) {
+    baselineStableStartedAt = 0;
+    return;
+  }
+
+  if (!isDogAbsent(weightG)) {
+    baselineStableStartedAt = 0;
+    return;
+  }
+
+  if (!isBaselineStable(weightG, distanceCm)) {
+    baselineStableStartedAt = now;
+    baselineWeightG = weightG;
+    baselineDistanceCm = distanceCm;
+    return;
+  }
+
+  if (baselineStableStartedAt == 0) {
+    baselineStableStartedAt = now;
+  }
+
+  if (now - baselineStableStartedAt >= BASELINE_STABLE_HOLD_MS) {
+    setBaseline(weightG, distanceCm, now);
+    baselineStableStartedAt = 0;
+    baselineRefreshRequested = false;
+  }
+}
+
+void StoolDetector::setBaseline(float weightG, float distanceCm, unsigned long now) {
+  baselineWeightG = weightG;
+  baselineDistanceCm = distanceCm;
+  lastBaselineCalibratedAt = now;
+
+  Serial.print("Baseline weight: ");
+  Serial.print(baselineWeightG, 1);
+  Serial.print(" g | Baseline distance: ");
+  Serial.print(baselineDistanceCm, 1);
+  Serial.println(" cm");
+}
+
+void StoolDetector::startVisit(unsigned long now) {
+  state = DETECTOR_VISIT_ACTIVE;
+  visitStartedAt = now;
+  visitEndCandidateAt = 0;
+  postExitStartedAt = 0;
+
+  visitBaselineWeightG = baselineWeightG;
+  visitBaselineDistanceCm = baselineDistanceCm;
+
+  Serial.print("Visit started. Snapshot weight: ");
+  Serial.print(visitBaselineWeightG, 1);
+  Serial.print(" g | Snapshot distance: ");
+  Serial.print(visitBaselineDistanceCm, 1);
+  Serial.println(" cm");
+}
+
+const char* StoolDetector::classifyPostExit(float weightG, float distanceCm) {
+  lastResidualDeltaG = weightG - visitBaselineWeightG;
+  lastHeightDeltaCm = visitBaselineDistanceCm - distanceCm;
+
+  Serial.print("Residual delta: ");
+  Serial.print(lastResidualDeltaG, 1);
+  Serial.print(" g | Height delta: ");
+  Serial.print(lastHeightDeltaCm, 1);
+  Serial.println(" cm");
+
+  if (lastResidualDeltaG < VISIT_ONLY_DELTA_G) {
+    return EVENT_VISIT_DETECTED;
+  }
+
+  if (lastHeightDeltaCm >= FECES_HEIGHT_DELTA_CM) {
+    return EVENT_STOOL_DETECTED;
+  }
+
+  if (fabs(lastHeightDeltaCm) <= URINE_DISTANCE_TOLERANCE_CM) {
+    return EVENT_URINE_DETECTED;
+  }
+
+  // 잔여 무게는 있지만 대변 높이 기준에는 못 미치는 애매한 경우는 소변으로 본다.
+  return EVENT_URINE_DETECTED;
+}
+
+float StoolDetector::getBaselineWeightG() {
+  return baselineWeightG;
+}
+
+float StoolDetector::getBaselineDistanceCm() {
+  return baselineDistanceCm;
+}
+
+float StoolDetector::getVisitBaselineWeightG() {
+  return visitBaselineWeightG;
+}
+
+float StoolDetector::getVisitBaselineDistanceCm() {
+  return visitBaselineDistanceCm;
+}
+
+float StoolDetector::getLastResidualDeltaG() {
+  return lastResidualDeltaG;
+}
+
+float StoolDetector::getLastHeightDeltaCm() {
+  return lastHeightDeltaCm;
 }
 
 const char* StoolDetector::getStateName() {

@@ -53,7 +53,7 @@ private:
   void updateEventSending(unsigned long now);
   void updateDebugPrint(unsigned long now);
 
-  void handleDistanceSample(float distanceCm);
+  void handleSensorSample(float weightG, float distanceCm);
   void handleSentEvent();
   void printRuntimeDebug();
 };
