@@ -1,0 +1,12 @@
+#ifndef EVENT_TYPES_H
+#define EVENT_TYPES_H
+
+// DB enum public.sensor_event_type과 정확히 일치해야 한다.
+
+#define EVENT_DEVICE_READY "DEVICE_READY"
+#define EVENT_VISIT_DETECTED "VISIT_DETECTED"
+#define EVENT_URINE_DETECTED "URINE_DETECTED"
+#define EVENT_STOOL_DETECTED "STOOL_DETECTED"
+#define EVENT_SENSOR_ERROR "SENSOR_ERROR"
+
+#endif
