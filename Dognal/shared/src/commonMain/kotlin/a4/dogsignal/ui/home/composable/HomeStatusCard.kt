@@ -50,7 +50,7 @@ internal fun HomeStatusCard(
         Image(
             painter = painterResource(Res.drawable.dogFoot),
             contentDescription = "dogFoot",
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(40.dp),
         )
         Column(
             modifier = Modifier.weight(1f),

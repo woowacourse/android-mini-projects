@@ -19,8 +19,12 @@ val RecordScreenBackground = Color(0xFFF8FAFF)
 val WarmSurface = Color(0xFFFFF6EC)
 val CoolBackground = Color(0xFFF4F0FF)
 val BrandSurface = Color(0xFFF3F9F7)
+val DeviceSuccessSurface = Color(0xFFE8F6F1)
 val Divider = Color(0xFFE8EEF2)
 val WarmBorder = Color(0xFFFFE0C6)
 val CoolStroke = Color(0xFFE2D8FF)
 val BrandStroke = Color(0xFFDAECE7)
 val BorderLight = Color(0xFFDCE4EA)
+
+// State
+val ErrorRed = Color(0xFFE53935)

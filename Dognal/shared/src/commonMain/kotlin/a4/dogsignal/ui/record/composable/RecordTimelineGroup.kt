@@ -16,16 +16,19 @@ import kotlinx.datetime.LocalTime
 @Composable
 internal fun RecordTimelineGroup(
     recordList: List<Record>,
+    onEditClick: (Record) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(recordList) { record ->
+        items(items = recordList, key = { it.id }) { record ->
             RecordTimelineItem(
-                time = record.dateTime.time,
+                dateTime = record.dateTime,
                 recordType = record.type,
+                note = record.note,
+                onEditClick = { onEditClick(record) },
             )
         }
     }
@@ -37,11 +40,11 @@ private fun RecordTimelineGroupPreview() {
     val date = LocalDate(2026, 6, 5)
     val recordList =
         listOf(
-            Record(dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
-            Record(dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
+            Record(id = "1", dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+            Record(id = "2", dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
         )
-
     RecordTimelineGroup(
-        recordList,
+        recordList = recordList,
+        onEditClick = {},
     )
 }

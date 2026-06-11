@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ktlint)
     id("com.codingfeline.buildkonfig") version "0.21.2"
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 kotlin {
@@ -42,6 +43,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.ui.tooling)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -55,9 +57,13 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.supabase.postgrest)
             implementation(libs.ktor.client.core)
+            implementation(libs.supabase.realtime)
+            implementation(libs.navigation.compose)
+            implementation(libs.supabase.auth)
+            implementation(libs.multiplatform.settings.no.arg)
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)     // ← 2번 (iOS 엔진)
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -75,10 +81,11 @@ ktlint {
     }
 }
 
-val localProps = Properties().apply {
-    val f = rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
-}
+val localProps =
+    Properties().apply {
+        val f = rootProject.file("local.properties")
+        if (f.exists()) f.inputStream().use { load(it) }
+    }
 
 buildkonfig {
     packageName = "a4.dogsignal"

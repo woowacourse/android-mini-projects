@@ -3,6 +3,8 @@ package a4.dogsignal.model
 import kotlinx.datetime.LocalDateTime
 
 data class Record(
-    val dateTime: LocalDateTime,
+    val id: String,
     val type: RecordType,
+    val dateTime: LocalDateTime,
+    val note: String? = null,
 )

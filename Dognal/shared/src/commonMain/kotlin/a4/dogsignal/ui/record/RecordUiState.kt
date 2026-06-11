@@ -8,4 +8,7 @@ internal data class RecordUiState(
     val dateLabel: String,
     val dateValue: String,
     val recordList: List<Record>,
+    val isLoading: Boolean = false,
+    val isSavingManualRecord: Boolean = false,
+    val manualRecordErrorMessage: String? = null,
 )
