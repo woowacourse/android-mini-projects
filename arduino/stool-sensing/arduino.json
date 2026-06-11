@@ -1,0 +1,10 @@
+{
+  "sketch": "stool-sensing.ino",
+  "fqbn": "esp32:esp32:esp32",
+  "port": "COM3",
+  "baud": 115200,
+  "requiredCore": "esp32:esp32",
+  "requiredLibraries": [
+    "HX711"
+  ]
+}
