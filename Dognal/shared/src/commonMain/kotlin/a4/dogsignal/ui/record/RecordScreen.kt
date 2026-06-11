@@ -1,6 +1,5 @@
 package a4.dogsignal.ui.record
 
-import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.model.Record
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
@@ -9,6 +8,10 @@ import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.record.composable.AddRecordButton
 import a4.dogsignal.ui.record.composable.DateHeaderCard
 import a4.dogsignal.ui.record.composable.RecordTimelineGroup
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePicker
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePickerState
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialog
+import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialogState
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.layout.Box
@@ -21,39 +24,31 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 @Composable
 internal fun RecordScreen(
-    repository: RecordRepository,
-    deviceId: String,
-    onAddRecordClick: () -> Unit,
-    onTabClick: (DognalTab) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val viewModel: RecordViewModel = viewModel { RecordViewModel(repository, deviceId) }
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    RecordScreen(
-        state = state,
-        onAddRecordClick = onAddRecordClick,
-        onTabClick = onTabClick,
-        modifier = modifier,
-    )
-}
-
-@Composable
-internal fun RecordScreen(
     state: RecordUiState,
+    isManualRecordDialogVisible: Boolean,
+    manualRecordDialogState: ManualRecordDialogState,
+    manualRecordDateTimePickerState: ManualRecordDateTimePickerState?,
     onAddRecordClick: () -> Unit,
+    onManualRecordDismiss: () -> Unit,
+    onManualRecordTypeClick: (RecordType) -> Unit,
+    onManualRecordDateClick: () -> Unit,
+    onManualRecordTimeClick: () -> Unit,
+    onManualRecordPickerDateChange: (LocalDate) -> Unit,
+    onManualRecordPickerTimeChange: (LocalTime) -> Unit,
+    onManualRecordPickerDismiss: () -> Unit,
+    onManualRecordPickerConfirm: () -> Unit,
+    onManualRecordMemoChange: (String) -> Unit,
+    onManualRecordSaveClick: () -> Unit,
     onTabClick: (DognalTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -106,6 +101,27 @@ internal fun RecordScreen(
             }
         }
     }
+    if (isManualRecordDialogVisible) {
+        ManualRecordDialog(
+            manualRecordDialogState = manualRecordDialogState,
+            isSaving = state.isSavingManualRecord,
+            errorMessage = state.manualRecordErrorMessage,
+            onDismissRequest = onManualRecordDismiss,
+            onRecordTypeClick = onManualRecordTypeClick,
+            onDateClick = onManualRecordDateClick,
+            onTimeClick = onManualRecordTimeClick,
+            onMemoChange = onManualRecordMemoChange,
+            onCancelClick = onManualRecordDismiss,
+            onSaveClick = onManualRecordSaveClick,
+        )
+    }
+    ManualRecordDateTimePicker(
+        state = manualRecordDateTimePickerState,
+        onDateChange = onManualRecordPickerDateChange,
+        onTimeChange = onManualRecordPickerTimeChange,
+        onDismissRequest = onManualRecordPickerDismiss,
+        onConfirmClick = onManualRecordPickerConfirm,
+    )
 }
 
 @Preview(showBackground = true)
@@ -160,7 +176,25 @@ private fun RecordScreenPreview() {
                             ),
                         ),
                 ),
+            isManualRecordDialogVisible = false,
+            manualRecordDialogState =
+                ManualRecordDialogState(
+                    selectedRecordType = RecordType.URINE,
+                    dateTime = LocalDateTime(date, LocalTime(15, 40)),
+                    memo = "",
+                ),
+            manualRecordDateTimePickerState = null,
             onAddRecordClick = {},
+            onManualRecordDismiss = {},
+            onManualRecordTypeClick = {},
+            onManualRecordDateClick = {},
+            onManualRecordTimeClick = {},
+            onManualRecordPickerDateChange = {},
+            onManualRecordPickerTimeChange = {},
+            onManualRecordPickerDismiss = {},
+            onManualRecordPickerConfirm = {},
+            onManualRecordMemoChange = {},
+            onManualRecordSaveClick = {},
             onTabClick = {},
         )
     }

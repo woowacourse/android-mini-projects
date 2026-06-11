@@ -11,3 +11,13 @@ data class RecordDto(
     @SerialName("occurred_at") val occurredAt: Instant,
     val note: String? = null,
 )
+
+@Serializable
+data class CreateRecordDto(
+    @SerialName("device_id") val deviceId: String,
+    @SerialName("record_type") val recordType: String,
+    val source: String,
+    @SerialName("occurred_at") val occurredAt: Instant,
+    val note: String,
+    @SerialName("created_at") val createdAt: Instant,
+)

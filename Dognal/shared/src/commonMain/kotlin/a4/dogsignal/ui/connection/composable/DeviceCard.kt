@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dognal.shared.generated.resources.Res
-import dognal.shared.generated.resources.arduino
+import dognal.shared.generated.resources.stool
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -51,7 +51,7 @@ internal fun DeviceCard(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Image(
-            painter = painterResource(Res.drawable.arduino),
+            painter = painterResource(Res.drawable.stool),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
         )
