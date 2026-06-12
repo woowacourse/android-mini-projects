@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.record.composable.dialog.composable
 
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -28,5 +30,13 @@ internal fun DialogHeader(modifier: Modifier = Modifier) {
             color = TextSecondary,
             style = MaterialTheme.typography.labelSmall,
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DialogHeaderPreview() {
+    AppTheme {
+        DialogHeader()
     }
 }

@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.record.composable.dialog.composable
 
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextDisabled
 import a4.dogsignal.ui.theme.TextPrimary
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -84,3 +86,25 @@ private fun String.withoutLineBreak(): String =
     takeWhile { character ->
         character != '\n' && character != '\r'
     }
+
+@Preview(showBackground = true)
+@Composable
+private fun DialogMemoFieldEmptyPreview() {
+    AppTheme {
+        DialogMemoField(
+            value = "",
+            onValueChange = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DialogMemoFieldFilledPreview() {
+    AppTheme {
+        DialogMemoField(
+            value = "색이 진함, 횟수 잦음",
+            onValueChange = {},
+        )
+    }
+}

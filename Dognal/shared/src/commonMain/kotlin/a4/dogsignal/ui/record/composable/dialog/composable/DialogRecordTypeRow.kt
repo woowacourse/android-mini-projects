@@ -2,6 +2,7 @@ package a4.dogsignal.ui.record.composable.dialog.composable
 
 import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.toColor
+import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandSurface
 import a4.dogsignal.ui.theme.CoolBackground
 import a4.dogsignal.ui.theme.Divider
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dognal.shared.generated.resources.Res
@@ -136,3 +138,14 @@ private fun manualRecordTypeOptions(): List<ManualRecordTypeOption> =
             background = BrandSurface,
         ),
     )
+
+@Preview(showBackground = true)
+@Composable
+private fun DialogRecordTypeRowPreview() {
+    AppTheme {
+        DialogRecordTypeRow(
+            selectedRecordType = RecordType.URINE,
+            onRecordTypeClick = {},
+        )
+    }
+}
