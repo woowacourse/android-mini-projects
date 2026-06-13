@@ -39,6 +39,7 @@ internal fun RecordScreen(
     manualRecordDialogState: ManualRecordDialogState,
     manualRecordDateTimePickerState: ManualRecordDateTimePickerState?,
     onAddRecordClick: () -> Unit,
+    onEditRecordClick: (Record) -> Unit,
     onManualRecordDismiss: () -> Unit,
     onManualRecordTypeClick: (RecordType) -> Unit,
     onManualRecordDateClick: () -> Unit,
@@ -49,6 +50,7 @@ internal fun RecordScreen(
     onManualRecordPickerConfirm: () -> Unit,
     onManualRecordMemoChange: (String) -> Unit,
     onManualRecordSaveClick: () -> Unit,
+    onManualRecordDeleteClick: () -> Unit,
     onTabClick: (DognalTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -95,7 +97,7 @@ internal fun RecordScreen(
             } else {
                 RecordTimelineGroup(
                     recordList = state.recordList,
-                    onEditClick = {},
+                    onEditClick = onEditRecordClick,
                     modifier = Modifier.padding(start = 15.dp),
                 )
             }
@@ -113,6 +115,7 @@ internal fun RecordScreen(
             onMemoChange = onManualRecordMemoChange,
             onCancelClick = onManualRecordDismiss,
             onSaveClick = onManualRecordSaveClick,
+            onDeleteClick = onManualRecordDeleteClick,
         )
     }
     ManualRecordDateTimePicker(
@@ -185,6 +188,7 @@ private fun RecordScreenPreview() {
                 ),
             manualRecordDateTimePickerState = null,
             onAddRecordClick = {},
+            onEditRecordClick = {},
             onManualRecordDismiss = {},
             onManualRecordTypeClick = {},
             onManualRecordDateClick = {},
@@ -195,6 +199,7 @@ private fun RecordScreenPreview() {
             onManualRecordPickerConfirm = {},
             onManualRecordMemoChange = {},
             onManualRecordSaveClick = {},
+            onManualRecordDeleteClick = {},
             onTabClick = {},
         )
     }

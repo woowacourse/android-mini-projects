@@ -2,6 +2,7 @@ package a4.dogsignal.ui.record.composable.dialog.composable
 
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandPrimary
+import a4.dogsignal.ui.theme.ErrorRed
 import a4.dogsignal.ui.theme.TextTertiary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,19 +28,32 @@ internal fun DialogActionButtons(
     onSaveClick: () -> Unit,
     isSaveEnabled: Boolean,
     saveText: String,
+    isEditing: Boolean = false,
+    onDeleteClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(26.dp),
     ) {
-        DialogActionButton(
-            text = "취소",
-            containerColor = Color(0xEEF0F4F7),
-            contentColor = TextTertiary,
-            onClick = onCancelClick,
-            modifier = Modifier.weight(1f),
-        )
+        if (isEditing) {
+            DialogActionButton(
+                text = "삭제",
+                containerColor = ErrorRed,
+                contentColor = Color.White,
+                onClick = onDeleteClick,
+                enabled = isSaveEnabled,
+                modifier = Modifier.weight(1f),
+            )
+        } else {
+            DialogActionButton(
+                text = "취소",
+                containerColor = Color(0xEEF0F4F7),
+                contentColor = TextTertiary,
+                onClick = onCancelClick,
+                modifier = Modifier.weight(1f),
+            )
+        }
         DialogActionButton(
             text = saveText,
             containerColor = BrandPrimary,

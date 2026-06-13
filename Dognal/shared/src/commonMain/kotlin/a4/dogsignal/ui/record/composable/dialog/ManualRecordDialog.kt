@@ -45,6 +45,7 @@ internal fun ManualRecordDialog(
     onMemoChange: (String) -> Unit,
     onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -65,6 +66,7 @@ internal fun ManualRecordDialog(
             onMemoChange = onMemoChange,
             onCancelClick = onCancelClick,
             onSaveClick = onSaveClick,
+            onDeleteClick = onDeleteClick,
             modifier = modifier,
         )
     }
@@ -81,6 +83,7 @@ private fun ManualRecordDialogContent(
     onMemoChange: (String) -> Unit,
     onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -105,7 +108,14 @@ private fun ManualRecordDialogContent(
                     .padding(start = 22.dp, top = 7.dp, end = 22.dp, bottom = 16.dp),
         ) {
             Spacer(Modifier.height(29.dp))
-            DialogHeader()
+            if (state.isEditing) {
+                DialogHeader(
+                    title = "기록 수정",
+                    subtitle = "기록한 배변 내용을 수정해요",
+                )
+            } else {
+                DialogHeader()
+            }
             Spacer(Modifier.height(8.dp))
             Text(
                 text = "기록 유형",
@@ -163,8 +173,17 @@ private fun ManualRecordDialogContent(
                     focusManager.clearFocus()
                     onSaveClick()
                 },
+                onDeleteClick = {
+                    focusManager.clearFocus()
+                    onDeleteClick()
+                },
                 isSaveEnabled = !isSaving,
-                saveText = if (isSaving) "저장 중..." else "기록 저장",
+                isEditing = state.isEditing,
+                saveText = when {
+                    isSaving -> "저장 중..."
+                    state.isEditing -> "수정 완료"
+                    else -> "기록 저장"
+                },
             )
         }
     }
@@ -193,6 +212,7 @@ private fun ManualRecordDialogContentPreview() {
             onMemoChange = {},
             onCancelClick = {},
             onSaveClick = {},
+            onDeleteClick = {},
         )
     }
 }

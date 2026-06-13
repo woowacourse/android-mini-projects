@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.record
 
+import a4.dogsignal.model.Record
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDateTimePickerState
 import a4.dogsignal.ui.record.composable.dialog.ManualRecordDialogState
@@ -29,6 +30,13 @@ internal fun RecordRoute(
     }
     var manualRecordDateTimePickerState by remember {
         mutableStateOf<ManualRecordDateTimePickerState?>(null)
+    }
+
+    val showManualRecordDialog: (ManualRecordDialogState) -> Unit = { initialState ->
+        viewModel.clearManualRecordError()
+        manualRecordDialogState = initialState
+        manualRecordDateTimePickerState = null
+        isManualRecordDialogVisible = true
     }
 
     val hideManualRecordDialog = {
@@ -61,10 +69,10 @@ internal fun RecordRoute(
         manualRecordDialogState = manualRecordDialogState,
         manualRecordDateTimePickerState = manualRecordDateTimePickerState,
         onAddRecordClick = {
-            viewModel.clearManualRecordError()
-            manualRecordDialogState = ManualRecordDialogState.initial(currentDateTime())
-            manualRecordDateTimePickerState = null
-            isManualRecordDialogVisible = true
+            showManualRecordDialog(ManualRecordDialogState.initial(currentDateTime()))
+        },
+        onEditRecordClick = { record ->
+            showManualRecordDialog(ManualRecordDialogState.fromRecord(record))
         },
         onManualRecordDismiss = hideManualRecordDialog,
         onManualRecordTypeClick = { recordType ->
@@ -93,12 +101,29 @@ internal fun RecordRoute(
             manualRecordDialogState =
                 manualRecordDialogState.copy(memo = memo)
         },
+        onManualRecordDeleteClick = {
+            val editingId = manualRecordDialogState.editingRecordId
+            if (editingId != null) {
+                viewModel.deleteManualRecord(editingId)
+            }
+        },
         onManualRecordSaveClick = {
-            viewModel.saveManualRecord(
-                type = manualRecordDialogState.selectedRecordType,
-                dateTime = manualRecordDialogState.dateTime,
-                memo = manualRecordDialogState.memo,
-            )
+            val dialogState = manualRecordDialogState
+            val editingId = dialogState.editingRecordId
+            if (editingId != null) {
+                viewModel.updateManualRecord(
+                    id = editingId,
+                    type = dialogState.selectedRecordType,
+                    dateTime = dialogState.dateTime,
+                    memo = dialogState.memo,
+                )
+            } else {
+                viewModel.saveManualRecord(
+                    type = dialogState.selectedRecordType,
+                    dateTime = dialogState.dateTime,
+                    memo = dialogState.memo,
+                )
+            }
         },
         onTabClick = onTabClick,
         modifier = modifier,
