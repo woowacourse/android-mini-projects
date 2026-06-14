@@ -7,6 +7,7 @@ import platform.UIKit.UIDatePickerMode
 @Composable
 internal actual fun TimePickerBottomSheet(
     selectedTime: LocalTime,
+    maxTime: LocalTime?,
     onTimeChange: (LocalTime) -> Unit,
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,
@@ -16,6 +17,7 @@ internal actual fun TimePickerBottomSheet(
         title = "시간 선택",
         date = selectedTime.toNSDate(),
         mode = UIDatePickerMode.UIDatePickerModeTime,
+        maximumDate = maxTime?.toNSDate(),
         onDismissRequest = onDismissRequest,
         onCancelClick = onCancelClick,
         onConfirmClick = { date ->

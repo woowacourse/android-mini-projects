@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 @Composable
 internal expect fun DatePickerBottomSheet(
     selectedDate: LocalDate,
+    maxDate: LocalDate?,
     onDateChange: (LocalDate) -> Unit,
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,

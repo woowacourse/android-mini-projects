@@ -20,6 +20,7 @@ internal fun ManualRecordDateTimePicker(
         ManualRecordDateTimePickerType.DATE ->
             DatePickerBottomSheet(
                 selectedDate = state.dateTime.date,
+                maxDate = state.maxDateTime.date,
                 onDateChange = onDateChange,
                 onDismissRequest = onDismissRequest,
                 onCancelClick = onDismissRequest,
@@ -29,6 +30,7 @@ internal fun ManualRecordDateTimePicker(
         ManualRecordDateTimePickerType.TIME ->
             TimePickerBottomSheet(
                 selectedTime = state.dateTime.time,
+                maxTime = if (state.dateTime.date == state.maxDateTime.date) state.maxDateTime.time else null,
                 onTimeChange = onTimeChange,
                 onDismissRequest = onDismissRequest,
                 onCancelClick = onDismissRequest,

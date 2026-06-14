@@ -81,11 +81,11 @@ internal fun RecordRoute(
         },
         onManualRecordDateClick = {
             manualRecordDateTimePickerState =
-                ManualRecordDateTimePickerState.date(manualRecordDialogState.dateTime)
+                ManualRecordDateTimePickerState.date(manualRecordDialogState.dateTime, maxDateTime = currentDateTime())
         },
         onManualRecordTimeClick = {
             manualRecordDateTimePickerState =
-                ManualRecordDateTimePickerState.time(manualRecordDialogState.dateTime)
+                ManualRecordDateTimePickerState.time(manualRecordDialogState.dateTime, maxDateTime = currentDateTime())
         },
         onManualRecordPickerDateChange = { date ->
             manualRecordDateTimePickerState =

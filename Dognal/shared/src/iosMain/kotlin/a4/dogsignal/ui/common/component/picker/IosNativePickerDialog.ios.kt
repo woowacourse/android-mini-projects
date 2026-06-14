@@ -32,6 +32,7 @@ internal fun IosNativePickerDialog(
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,
     onConfirmClick: (NSDate) -> Unit,
+    maximumDate: NSDate? = null,
 ) {
     val currentOnDismissRequest by rememberUpdatedState(onDismissRequest)
     val currentOnCancelClick by rememberUpdatedState(onCancelClick)
@@ -48,6 +49,7 @@ internal fun IosNativePickerDialog(
                     pickerTitle = title,
                     date = date,
                     mode = mode,
+                    maximumDate = maximumDate,
                     onCancelClick = { currentOnCancelClick() },
                     onConfirmClick = { selectedDate -> currentOnConfirmClick(selectedDate) },
                 )
@@ -70,6 +72,7 @@ private class NativePickerViewController(
     private val pickerTitle: String,
     private val date: NSDate,
     private val mode: UIDatePickerMode,
+    private val maximumDate: NSDate?,
     private val onCancelClick: () -> Unit,
     private val onConfirmClick: (NSDate) -> Unit,
 ) : UIViewController(nibName = null, bundle = null) {
@@ -99,6 +102,7 @@ private class NativePickerViewController(
         datePicker.datePickerMode = mode
         datePicker.preferredDatePickerStyle = UIDatePickerStyle.UIDatePickerStyleWheels
         datePicker.setDate(date, animated = false)
+        datePicker.maximumDate = maximumDate
         datePicker.setLocale(NSLocale(localeIdentifier = KOREAN_LOCALE_IDENTIFIER))
         datePicker.setBackgroundColor(UIColor.whiteColor)
         sheetView.addSubview(datePicker)
