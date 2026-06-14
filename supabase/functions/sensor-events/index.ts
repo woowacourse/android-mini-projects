@@ -202,6 +202,10 @@ Deno.serve(async (req: Request): Promise<Response> => {
     event_type: eventType,
     occurred_at: rawOccurredAt,
     received_at: serverReceivedAt,
+    weight_g: toNum(body.weightG),
+    distance_cm: toNum(body.distanceCm),
+    baseline_weight_g: toNum(body.baselineWeightG),
+    baseline_distance_cm: toNum(body.baselineDistanceCm),
   };
 
   const { data: insertedEvent, error: eventErr } = await supabase
