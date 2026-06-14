@@ -85,6 +85,84 @@ internal class RecordViewModel(
         }
     }
 
+    fun updateManualRecord(
+        id: String,
+        type: RecordType,
+        dateTime: LocalDateTime,
+        memo: String,
+    ) {
+        if (_uiState.value.isSavingManualRecord) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSavingManualRecord = true,
+                    manualRecordErrorMessage = null,
+                )
+            }
+            runCatching {
+                repository.updateRecord(
+                    id = id,
+                    type = type,
+                    dateTime = dateTime,
+                    memo = memo,
+                )
+            }.onSuccess {
+                val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
+                _uiState.update {
+                    it.copy(
+                        recordList = refreshedRecords ?: it.recordList,
+                        isSavingManualRecord = false,
+                        manualRecordErrorMessage = null,
+                    )
+                }
+                _manualRecordSavedEvent.send(Unit)
+            }.onFailure { e ->
+                println("RecordViewModel: updateManualRecord 실패 - $e")
+                _uiState.update {
+                    it.copy(
+                        isSavingManualRecord = false,
+                        manualRecordErrorMessage = "기록 수정에 실패했어요. 잠시 후 다시 시도해주세요.",
+                    )
+                }
+            }
+        }
+    }
+
+    fun deleteManualRecord(id: String) {
+        if (_uiState.value.isSavingManualRecord) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSavingManualRecord = true,
+                    manualRecordErrorMessage = null,
+                )
+            }
+            runCatching {
+                repository.deleteRecord(id)
+            }.onSuccess {
+                val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
+                _uiState.update {
+                    it.copy(
+                        recordList = refreshedRecords ?: it.recordList,
+                        isSavingManualRecord = false,
+                        manualRecordErrorMessage = null,
+                    )
+                }
+                _manualRecordSavedEvent.send(Unit)
+            }.onFailure { e ->
+                println("RecordViewModel: deleteManualRecord 실패 - $e")
+                _uiState.update {
+                    it.copy(
+                        isSavingManualRecord = false,
+                        manualRecordErrorMessage = "기록 삭제에 실패했어요. 잠시 후 다시 시도해주세요.",
+                    )
+                }
+            }
+        }
+    }
+
     fun clearManualRecordError() {
         _uiState.update { it.copy(manualRecordErrorMessage = null) }
     }
