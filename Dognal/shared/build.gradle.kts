@@ -11,6 +11,10 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10"
 }
 
+composeCompiler {
+    stabilityConfigurationFiles.add(project.layout.projectDirectory.file("compose_compiler_config.conf"))
+}
+
 kotlin {
     listOf(
         iosArm64(),

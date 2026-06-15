@@ -44,7 +44,8 @@ internal fun HomeStatusCard(
         isLoading -> "로딩 중..."
         lastRecordDateTime == null -> "오늘 감지 없음"
         else -> {
-            val diffMinutes = (Clock.System.now() - lastRecordDateTime.toInstant(TimeZone.currentSystemDefault())).inWholeMinutes
+            val diffMinutes =
+                (Clock.System.now() - lastRecordDateTime.toInstant(TimeZone.currentSystemDefault())).inWholeMinutes
             formatTimeDiff(diffMinutes)
         }
     }
