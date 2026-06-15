@@ -31,6 +31,8 @@ public:
 private:
   float baselineWeightG;
   float baselineDistanceCm;
+  float candidateBaselineWeightG;
+  float candidateBaselineDistanceCm;
   float visitBaselineWeightG;
   float visitBaselineDistanceCm;
   float postExitWeightG;
@@ -46,17 +48,33 @@ private:
   unsigned long visitEndedAt;
   unsigned long postExitStartedAt;
   unsigned long clearStartedAt;
-  unsigned long baselineStableStartedAt;
-  unsigned long lastBaselineCalibratedAt;
-  bool baselineRefreshRequested;
+  unsigned long baselineWeightStableStartedAt;
+  unsigned long baselineDistanceStableStartedAt;
+  unsigned long lastWeightBaselineCalibratedAt;
+  unsigned long lastDistanceBaselineCalibratedAt;
+  bool hasBaselineWeightCandidate;
+  bool hasBaselineDistanceCandidate;
+  bool weightBaselineRefreshRequested;
+  bool distanceBaselineRefreshRequested;
 
+  bool hasValidWeight(float weightG);
+  bool hasValidDistance(float distanceCm);
   bool hasValidSample(float weightG, float distanceCm);
   bool isVisitEnterCandidate(float weightG);
   bool isDogAbsent(float weightG);
-  bool isBaselineStable(float weightG, float distanceCm);
-  bool canUpdateBaseline(unsigned long now);
+  bool isBaselineWeightCandidateStable(float weightG);
+  bool isBaselineDistanceCandidateStable(float distanceCm);
+  bool canUpdateWeightBaseline(unsigned long now, float weightG);
+  bool canUpdateDistanceBaseline(unsigned long now);
   void updateBaselineCalibration(unsigned long now, float weightG, float distanceCm);
-  void setBaseline(float weightG, float distanceCm, unsigned long now);
+  void updateWeightBaselineCalibration(unsigned long now, float weightG);
+  void updateDistanceBaselineCalibration(unsigned long now, float distanceCm);
+  void requestBaselineRefresh();
+  void resetBaselineWeightCandidate();
+  void resetBaselineDistanceCandidate();
+  void resetBaselineCandidates();
+  void setBaselineWeight(float weightG, unsigned long now);
+  void setBaselineDistance(float distanceCm, unsigned long now);
   void startVisit(unsigned long now);
   const char* classifyPostExit(float weightG, float distanceCm);
 

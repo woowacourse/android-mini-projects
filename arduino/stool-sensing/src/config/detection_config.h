@@ -37,7 +37,7 @@ const unsigned long CALIBRATION_INTERVAL_MS = 10UL * 60UL * 1000UL;
 const unsigned long BASELINE_STABLE_HOLD_MS = 5000;
 
 // 이벤트 발생 후 다음 이벤트를 받을 준비가 될 때까지의 최소 안정 시간
-const unsigned long CLEAR_RESET_MS = 30000;
+const unsigned long CLEAR_RESET_MS = 15000;
 
 // 기준값 보정 중 센서값이 이 범위 안에서 유지되면 안정 상태로 본다.
 const float BASELINE_WEIGHT_STABLE_DELTA_G = 10.0;
