@@ -11,6 +11,11 @@ import a4.dogsignal.ui.device.DeviceInfoScreen
 import a4.dogsignal.ui.home.HomeScreen
 import a4.dogsignal.ui.record.RecordScreen
 import a4.dogsignal.ui.record.RecordViewModel
+import a4.dogsignal.ui.registration.DeviceRegistrationCardState
+import a4.dogsignal.ui.registration.DeviceRegistrationScreen
+import a4.dogsignal.ui.registration.DeviceRegistrationStepState
+import a4.dogsignal.ui.registration.DeviceRegistrationStepStatus
+import a4.dogsignal.ui.registration.DeviceRegistrationUiState
 import a4.dogsignal.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 private object Route {
+    const val DEVICE_REGISTRATION = "device_registration"
     const val DEVICE_INFO = "device_info"
 }
 
@@ -50,19 +56,37 @@ fun App() {
         if (!isReady) return@AppTheme
 
         val navController = rememberNavController()
-        val startDestination = if (deviceId != null) DognalTab.HOME.name else Route.DEVICE_INFO
+        val startDestination = if (deviceId != null) DognalTab.HOME.name else Route.DEVICE_REGISTRATION
 
         NavHost(
             navController = navController,
             startDestination = startDestination,
         ) {
+            composable(Route.DEVICE_REGISTRATION) {
+                DeviceRegistrationScreen(
+                    state = DeviceRegistrationUiState(
+                        deviceCard = DeviceRegistrationCardState(
+                            title = "Arduino 키트 등록",
+                            description = "로드셀 · 초음파",
+                        ),
+                        steps = listOf(
+                            DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
+                            DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
+                        ),
+                        actionLabel = "기기 등록하기",
+                    ),
+                    onRegisterClick = {
+                        navController.navigate(Route.DEVICE_INFO)
+                    },
+                )
+            }
             composable(Route.DEVICE_INFO) {
                 DeviceInfoScreen(
                     deviceRepository = deviceRepository,
                     onAuthenticated = { id ->
                         deviceId = id
                         navController.navigate(DognalTab.HOME.name) {
-                            popUpTo(Route.DEVICE_INFO) { inclusive = true }
+                            popUpTo(Route.DEVICE_REGISTRATION) { inclusive = true }
                         }
                     },
                 )

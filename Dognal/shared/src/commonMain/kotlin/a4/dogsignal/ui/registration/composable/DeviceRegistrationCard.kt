@@ -1,6 +1,6 @@
-package a4.dogsignal.ui.connection.composable
+package a4.dogsignal.ui.registration.composable
 
-import a4.dogsignal.ui.connection.DeviceCardState
+import a4.dogsignal.ui.registration.DeviceRegistrationCardState
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextSecondary
@@ -26,12 +26,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dognal.shared.generated.resources.Res
-import dognal.shared.generated.resources.stool
+import dognal.shared.generated.resources.arduino
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun DeviceCard(
-    state: DeviceCardState,
+internal fun DeviceRegistrationCard(
+    state: DeviceRegistrationCardState,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -51,7 +51,7 @@ internal fun DeviceCard(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Image(
-            painter = painterResource(Res.drawable.stool),
+            painter = painterResource(Res.drawable.arduino),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
         )
@@ -72,12 +72,12 @@ internal fun DeviceCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun DeviceCardPreview() {
+private fun DeviceRegistrationCardPreview() {
     AppTheme {
-        DeviceCard(
+        DeviceRegistrationCard(
             state =
-                DeviceCardState(
-                    title = "Arduino 키트 연결",
+                DeviceRegistrationCardState(
+                    title = "Arduino 키트 등록",
                     description = "로드셀 · 초음파",
                 ),
         )

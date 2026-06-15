@@ -1,4 +1,4 @@
-package a4.dogsignal.ui.connection.composable
+package a4.dogsignal.ui.registration.composable
 
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandPrimary
@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun ConnectButton(
+internal fun DeviceRegistrationButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -43,10 +43,10 @@ internal fun ConnectButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun ConnectButtonPreview() {
+private fun DeviceRegistrationButtonPreview() {
     AppTheme {
-        ConnectButton(
-            label = "기기 연결하기",
+        DeviceRegistrationButton(
+            label = "기기 등록하기",
             onClick = {},
         )
     }
