@@ -26,7 +26,7 @@ const float FECES_HEIGHT_DELTA_CM = 2.0;
 const float URINE_DISTANCE_TOLERANCE_CM = 1.0;
 
 // 방문 시작/종료 안정화 시간
-const unsigned long VISIT_START_HOLD_MS = 1500;
+const unsigned long VISIT_START_HOLD_MS = 1000;
 const unsigned long EXIT_HOLD_MS = 3000;
 
 // 퇴장 후 잔여 무게와 초음파 값이 안정될 때까지 기다리는 시간
