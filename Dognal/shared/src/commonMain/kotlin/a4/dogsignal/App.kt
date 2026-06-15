@@ -9,7 +9,7 @@ import a4.dogsignal.di.createSupabase
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.device.DeviceInfoScreen
 import a4.dogsignal.ui.home.HomeScreen
-import a4.dogsignal.ui.record.RecordRoute
+import a4.dogsignal.ui.record.RecordScreen
 import a4.dogsignal.ui.record.RecordViewModel
 import a4.dogsignal.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
@@ -82,7 +82,7 @@ fun App() {
                         RecordViewModel(recordRepository, currentDeviceId)
                     }
 
-                RecordRoute(
+                RecordScreen(
                     viewModel = recordViewModel,
                     onTabClick = { tab -> navController.navigateToTab(tab) },
                 )
