@@ -9,7 +9,6 @@ import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import kotlin.time.Instant
 
 class RecordDataSource(
     private val supabase: SupabaseClient,
@@ -28,8 +27,8 @@ class RecordDataSource(
 
     suspend fun getRecordsBetween(
         deviceId: String,
-        from: Instant,
-        until: Instant,
+        from: kotlin.time.Instant,
+        until: kotlin.time.Instant,
     ): List<RecordDto> {
         return supabase.from("potty_records")
             .select(columns = Columns.list("id", "record_type", "occurred_at", "note")) {
@@ -53,7 +52,7 @@ class RecordDataSource(
     suspend fun updateRecord(
         id: String,
         recordType: String,
-        occurredAt: Instant,
+        occurredAt: kotlin.time.Instant,
         note: String,
     ) {
         supabase.from("potty_records")

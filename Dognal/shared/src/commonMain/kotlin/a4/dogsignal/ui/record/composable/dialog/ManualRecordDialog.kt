@@ -108,14 +108,7 @@ private fun ManualRecordDialogContent(
                     .padding(start = 22.dp, top = 7.dp, end = 22.dp, bottom = 16.dp),
         ) {
             Spacer(Modifier.height(29.dp))
-            if (state.isEditing) {
-                DialogHeader(
-                    title = "기록 수정",
-                    subtitle = "기록한 배변 내용을 수정해요",
-                )
-            } else {
-                DialogHeader()
-            }
+            DialogHeader(isEditing = state.isEditing)
             Spacer(Modifier.height(8.dp))
             Text(
                 text = "기록 유형",
@@ -165,6 +158,7 @@ private fun ManualRecordDialogContent(
             }
             Spacer(Modifier.height(27.dp))
             DialogActionButtons(
+                isEditing = state.isEditing,
                 onCancelClick = {
                     focusManager.clearFocus()
                     onCancelClick()
@@ -178,10 +172,9 @@ private fun ManualRecordDialogContent(
                     onDeleteClick()
                 },
                 isSaveEnabled = !isSaving,
-                isEditing = state.isEditing,
                 saveText = when {
                     isSaving -> "저장 중..."
-                    state.isEditing -> "수정 완료"
+                    state.isEditing -> "기록 수정"
                     else -> "기록 저장"
                 },
             )
@@ -213,6 +206,7 @@ private fun ManualRecordDialogContentPreview() {
             onCancelClick = {},
             onSaveClick = {},
             onDeleteClick = {},
+            modifier = Modifier,
         )
     }
 }
