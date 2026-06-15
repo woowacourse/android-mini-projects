@@ -40,7 +40,7 @@ private fun RecordTimelineGroupPreview() {
     val date = LocalDate(2026, 6, 5)
     val recordList =
         listOf(
-            Record(id = "1", dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.PAD),
+            Record(id = "1", dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.VISIT),
             Record(id = "2", dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
         )
     RecordTimelineGroup(

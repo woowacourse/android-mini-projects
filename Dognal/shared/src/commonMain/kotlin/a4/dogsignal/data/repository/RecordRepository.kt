@@ -76,18 +76,8 @@ private fun RecordDto.toDomain(): Record =
     )
 
 private fun String.toRecordType(): RecordType =
-    when (this) {
-        "VISIT" -> RecordType.PAD
-        "URINE" -> RecordType.URINE
-        "STOOL" -> RecordType.STOOL
-        else -> error("Unknown record_type: $this")
-    }
+    RecordType.entries.find { it.name == this } ?: error("Unknown record_type: $this")
 
-private fun RecordType.toRecordTypeColumn(): String =
-    when (this) {
-        RecordType.PAD -> "VISIT"
-        RecordType.URINE -> "URINE"
-        RecordType.STOOL -> "STOOL"
-    }
+private fun RecordType.toRecordTypeColumn(): String = name
 
 private const val MANUAL_RECORD_SOURCE = "USER_WRITE"

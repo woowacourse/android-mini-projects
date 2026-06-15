@@ -112,7 +112,7 @@ private fun RecordType.palette(): SummaryPalette =
                 textColor = toColor(),
             )
 
-        RecordType.PAD ->
+        RecordType.VISIT ->
             SummaryPalette(
                 background = BrandSurface,
                 stroke = BrandStroke,
@@ -136,7 +136,7 @@ private fun HomeSummaryGridPreview() {
                         count = 2,
                     ),
                     HomeSummaryCardState(
-                        recordType = RecordType.PAD,
+                        recordType = RecordType.VISIT,
                         count = 2,
                     ),
                 ),

@@ -138,7 +138,7 @@ private fun RecordTimelineItemPreview() {
     AppTheme {
         RecordTimelineItem(
             dateTime = LocalDateTime(2026, 6, 9, 14, 44),
-            recordType = RecordType.PAD,
+            recordType = RecordType.VISIT,
             note = "메모하는 공간입니다.메모하는 공간입니다.메모하는 공간입니다.메모하는 공간입니다.",
             onEditClick = {}
         )

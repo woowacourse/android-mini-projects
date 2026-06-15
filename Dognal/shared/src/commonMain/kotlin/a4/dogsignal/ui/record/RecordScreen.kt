@@ -280,7 +280,7 @@ private fun RecordScreenPreview() {
                             Record(
                                 id = "1",
                                 dateTime = LocalDateTime(date, LocalTime(2, 5)),
-                                type = RecordType.PAD,
+                                type = RecordType.VISIT,
                                 note = "힘겨워 보였음"
                             ),
                             Record(

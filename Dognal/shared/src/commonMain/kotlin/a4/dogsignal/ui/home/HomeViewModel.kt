@@ -52,7 +52,7 @@ internal class HomeViewModel(
         listOf(
             HomeSummaryCardState(RecordType.URINE, records.count { it.type == RecordType.URINE }),
             HomeSummaryCardState(RecordType.STOOL, records.count { it.type == RecordType.STOOL }),
-            HomeSummaryCardState(RecordType.PAD, records.count { it.type == RecordType.PAD }),
+            HomeSummaryCardState(RecordType.VISIT, records.count { it.type == RecordType.VISIT }),
         )
 
     private fun formatTimeDiff(dateTime: LocalDateTime): String {
