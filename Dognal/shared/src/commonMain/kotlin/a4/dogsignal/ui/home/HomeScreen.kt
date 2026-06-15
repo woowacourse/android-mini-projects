@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun HomeScreen(
@@ -96,7 +97,7 @@ private fun HomeScreenPreview() {
                             description = "마지막 기록 14분 전",
                         ),
                     summaryCards =
-                        listOf(
+                        persistentListOf(
                             HomeSummaryCardState(
                                 recordType = RecordType.URINE,
                                 count = 4,

@@ -6,6 +6,9 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,8 +51,8 @@ internal class HomeViewModel(
         }
     }
 
-    private fun buildSummaryCards(records: List<Record>): List<HomeSummaryCardState> =
-        listOf(
+    private fun buildSummaryCards(records: List<Record>): ImmutableList<HomeSummaryCardState> =
+        persistentListOf(
             HomeSummaryCardState(RecordType.URINE, records.count { it.type == RecordType.URINE }),
             HomeSummaryCardState(RecordType.STOOL, records.count { it.type == RecordType.STOOL }),
             HomeSummaryCardState(RecordType.VISIT, records.count { it.type == RecordType.VISIT }),
@@ -69,6 +72,6 @@ internal class HomeViewModel(
         HomeUiState(
             selectedTab = DognalTab.HOME,
             statusCard = HomeStatusCardState("오늘 상태", "로딩 중..."),
-            summaryCards = emptyList(),
+            summaryCards = persistentListOf(),
         )
 }

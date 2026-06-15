@@ -2,6 +2,8 @@ package a4.dogsignal.ui.registration.composable
 
 import a4.dogsignal.ui.registration.DeviceRegistrationStepState
 import a4.dogsignal.ui.registration.DeviceRegistrationStepStatus
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.DeviceSuccessSurface
 import a4.dogsignal.ui.theme.DeviceWaitingSurface
@@ -38,7 +40,7 @@ import dognal.shared.generated.resources.exclamation
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun DeviceRegistrationStepList(steps: List<DeviceRegistrationStepState>) {
+internal fun DeviceRegistrationStepList(steps: ImmutableList<DeviceRegistrationStepState>) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
             text = "등록 전 체크",
@@ -119,7 +121,7 @@ private fun DeviceRegistrationStepListPreview() {
     AppTheme {
         DeviceRegistrationStepList(
             steps =
-                listOf(
+                persistentListOf(
                     DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
                     DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
                 ),

@@ -9,13 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 @Composable
 internal fun RecordTimelineGroup(
-    recordList: List<Record>,
+    recordList: ImmutableList<Record>,
     onEditClick: (Record) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -39,7 +41,7 @@ internal fun RecordTimelineGroup(
 private fun RecordTimelineGroupPreview() {
     val date = LocalDate(2026, 6, 5)
     val recordList =
-        listOf(
+        persistentListOf(
             Record(id = "1", dateTime = LocalDateTime(date, LocalTime(2, 5)), type = RecordType.VISIT),
             Record(id = "2", dateTime = LocalDateTime(date, LocalTime(1, 20)), type = RecordType.URINE),
         )

@@ -1,9 +1,11 @@
 package a4.dogsignal.ui.record.composable.dialog
 
+import androidx.compose.runtime.Immutable
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
+@Immutable
 internal data class ManualRecordDateTimePickerState(
     val type: ManualRecordDateTimePickerType,
     val dateTime: LocalDateTime,

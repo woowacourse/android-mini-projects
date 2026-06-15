@@ -4,6 +4,8 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.toColor
 import a4.dogsignal.ui.common.toLabel
 import a4.dogsignal.ui.home.HomeSummaryCardState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.BrandStroke
 import a4.dogsignal.ui.theme.BrandSurface
@@ -34,7 +36,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun HomeSummaryGrid(
-    cards: List<HomeSummaryCardState>,
+    cards: ImmutableList<HomeSummaryCardState>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -126,7 +128,7 @@ private fun HomeSummaryGridPreview() {
     AppTheme {
         HomeSummaryGrid(
             cards =
-                listOf(
+                persistentListOf(
                     HomeSummaryCardState(
                         recordType = RecordType.URINE,
                         count = 2,

@@ -5,6 +5,8 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +35,7 @@ internal class RecordViewModel(
             _uiState.update { it.copy(isLoading = true) }
             runCatching { repository.getRecords(deviceId) }
                 .onSuccess { records ->
-                    _uiState.update { it.copy(recordList = records, isLoading = false) }
+                    _uiState.update { it.copy(recordList = records.toImmutableList(), isLoading = false) }
                 }
                 .onFailure { e ->
                     println("RecordViewModel: loadRecords 실패 - ${e.message}")
@@ -143,7 +145,7 @@ internal class RecordViewModel(
         val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
         _uiState.update {
             it.copy(
-                recordList = refreshedRecords ?: it.recordList,
+                recordList = refreshedRecords?.toImmutableList() ?: it.recordList,
                 isSavingManualRecord = false,
                 manualRecordErrorMessage = null,
             )
@@ -161,7 +163,7 @@ internal class RecordViewModel(
             selectedTab = DognalTab.RECORD,
             dateLabel = "전체",
             dateValue = "",
-            recordList = emptyList(),
+            recordList = persistentListOf(),
         )
     }
 }

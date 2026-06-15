@@ -4,6 +4,7 @@ import a4.dogsignal.ui.common.component.ScreenHeader
 import a4.dogsignal.ui.registration.composable.DeviceRegistrationButton
 import a4.dogsignal.ui.registration.composable.DeviceRegistrationCard
 import a4.dogsignal.ui.registration.composable.DeviceRegistrationStepList
+import kotlinx.collections.immutable.persistentListOf
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.background
@@ -66,7 +67,7 @@ private fun DeviceRegistrationScreenPreview() {
                             description = "로드셀 · 초음파",
                         ),
                     steps =
-                        listOf(
+                        persistentListOf(
                             DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
                             DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
                             DeviceRegistrationStepState("부저는 무음 모드로 시작해요", DeviceRegistrationStepStatus.Waiting),

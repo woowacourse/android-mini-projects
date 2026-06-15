@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kotlinx.collections.immutable.persistentListOf
 
 private object Route {
     const val DEVICE_REGISTRATION = "device_registration"
@@ -69,7 +70,7 @@ fun App() {
                             title = "Arduino 키트 등록",
                             description = "로드셀 · 초음파",
                         ),
-                        steps = listOf(
+                        steps = persistentListOf(
                             DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
                             DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
                         ),

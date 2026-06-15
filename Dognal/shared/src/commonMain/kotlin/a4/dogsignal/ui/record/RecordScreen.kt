@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -276,7 +277,7 @@ private fun RecordScreenPreview() {
                     dateLabel = "오늘",
                     dateValue = date.toString(),
                     recordList =
-                        listOf(
+                        persistentListOf(
                             Record(
                                 id = "1",
                                 dateTime = LocalDateTime(date, LocalTime(2, 5)),

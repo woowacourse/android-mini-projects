@@ -61,6 +61,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.supabase.auth)
             implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.kotlinx.collections.immutable)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
