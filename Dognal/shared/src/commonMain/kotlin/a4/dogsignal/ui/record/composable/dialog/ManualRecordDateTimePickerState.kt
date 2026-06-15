@@ -11,8 +11,10 @@ internal data class ManualRecordDateTimePickerState(
     val dateTime: LocalDateTime,
     val maxDateTime: LocalDateTime,
 ) {
-    fun updateDate(date: LocalDate): ManualRecordDateTimePickerState =
-        copy(dateTime = LocalDateTime(date = date, time = dateTime.time))
+    fun updateDate(date: LocalDate): ManualRecordDateTimePickerState {
+        val newDateTime = LocalDateTime(date = date, time = dateTime.time)
+        return copy(dateTime = minOf(newDateTime, maxDateTime))
+    }
 
     fun updateTime(time: LocalTime): ManualRecordDateTimePickerState =
         copy(dateTime = LocalDateTime(date = dateTime.date, time = time))
