@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 internal fun HomeScreen(
@@ -76,7 +77,10 @@ internal fun HomeScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
         )
         Spacer(Modifier.height(21.dp))
-        HomeStatusCard(state.statusCard)
+        HomeStatusCard(
+            isLoading = state.isLoading,
+            lastRecordDateTime = state.lastRecordDateTime,
+        )
         Spacer(Modifier.height(22.dp))
         HomeSummaryGrid(state.summaryCards)
         Spacer(Modifier.weight(1f))
@@ -91,11 +95,8 @@ private fun HomeScreenPreview() {
             state =
                 HomeUiState(
                     selectedTab = DognalTab.HOME,
-                    statusCard =
-                        HomeStatusCardState(
-                            title = "마지막 배변 감지 시간",
-                            description = "마지막 기록 14분 전",
-                        ),
+                    isLoading = false,
+                    lastRecordDateTime = LocalDateTime(2026, 6, 15, 14, 0),
                     summaryCards =
                         persistentListOf(
                             HomeSummaryCardState(
