@@ -64,15 +64,7 @@ internal class RecordViewModel(
                     memo = memo,
                 )
             }.onSuccess {
-                val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
-                _uiState.update {
-                    it.copy(
-                        recordList = refreshedRecords ?: it.recordList,
-                        isSavingManualRecord = false,
-                        manualRecordErrorMessage = null,
-                    )
-                }
-                _manualRecordSavedEvent.send(Unit)
+                onRecordSaved()
             }.onFailure { e ->
                 println("RecordViewModel: saveManualRecord 실패 - $e")
                 _uiState.update {
@@ -108,15 +100,7 @@ internal class RecordViewModel(
                     memo = memo,
                 )
             }.onSuccess {
-                val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
-                _uiState.update {
-                    it.copy(
-                        recordList = refreshedRecords ?: it.recordList,
-                        isSavingManualRecord = false,
-                        manualRecordErrorMessage = null,
-                    )
-                }
-                _manualRecordSavedEvent.send(Unit)
+                onRecordSaved()
             }.onFailure { e ->
                 println("RecordViewModel: updateManualRecord 실패 - $e")
                 _uiState.update {
@@ -129,7 +113,7 @@ internal class RecordViewModel(
         }
     }
 
-    fun deleteManualRecord(id: String) {
+    fun deleteRecord(id: String) {
         if (_uiState.value.isSavingManualRecord) return
 
         viewModelScope.launch {
@@ -142,17 +126,9 @@ internal class RecordViewModel(
             runCatching {
                 repository.deleteRecord(id)
             }.onSuccess {
-                val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
-                _uiState.update {
-                    it.copy(
-                        recordList = refreshedRecords ?: it.recordList,
-                        isSavingManualRecord = false,
-                        manualRecordErrorMessage = null,
-                    )
-                }
-                _manualRecordSavedEvent.send(Unit)
+                onRecordSaved()
             }.onFailure { e ->
-                println("RecordViewModel: deleteManualRecord 실패 - $e")
+                println("RecordViewModel: deleteRecord 실패 - $e")
                 _uiState.update {
                     it.copy(
                         isSavingManualRecord = false,
@@ -161,6 +137,18 @@ internal class RecordViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun onRecordSaved() {
+        val refreshedRecords = runCatching { repository.getRecords(deviceId) }.getOrNull()
+        _uiState.update {
+            it.copy(
+                recordList = refreshedRecords ?: it.recordList,
+                isSavingManualRecord = false,
+                manualRecordErrorMessage = null,
+            )
+        }
+        _manualRecordSavedEvent.send(Unit)
     }
 
     fun clearManualRecordError() {
