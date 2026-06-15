@@ -65,24 +65,6 @@ class RecordRepository(
             )
         dataSource.createRecord(record)
     }
-
-    suspend fun updateRecord(
-        id: String,
-        type: RecordType,
-        dateTime: LocalDateTime,
-        memo: String,
-    ) {
-        dataSource.updateRecord(
-            id = id,
-            recordType = type.toRecordTypeColumn(),
-            occurredAt = dateTime.toInstant(TimeZone.currentSystemDefault()),
-            note = memo.trim(),
-        )
-    }
-
-    suspend fun deleteRecord(id: String) {
-        dataSource.deleteRecord(id)
-    }
 }
 
 private fun RecordDto.toDomain(): Record =
