@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalTime
 @Composable
 internal actual fun TimePickerBottomSheet(
     selectedTime: LocalTime,
+    maxTime: LocalTime?,
     onTimeChange: (LocalTime) -> Unit,
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,
@@ -27,7 +28,9 @@ internal actual fun TimePickerBottomSheet(
             context,
             { _, hourOfDay, minute ->
                 handleDialogAction {
-                    currentOnTimeChange(LocalTime(hour = hourOfDay, minute = minute))
+                    val picked = LocalTime(hour = hourOfDay, minute = minute)
+                    val clamped = if (maxTime != null && picked > maxTime) maxTime else picked
+                    currentOnTimeChange(clamped)
                     currentOnConfirmClick()
                 }
             },

@@ -5,7 +5,6 @@ import a4.dogsignal.model.RecordType
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.common.component.DognalTabs
 import a4.dogsignal.ui.common.component.ScreenHeader
-import a4.dogsignal.ui.home.composable.HomeRecordButton
 import a4.dogsignal.ui.home.composable.HomeStatusCard
 import a4.dogsignal.ui.home.composable.HomeSummaryGrid
 import a4.dogsignal.ui.theme.AppTheme
@@ -36,7 +35,6 @@ internal fun HomeScreen(
     repository: RecordRepository,
     deviceId: String,
     onTabClick: (DognalTab) -> Unit,
-    onAlertClick: () -> Unit = {},
 ) {
     val viewModel: HomeViewModel = viewModel { HomeViewModel(repository, deviceId) }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -48,7 +46,6 @@ internal fun HomeScreen(
     HomeScreen(
         state = state,
         onTabClick = onTabClick,
-        onAlertClick = onAlertClick,
     )
 }
 
@@ -56,7 +53,6 @@ internal fun HomeScreen(
 internal fun HomeScreen(
     state: HomeUiState,
     onTabClick: (DognalTab) -> Unit = {},
-    onAlertClick: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -83,10 +79,6 @@ internal fun HomeScreen(
         Spacer(Modifier.height(22.dp))
         HomeSummaryGrid(state.summaryCards)
         Spacer(Modifier.weight(1f))
-        HomeRecordButton(
-            onClick = onAlertClick,
-            modifier = Modifier.padding(bottom = 30.dp),
-        )
     }
 }
 

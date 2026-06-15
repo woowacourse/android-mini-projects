@@ -25,6 +25,7 @@ internal fun RecordRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var isManualRecordDialogVisible by remember { mutableStateOf(false) }
+    var editingRecord by remember { mutableStateOf<Record?>(null) }
     var manualRecordDialogState by remember {
         mutableStateOf(ManualRecordDialogState.initial(currentDateTime()))
     }
@@ -32,15 +33,9 @@ internal fun RecordRoute(
         mutableStateOf<ManualRecordDateTimePickerState?>(null)
     }
 
-    val showManualRecordDialog: (ManualRecordDialogState) -> Unit = { initialState ->
-        viewModel.clearManualRecordError()
-        manualRecordDialogState = initialState
-        manualRecordDateTimePickerState = null
-        isManualRecordDialogVisible = true
-    }
-
     val hideManualRecordDialog = {
         isManualRecordDialogVisible = false
+        editingRecord = null
         manualRecordDateTimePickerState = null
         viewModel.clearManualRecordError()
     }
@@ -69,10 +64,23 @@ internal fun RecordRoute(
         manualRecordDialogState = manualRecordDialogState,
         manualRecordDateTimePickerState = manualRecordDateTimePickerState,
         onAddRecordClick = {
-            showManualRecordDialog(ManualRecordDialogState.initial(currentDateTime()))
+            viewModel.clearManualRecordError()
+            editingRecord = null
+            manualRecordDialogState = ManualRecordDialogState.initial(currentDateTime())
+            manualRecordDateTimePickerState = null
+            isManualRecordDialogVisible = true
         },
         onEditRecordClick = { record ->
-            showManualRecordDialog(ManualRecordDialogState.fromRecord(record))
+            viewModel.clearManualRecordError()
+            editingRecord = record
+            manualRecordDialogState = ManualRecordDialogState(
+                selectedRecordType = record.type,
+                dateTime = record.dateTime,
+                memo = record.note ?: "",
+                isEditing = true,
+            )
+            manualRecordDateTimePickerState = null
+            isManualRecordDialogVisible = true
         },
         onManualRecordDismiss = hideManualRecordDialog,
         onManualRecordTypeClick = { recordType ->
@@ -81,11 +89,11 @@ internal fun RecordRoute(
         },
         onManualRecordDateClick = {
             manualRecordDateTimePickerState =
-                ManualRecordDateTimePickerState.date(manualRecordDialogState.dateTime)
+                ManualRecordDateTimePickerState.date(manualRecordDialogState.dateTime, maxDateTime = currentDateTime())
         },
         onManualRecordTimeClick = {
             manualRecordDateTimePickerState =
-                ManualRecordDateTimePickerState.time(manualRecordDialogState.dateTime)
+                ManualRecordDateTimePickerState.time(manualRecordDialogState.dateTime, maxDateTime = currentDateTime())
         },
         onManualRecordPickerDateChange = { date ->
             manualRecordDateTimePickerState =
@@ -102,26 +110,24 @@ internal fun RecordRoute(
                 manualRecordDialogState.copy(memo = memo)
         },
         onManualRecordDeleteClick = {
-            val editingId = manualRecordDialogState.editingRecordId
-            if (editingId != null) {
-                viewModel.deleteManualRecord(editingId)
+            editingRecord?.let { record ->
+                viewModel.deleteRecord(record.id)
             }
         },
         onManualRecordSaveClick = {
-            val dialogState = manualRecordDialogState
-            val editingId = dialogState.editingRecordId
-            if (editingId != null) {
+            val record = editingRecord
+            if (record != null) {
                 viewModel.updateManualRecord(
-                    id = editingId,
-                    type = dialogState.selectedRecordType,
-                    dateTime = dialogState.dateTime,
-                    memo = dialogState.memo,
+                    id = record.id,
+                    type = manualRecordDialogState.selectedRecordType,
+                    dateTime = manualRecordDialogState.dateTime,
+                    memo = manualRecordDialogState.memo,
                 )
             } else {
                 viewModel.saveManualRecord(
-                    type = dialogState.selectedRecordType,
-                    dateTime = dialogState.dateTime,
-                    memo = dialogState.memo,
+                    type = manualRecordDialogState.selectedRecordType,
+                    dateTime = manualRecordDialogState.dateTime,
+                    memo = manualRecordDialogState.memo,
                 )
             }
         },

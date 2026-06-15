@@ -73,7 +73,6 @@ fun App() {
                     repository = recordRepository,
                     deviceId = currentDeviceId,
                     onTabClick = { tab -> navController.navigateToTab(tab) },
-                    onAlertClick = {},
                 )
             }
             composable(DognalTab.RECORD.name) {
