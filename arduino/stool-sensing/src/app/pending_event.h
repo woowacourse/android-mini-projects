@@ -8,6 +8,10 @@ struct PendingEvent {
   int seq;
   String eventType;
   unsigned long lastAttemptAt;
+  float weightG;
+  float distanceCm;
+  float baselineWeightG;
+  float baselineDistanceCm;
 };
 
 #endif

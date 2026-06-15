@@ -87,6 +87,11 @@ create table public.sensor_events (
 
     event_type public.sensor_event_type not null,
 
+    weight_g real,
+    distance_cm real,
+    baseline_weight_g real,
+    baseline_distance_cm real,
+
     occurred_at timestamptz,
     received_at timestamptz not null default now(),
     created_at timestamptz not null default now(),

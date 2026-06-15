@@ -41,7 +41,9 @@ String SupabaseClient::jsonEscape(const char* input) {
   return out;
 }
 
-bool SupabaseClient::sendEvent(int seq, const char* eventType) {
+bool SupabaseClient::sendEvent(int seq, const char* eventType,
+                               float weightG, float distanceCm,
+                               float baselineWeightG, float baselineDistanceCm) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Cannot send event: WiFi not connected.");
     return false;
@@ -66,6 +68,10 @@ bool SupabaseClient::sendEvent(int seq, const char* eventType) {
   http.addHeader("apikey", apiKey);
   http.addHeader("Authorization", String("Bearer ") + apiKey);
 
+  auto floatOrNull = [](float v) -> String {
+    return isnan(v) ? "null" : String(v, 2);
+  };
+
   String payload = "{";
   payload += "\"p_device_code\":\"" + jsonEscape(deviceCode) + "\",";
   payload += "\"p_device_secret\":\"" + jsonEscape(deviceSecret) + "\",";
@@ -73,7 +79,11 @@ bool SupabaseClient::sendEvent(int seq, const char* eventType) {
   payload += "\"p_event_type\":\"" + jsonEscape(eventType) + "\",";
   payload += "\"p_schema_version\":1,";
   payload += "\"p_rssi\":" + String(WiFi.RSSI()) + ",";
-  payload += "\"p_ip_address\":\"" + WiFi.localIP().toString() + "\"";
+  payload += "\"p_ip_address\":\"" + WiFi.localIP().toString() + "\",";
+  payload += "\"p_weight_g\":" + floatOrNull(weightG) + ",";
+  payload += "\"p_distance_cm\":" + floatOrNull(distanceCm) + ",";
+  payload += "\"p_baseline_weight_g\":" + floatOrNull(baselineWeightG) + ",";
+  payload += "\"p_baseline_distance_cm\":" + floatOrNull(baselineDistanceCm);
   payload += "}";
 
   Serial.println("POST Supabase RPC:");
