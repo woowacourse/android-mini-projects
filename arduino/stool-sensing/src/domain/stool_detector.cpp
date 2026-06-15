@@ -7,6 +7,8 @@
 StoolDetector::StoolDetector() {
   baselineWeightG = NAN;
   baselineDistanceCm = -1.0;
+  candidateBaselineWeightG = NAN;
+  candidateBaselineDistanceCm = -1.0;
   visitBaselineWeightG = NAN;
   visitBaselineDistanceCm = -1.0;
   postExitWeightG = NAN;
@@ -22,31 +24,50 @@ StoolDetector::StoolDetector() {
   visitEndedAt = 0;
   postExitStartedAt = 0;
   clearStartedAt = 0;
-  baselineStableStartedAt = 0;
-  lastBaselineCalibratedAt = 0;
-  baselineRefreshRequested = false;
+  baselineWeightStableStartedAt = 0;
+  baselineDistanceStableStartedAt = 0;
+  lastWeightBaselineCalibratedAt = 0;
+  lastDistanceBaselineCalibratedAt = 0;
+  hasBaselineWeightCandidate = false;
+  hasBaselineDistanceCandidate = false;
+  weightBaselineRefreshRequested = false;
+  distanceBaselineRefreshRequested = false;
 }
 
 bool StoolDetector::begin(float baselineWeightG, float baselineDistanceCm) {
-  if (!hasValidSample(baselineWeightG, baselineDistanceCm)) {
+  if (!hasValidWeight(baselineWeightG)) {
     Serial.println("Baseline calibration failed.");
     return false;
   }
 
-  setBaseline(baselineWeightG, baselineDistanceCm, millis());
+  unsigned long now = millis();
+  setBaselineWeight(baselineWeightG, now);
+
+  if (hasValidDistance(baselineDistanceCm)) {
+    setBaselineDistance(baselineDistanceCm, now);
+  } else {
+    Serial.println("Baseline distance pending.");
+  }
+
   return true;
 }
 
 DetectionResult StoolDetector::update(float weightG, float distanceCm) {
-  if (!hasValidSample(weightG, distanceCm)) {
+  if (!hasValidWeight(weightG)) {
     return noEvent();
   }
 
   unsigned long now = millis();
+  bool hasDistance = hasValidDistance(distanceCm);
 
   switch (state) {
     case DETECTOR_IDLE:
       updateBaselineCalibration(now, weightG, distanceCm);
+
+      if (!hasDistance || baselineDistanceCm < 0) {
+        visitStartCandidateAt = 0;
+        break;
+      }
 
       if (isVisitEnterCandidate(weightG)) {
         if (visitStartCandidateAt == 0) {
@@ -62,6 +83,10 @@ DetectionResult StoolDetector::update(float weightG, float distanceCm) {
       break;
 
     case DETECTOR_VISIT_ACTIVE:
+      if (!hasDistance) {
+        break;
+      }
+
       if (isDogAbsent(weightG)) {
         if (visitEndCandidateAt == 0) {
           visitEndCandidateAt = now;
@@ -82,6 +107,10 @@ DetectionResult StoolDetector::update(float weightG, float distanceCm) {
       break;
 
     case DETECTOR_POST_VISIT_CHECK:
+      if (!hasDistance) {
+        break;
+      }
+
       if (isVisitEnterCandidate(weightG)) {
         Serial.println("Dog returned during post-exit check. Back to visit active.");
         state = DETECTOR_VISIT_ACTIVE;
@@ -101,8 +130,8 @@ DetectionResult StoolDetector::update(float weightG, float distanceCm) {
 
         state = DETECTOR_LOCKED;
         clearStartedAt = 0;
-        baselineStableStartedAt = 0;
-        baselineRefreshRequested = true;
+        resetBaselineCandidates();
+        requestBaselineRefresh();
 
         return event(eventType);
       }
@@ -127,11 +156,11 @@ DetectionResult StoolDetector::update(float weightG, float distanceCm) {
           visitEndedAt = 0;
           postExitStartedAt = 0;
           clearStartedAt = 0;
-          baselineStableStartedAt = 0;
+          resetBaselineCandidates();
         }
       } else {
         clearStartedAt = 0;
-        baselineStableStartedAt = 0;
+        resetBaselineCandidates();
       }
       break;
   }
@@ -139,11 +168,23 @@ DetectionResult StoolDetector::update(float weightG, float distanceCm) {
   return noEvent();
 }
 
+bool StoolDetector::hasValidWeight(float weightG) {
+  return !isnan(weightG);
+}
+
+bool StoolDetector::hasValidDistance(float distanceCm) {
+  return distanceCm >= 0;
+}
+
 bool StoolDetector::hasValidSample(float weightG, float distanceCm) {
-  return !isnan(weightG) && distanceCm >= 0;
+  return hasValidWeight(weightG) && hasValidDistance(distanceCm);
 }
 
 bool StoolDetector::isVisitEnterCandidate(float weightG) {
+  if (isnan(baselineWeightG)) {
+    return false;
+  }
+
   return weightG - baselineWeightG >= VISIT_ENTER_DELTA_G;
 }
 
@@ -152,53 +193,120 @@ bool StoolDetector::isDogAbsent(float weightG) {
   return weightG - referenceWeightG < DOG_ABSENCE_DELTA_G;
 }
 
-bool StoolDetector::isBaselineStable(float weightG, float distanceCm) {
-  return fabs(weightG - baselineWeightG) <= BASELINE_WEIGHT_STABLE_DELTA_G &&
-         fabs(distanceCm - baselineDistanceCm) <= BASELINE_DISTANCE_STABLE_DELTA_CM;
+bool StoolDetector::isBaselineWeightCandidateStable(float weightG) {
+  return hasBaselineWeightCandidate &&
+         fabs(weightG - candidateBaselineWeightG) <= BASELINE_WEIGHT_STABLE_DELTA_G;
 }
 
-bool StoolDetector::canUpdateBaseline(unsigned long now) {
-  return baselineRefreshRequested ||
-         now - lastBaselineCalibratedAt >= CALIBRATION_INTERVAL_MS;
+bool StoolDetector::isBaselineDistanceCandidateStable(float distanceCm) {
+  return hasBaselineDistanceCandidate &&
+         fabs(distanceCm - candidateBaselineDistanceCm) <= BASELINE_DISTANCE_STABLE_DELTA_CM;
+}
+
+bool StoolDetector::canUpdateWeightBaseline(unsigned long now, float weightG) {
+  return weightBaselineRefreshRequested ||
+         isnan(baselineWeightG) ||
+         now - lastWeightBaselineCalibratedAt >= CALIBRATION_INTERVAL_MS ||
+         weightG < baselineWeightG - BASELINE_WEIGHT_STABLE_DELTA_G;
+}
+
+bool StoolDetector::canUpdateDistanceBaseline(unsigned long now) {
+  return distanceBaselineRefreshRequested ||
+         baselineDistanceCm < 0 ||
+         now - lastDistanceBaselineCalibratedAt >= CALIBRATION_INTERVAL_MS;
 }
 
 void StoolDetector::updateBaselineCalibration(unsigned long now, float weightG, float distanceCm) {
-  if (!canUpdateBaseline(now)) {
-    baselineStableStartedAt = 0;
-    return;
-  }
-
   if (!isDogAbsent(weightG)) {
-    baselineStableStartedAt = 0;
+    resetBaselineCandidates();
     return;
   }
 
-  if (!isBaselineStable(weightG, distanceCm)) {
-    baselineStableStartedAt = now;
-    baselineWeightG = weightG;
-    baselineDistanceCm = distanceCm;
-    return;
-  }
+  updateWeightBaselineCalibration(now, weightG);
 
-  if (baselineStableStartedAt == 0) {
-    baselineStableStartedAt = now;
-  }
-
-  if (now - baselineStableStartedAt >= BASELINE_STABLE_HOLD_MS) {
-    setBaseline(weightG, distanceCm, now);
-    baselineStableStartedAt = 0;
-    baselineRefreshRequested = false;
+  if (hasValidDistance(distanceCm)) {
+    updateDistanceBaselineCalibration(now, distanceCm);
+  } else {
+    resetBaselineDistanceCandidate();
   }
 }
 
-void StoolDetector::setBaseline(float weightG, float distanceCm, unsigned long now) {
+void StoolDetector::updateWeightBaselineCalibration(unsigned long now, float weightG) {
+  if (!canUpdateWeightBaseline(now, weightG)) {
+    resetBaselineWeightCandidate();
+    return;
+  }
+
+  if (!isBaselineWeightCandidateStable(weightG)) {
+    baselineWeightStableStartedAt = now;
+    candidateBaselineWeightG = weightG;
+    hasBaselineWeightCandidate = true;
+    return;
+  }
+
+  if (now - baselineWeightStableStartedAt >= BASELINE_STABLE_HOLD_MS) {
+    setBaselineWeight(weightG, now);
+    weightBaselineRefreshRequested = false;
+  }
+}
+
+void StoolDetector::updateDistanceBaselineCalibration(unsigned long now, float distanceCm) {
+  if (!canUpdateDistanceBaseline(now)) {
+    resetBaselineDistanceCandidate();
+    return;
+  }
+
+  if (!isBaselineDistanceCandidateStable(distanceCm)) {
+    baselineDistanceStableStartedAt = now;
+    candidateBaselineDistanceCm = distanceCm;
+    hasBaselineDistanceCandidate = true;
+    return;
+  }
+
+  if (now - baselineDistanceStableStartedAt >= BASELINE_STABLE_HOLD_MS) {
+    setBaselineDistance(distanceCm, now);
+    distanceBaselineRefreshRequested = false;
+  }
+}
+
+void StoolDetector::requestBaselineRefresh() {
+  weightBaselineRefreshRequested = true;
+  distanceBaselineRefreshRequested = true;
+}
+
+void StoolDetector::resetBaselineWeightCandidate() {
+  candidateBaselineWeightG = NAN;
+  baselineWeightStableStartedAt = 0;
+  hasBaselineWeightCandidate = false;
+}
+
+void StoolDetector::resetBaselineDistanceCandidate() {
+  candidateBaselineDistanceCm = -1.0;
+  baselineDistanceStableStartedAt = 0;
+  hasBaselineDistanceCandidate = false;
+}
+
+void StoolDetector::resetBaselineCandidates() {
+  resetBaselineWeightCandidate();
+  resetBaselineDistanceCandidate();
+}
+
+void StoolDetector::setBaselineWeight(float weightG, unsigned long now) {
   baselineWeightG = weightG;
-  baselineDistanceCm = distanceCm;
-  lastBaselineCalibratedAt = now;
+  lastWeightBaselineCalibratedAt = now;
+  resetBaselineWeightCandidate();
 
   Serial.print("Baseline weight: ");
   Serial.print(baselineWeightG, 1);
-  Serial.print(" g | Baseline distance: ");
+  Serial.println(" g");
+}
+
+void StoolDetector::setBaselineDistance(float distanceCm, unsigned long now) {
+  baselineDistanceCm = distanceCm;
+  lastDistanceBaselineCalibratedAt = now;
+  resetBaselineDistanceCandidate();
+
+  Serial.print("Baseline distance: ");
   Serial.print(baselineDistanceCm, 1);
   Serial.println(" cm");
 }
@@ -208,6 +316,7 @@ void StoolDetector::startVisit(unsigned long now) {
   visitStartedAt = now;
   visitEndCandidateAt = 0;
   postExitStartedAt = 0;
+  resetBaselineCandidates();
 
   visitBaselineWeightG = baselineWeightG;
   visitBaselineDistanceCm = baselineDistanceCm;
