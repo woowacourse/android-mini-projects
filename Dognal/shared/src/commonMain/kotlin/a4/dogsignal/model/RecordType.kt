@@ -1,7 +1,7 @@
 package a4.dogsignal.model
 
 enum class RecordType {
-    PAD,
+    VISIT,
     URINE,
     STOOL,
 }

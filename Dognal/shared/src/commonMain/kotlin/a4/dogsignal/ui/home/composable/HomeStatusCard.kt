@@ -1,6 +1,6 @@
 package a4.dogsignal.ui.home.composable
 
-import a4.dogsignal.ui.home.HomeStatusCardState
+import a4.dogsignal.ui.home.formatTimeDiff
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
@@ -28,13 +28,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dognal.shared.generated.resources.Res
 import dognal.shared.generated.resources.dogFoot
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.painterResource
+import kotlin.time.Clock
 
 @Composable
 internal fun HomeStatusCard(
-    state: HomeStatusCardState,
+    isLoading: Boolean,
+    lastRecordDateTime: LocalDateTime?,
     modifier: Modifier = Modifier,
 ) {
+    val description = when {
+        isLoading -> "로딩 중..."
+        lastRecordDateTime == null -> "오늘 감지 없음"
+        else -> {
+            val diffMinutes =
+                (Clock.System.now() - lastRecordDateTime.toInstant(TimeZone.currentSystemDefault())).inWholeMinutes
+            formatTimeDiff(diffMinutes)
+        }
+    }
+
     Row(
         modifier =
             modifier
@@ -57,12 +72,12 @@ internal fun HomeStatusCard(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = state.title,
+                text = "오늘 상태",
                 color = TextPrimary,
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = state.description,
+                text = description,
                 color = TextSecondary,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,
@@ -77,11 +92,8 @@ internal fun HomeStatusCard(
 private fun HomeStatusCardPreview() {
     AppTheme {
         HomeStatusCard(
-            state =
-                HomeStatusCardState(
-                    title = "마지막 배변 감지 시간",
-                    description = "마지막 기록 14분 전",
-                ),
+            isLoading = false,
+            lastRecordDateTime = LocalDateTime(2026, 6, 15, 14, 0),
         )
     }
 }

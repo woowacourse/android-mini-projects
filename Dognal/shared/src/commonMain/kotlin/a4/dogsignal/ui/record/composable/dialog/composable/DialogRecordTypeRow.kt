@@ -131,10 +131,10 @@ private fun manualRecordTypeOptions(): List<ManualRecordTypeOption> =
             background = CoolBackground,
         ),
         ManualRecordTypeOption(
-            recordType = RecordType.PAD,
+            recordType = RecordType.VISIT,
             label = "방문",
             icon = Res.drawable.visit,
-            color = RecordType.PAD.toColor(),
+            color = RecordType.VISIT.toColor(),
             background = BrandSurface,
         ),
     )

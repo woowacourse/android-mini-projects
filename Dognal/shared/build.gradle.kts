@@ -11,6 +11,10 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10"
 }
 
+composeCompiler {
+    stabilityConfigurationFiles.add(project.layout.projectDirectory.file("compose_compiler_config.conf"))
+}
+
 kotlin {
     listOf(
         iosArm64(),
@@ -61,12 +65,18 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.supabase.auth)
             implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.kotlinx.collections.immutable)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        getByName("androidHostTest").dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

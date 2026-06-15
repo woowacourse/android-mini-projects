@@ -1,9 +1,12 @@
-package a4.dogsignal.ui.connection.composable
+package a4.dogsignal.ui.registration.composable
 
-import a4.dogsignal.ui.connection.ConnectionStepState
-import a4.dogsignal.ui.connection.ConnectionStepStatus
-import a4.dogsignal.ui.connection.DeviceConnectionColors
+import a4.dogsignal.ui.registration.DeviceRegistrationStepState
+import a4.dogsignal.ui.registration.DeviceRegistrationStepStatus
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import a4.dogsignal.ui.theme.AppTheme
+import a4.dogsignal.ui.theme.DeviceSuccessSurface
+import a4.dogsignal.ui.theme.DeviceWaitingSurface
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
 import a4.dogsignal.ui.theme.TextTertiary
@@ -37,23 +40,23 @@ import dognal.shared.generated.resources.exclamation
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun ConnectionStepList(steps: List<ConnectionStepState>) {
+internal fun DeviceRegistrationStepList(steps: ImmutableList<DeviceRegistrationStepState>) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
-            text = "연결 전 체크",
+            text = "등록 전 체크",
             style = MaterialTheme.typography.titleMedium,
             color = TextPrimary,
             modifier = Modifier.padding(bottom = 11.dp),
         )
 
         steps.forEach { step ->
-            ConnectionStep(step)
+            DeviceRegistrationStep(step)
         }
     }
 }
 
 @Composable
-private fun ConnectionStep(step: ConnectionStepState) {
+private fun DeviceRegistrationStep(step: DeviceRegistrationStepState) {
     Row(
         modifier =
             Modifier
@@ -80,11 +83,11 @@ private fun ConnectionStep(step: ConnectionStepState) {
 }
 
 @Composable
-private fun StepStatusIcon(status: ConnectionStepStatus) {
+private fun StepStatusIcon(status: DeviceRegistrationStepStatus) {
     val background =
         when (status) {
-            ConnectionStepStatus.Done -> DeviceConnectionColors.SuccessBackground
-            ConnectionStepStatus.Waiting -> DeviceConnectionColors.WaitingBackground
+            DeviceRegistrationStepStatus.Done -> DeviceSuccessSurface
+            DeviceRegistrationStepStatus.Waiting -> DeviceWaitingSurface
         }
     Box(
         modifier =
@@ -95,14 +98,14 @@ private fun StepStatusIcon(status: ConnectionStepStatus) {
         contentAlignment = Alignment.Center,
     ) {
         when (status) {
-            ConnectionStepStatus.Done ->
+            DeviceRegistrationStepStatus.Done ->
                 Image(
                     painter = painterResource(Res.drawable.check),
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
                 )
 
-            ConnectionStepStatus.Waiting ->
+            DeviceRegistrationStepStatus.Waiting ->
                 Image(
                     painter = painterResource(Res.drawable.exclamation),
                     contentDescription = null,
@@ -114,14 +117,13 @@ private fun StepStatusIcon(status: ConnectionStepStatus) {
 
 @Preview(showBackground = true)
 @Composable
-private fun ConnectionStepListPreview() {
+private fun DeviceRegistrationStepListPreview() {
     AppTheme {
-        ConnectionStepList(
+        DeviceRegistrationStepList(
             steps =
-                listOf(
-                    ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
-                    ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
-                    ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
+                persistentListOf(
+                    DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
+                    DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
                 ),
         )
     }

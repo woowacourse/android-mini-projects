@@ -65,27 +65,9 @@ class RecordRepository(
             )
         dataSource.createRecord(record)
     }
-
-    suspend fun updateRecord(
-        id: String,
-        type: RecordType,
-        dateTime: LocalDateTime,
-        memo: String,
-    ) {
-        dataSource.updateRecord(
-            id = id,
-            recordType = type.toRecordTypeColumn(),
-            occurredAt = dateTime.toInstant(TimeZone.currentSystemDefault()),
-            note = memo.trim(),
-        )
-    }
-
-    suspend fun deleteRecord(id: String) {
-        dataSource.deleteRecord(id)
-    }
 }
 
-private fun RecordDto.toDomain(): Record =
+internal fun RecordDto.toDomain(): Record =
     Record(
         id = id,
         type = recordType.toRecordType(),
@@ -93,19 +75,9 @@ private fun RecordDto.toDomain(): Record =
         note = note,
     )
 
-private fun String.toRecordType(): RecordType =
-    when (this) {
-        "VISIT" -> RecordType.PAD
-        "URINE" -> RecordType.URINE
-        "STOOL" -> RecordType.STOOL
-        else -> error("Unknown record_type: $this")
-    }
+internal fun String.toRecordType(): RecordType =
+    RecordType.entries.find { it.name == this } ?: error("Unknown record_type: $this")
 
-private fun RecordType.toRecordTypeColumn(): String =
-    when (this) {
-        RecordType.PAD -> "VISIT"
-        RecordType.URINE -> "URINE"
-        RecordType.STOOL -> "STOOL"
-    }
+internal fun RecordType.toRecordTypeColumn(): String = name
 
 private const val MANUAL_RECORD_SOURCE = "USER_WRITE"

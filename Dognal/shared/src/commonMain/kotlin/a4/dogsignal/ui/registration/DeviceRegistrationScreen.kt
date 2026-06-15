@@ -1,9 +1,10 @@
-package a4.dogsignal.ui.connection
+package a4.dogsignal.ui.registration
 
 import a4.dogsignal.ui.common.component.ScreenHeader
-import a4.dogsignal.ui.connection.composable.ConnectButton
-import a4.dogsignal.ui.connection.composable.ConnectionStepList
-import a4.dogsignal.ui.connection.composable.DeviceCard
+import a4.dogsignal.ui.registration.composable.DeviceRegistrationButton
+import a4.dogsignal.ui.registration.composable.DeviceRegistrationCard
+import a4.dogsignal.ui.registration.composable.DeviceRegistrationStepList
+import kotlinx.collections.immutable.persistentListOf
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.RecordScreenBackground
 import androidx.compose.foundation.background
@@ -22,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun DeviceConnectionScreen(
-    state: DeviceConnectionUiState,
-    onConnectClick: () -> Unit = {},
+internal fun DeviceRegistrationScreen(
+    state: DeviceRegistrationUiState,
+    onRegisterClick: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -37,17 +38,17 @@ internal fun DeviceConnectionScreen(
     ) {
         Spacer(Modifier.height(28.dp))
         ScreenHeader(
-            title = "기기연결",
+            title = "디바이스 등록",
             subtitle = "센서 키트를 앱과 연결해요",
         )
         Spacer(Modifier.height(32.dp))
-        DeviceCard(state.deviceCard)
+        DeviceRegistrationCard(state.deviceCard)
         Spacer(Modifier.height(28.dp))
-        ConnectionStepList(state.steps)
+        DeviceRegistrationStepList(state.steps)
         Spacer(Modifier.weight(1f))
-        ConnectButton(
+        DeviceRegistrationButton(
             label = state.actionLabel,
-            onClick = onConnectClick,
+            onClick = onRegisterClick,
             modifier = Modifier.padding(bottom = 30.dp),
         )
     }
@@ -55,23 +56,23 @@ internal fun DeviceConnectionScreen(
 
 @Preview
 @Composable
-private fun DeviceConnectionScreenPreview() {
+private fun DeviceRegistrationScreenPreview() {
     AppTheme {
-        DeviceConnectionScreen(
+        DeviceRegistrationScreen(
             state =
-                DeviceConnectionUiState(
+                DeviceRegistrationUiState(
                     deviceCard =
-                        DeviceCardState(
-                            title = "Arduino 키트 연결",
+                        DeviceRegistrationCardState(
+                            title = "Arduino 키트 등록",
                             description = "로드셀 · 초음파",
                         ),
                     steps =
-                        listOf(
-                            ConnectionStepState("패드 아래 센서판이 평평한가요?", ConnectionStepStatus.Done),
-                            ConnectionStepState("패드 초기 무게를 자동 보정할게요", ConnectionStepStatus.Done),
-                            ConnectionStepState("부저는 무음 모드로 시작해요", ConnectionStepStatus.Waiting),
+                        persistentListOf(
+                            DeviceRegistrationStepState("패드 아래 센서판이 평평한가요?", DeviceRegistrationStepStatus.Done),
+                            DeviceRegistrationStepState("패드 초기 무게를 자동 보정할게요", DeviceRegistrationStepStatus.Done),
+                            DeviceRegistrationStepState("부저는 무음 모드로 시작해요", DeviceRegistrationStepStatus.Waiting),
                         ),
-                    actionLabel = "기기 연결하기",
+                    actionLabel = "기기 등록하기",
                 ),
         )
     }
