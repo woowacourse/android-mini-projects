@@ -30,24 +30,6 @@ class RecordRepository(
         return dataSource.getRecordsBetween(deviceId, from, until).map { it.toDomain() }
     }
 
-    suspend fun updateRecord(
-        id: String,
-        type: RecordType,
-        dateTime: LocalDateTime,
-        memo: String,
-    ) {
-        dataSource.updateRecord(
-            id = id,
-            recordType = type.toRecordTypeColumn(),
-            occurredAt = dateTime.toInstant(TimeZone.currentSystemDefault()),
-            note = memo.trim(),
-        )
-    }
-
-    suspend fun deleteRecord(id: String) {
-        dataSource.deleteRecord(id)
-    }
-
     suspend fun createManualRecord(
         deviceId: String,
         type: RecordType,
