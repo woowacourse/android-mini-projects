@@ -67,7 +67,7 @@ class RecordRepository(
     }
 }
 
-private fun RecordDto.toDomain(): Record =
+internal fun RecordDto.toDomain(): Record =
     Record(
         id = id,
         type = recordType.toRecordType(),
@@ -75,9 +75,9 @@ private fun RecordDto.toDomain(): Record =
         note = note,
     )
 
-private fun String.toRecordType(): RecordType =
+internal fun String.toRecordType(): RecordType =
     RecordType.entries.find { it.name == this } ?: error("Unknown record_type: $this")
 
-private fun RecordType.toRecordTypeColumn(): String = name
+internal fun RecordType.toRecordTypeColumn(): String = name
 
 private const val MANUAL_RECORD_SOURCE = "USER_WRITE"

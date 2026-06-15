@@ -2,7 +2,7 @@ package a4.dogsignal
 
 import a4.dogsignal.data.local.DeviceLocalDataSource
 import a4.dogsignal.data.network.DeviceDataSource
-import a4.dogsignal.data.network.RecordDataSource
+import a4.dogsignal.data.network.SupabaseRecordDataSource
 import a4.dogsignal.data.repository.DeviceRepository
 import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.di.createSupabase
@@ -42,7 +42,7 @@ fun App() {
     val deviceLocalDataSource = remember { DeviceLocalDataSource() }
     val deviceDataSource = remember { DeviceDataSource(supabase) }
     val deviceRepository = remember { DeviceRepository(deviceLocalDataSource, deviceDataSource) }
-    val recordDataSource = remember { RecordDataSource(supabase) }
+    val recordDataSource = remember { SupabaseRecordDataSource(supabase) }
     val recordRepository = remember { RecordRepository(recordDataSource) }
 
     var deviceId by remember { mutableStateOf<String?>(null) }

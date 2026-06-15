@@ -1,5 +1,6 @@
 package a4.dogsignal.ui.home.composable
 
+import a4.dogsignal.ui.home.formatTimeDiff
 import a4.dogsignal.ui.theme.AppTheme
 import a4.dogsignal.ui.theme.Divider
 import a4.dogsignal.ui.theme.TextPrimary
@@ -42,7 +43,10 @@ internal fun HomeStatusCard(
     val description = when {
         isLoading -> "로딩 중..."
         lastRecordDateTime == null -> "오늘 감지 없음"
-        else -> formatTimeDiff(lastRecordDateTime)
+        else -> {
+            val diffMinutes = (Clock.System.now() - lastRecordDateTime.toInstant(TimeZone.currentSystemDefault())).inWholeMinutes
+            formatTimeDiff(diffMinutes)
+        }
     }
 
     Row(
@@ -79,16 +83,6 @@ internal fun HomeStatusCard(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-    }
-}
-
-private fun formatTimeDiff(dateTime: LocalDateTime): String {
-    val diffMinutes = (Clock.System.now() - dateTime.toInstant(TimeZone.currentSystemDefault())).inWholeMinutes
-    return when {
-        diffMinutes < 1 -> "방금 전"
-        diffMinutes < 60 -> "마지막 감지 ${diffMinutes}분 전"
-        diffMinutes < 1440 -> "마지막 감지 ${diffMinutes / 60}시간 전"
-        else -> "마지막 감지 ${diffMinutes / 1440}일 전"
     }
 }
 
