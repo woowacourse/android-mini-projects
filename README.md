@@ -3,7 +3,32 @@
 강아지 배변패드 방문·소변·대변을 자동으로 감지하고 기록하는 IoT 앱 프로젝트입니다.
 ESP32 하드웨어가 센서로 이벤트를 감지하면 Supabase를 거쳐 Android/iOS 앱에 푸시 알림이 전송되고, 앱에서 기록을 조회·관리할 수 있습니다.
 
+> 우아한테크코스 8기 Android 미니 프로젝트 · 2026.05.28 ~ 진행 중
+
 피그마 디자인: [링크 바로가기](https://www.figma.com/design/HtTu8krbr2kOYGiWt2uLZ9/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%AF%B8%EB%8B%88-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&t=bFMTjGwftHtI5Dw9-1)
+
+---
+
+## 시연
+
+> 📹 센서 감지 → 푸시 알림 → 앱 기록 흐름
+
+| 기기 등록 | 홈 화면 | 기록 목록 |
+|---|---|---|
+| <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/be86ff42-e82d-4001-be78-5f27f3b29518" /> | <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/df6c3fb1-e262-45e0-b884-5b0dba2ca530" /> | <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/99a2d338-ff9a-46aa-986b-09ea4b753841" /> |
+
+---
+
+## 팀 구성 및 담당
+
+4인 팀으로 진행했으며, 각자 아래 영역을 담당했습니다.
+
+| 담당 | 영역 |
+|------|------|
+| 허닛 - 팀장 @BaekCCI | ESP32 펌웨어 |
+| 모스 @katie0109 | ESP32 펌웨어 |
+| 별터 @todays-sun-day | Android/iOS 앱 UI 구현 (Compose Multiplatform), Supabase 연동 |
+| 로미 @parkhyomi | Android/iOS 앱 UI 구현 (Compose Multiplatform), 기록 추가 시 Android 앱 푸시 알림 처리 (FCM 연동) |
 
 ---
 
