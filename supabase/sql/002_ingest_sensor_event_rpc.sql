@@ -85,7 +85,7 @@ execute function public.create_potty_record_from_sensor_event();
 -- payload 예시:
 -- {
 --   "p_device_code": "pad-001",
---   "p_device_secret": "pad-001-device-secret-1234",
+--   "p_device_secret": "replace-with-device-secret",
 --   "p_seq": 1,
 --   "p_event_type": "DEVICE_READY",
 --   "p_schema_version": 1,

@@ -12,3 +12,12 @@ arduino/stool-sensing/build/
 .DS_Store
 .vscode/
 .idea/
+
+# Local secrets
+.env
+*.env
+!*.env.example
+supabase/**/*.env
+!supabase/**/*.env.example
+supabase/**/*service-account*.json
+supabase/.temp/

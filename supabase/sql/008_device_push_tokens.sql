@@ -45,6 +45,8 @@ revoke all on table public.device_push_tokens from public;
 revoke all on table public.device_push_tokens from anon;
 revoke all on table public.device_push_tokens from authenticated;
 
+grant select, delete on table public.device_push_tokens to service_role;
+
 -- ---------------------------------------------------------------------
 -- 2. FCM token 등록 RPC
 -- ---------------------------------------------------------------------

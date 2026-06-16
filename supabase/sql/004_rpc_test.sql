@@ -10,7 +10,7 @@
 -- DEVICE_READY는 device_status만 갱신하고 sensor_events에는 저장하지 않는다.
 select public.ingest_sensor_event(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     900001,
     'DEVICE_READY'
 );
@@ -20,7 +20,7 @@ select public.ingest_sensor_event(
 -- trigger가 potty_records에 VISIT 기록도 생성한다.
 select public.ingest_sensor_event(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     900002,
     'VISIT_DETECTED'
 );
@@ -30,7 +30,7 @@ select public.ingest_sensor_event(
 -- trigger가 potty_records에 STOOL 기록도 생성한다.
 select public.ingest_sensor_event(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     900003,
     'STOOL_DETECTED'
 );
@@ -56,7 +56,7 @@ limit 20;
 select *
 from public.get_sensor_events_by_device(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     20
 );
 
