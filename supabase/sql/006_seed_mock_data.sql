@@ -22,7 +22,7 @@ values (
     'pad-001',
     'ESP32 배변 감지기',
     '0.1.0',
-    extensions.crypt('pad-001-device-secret-1234', extensions.gen_salt('bf'))
+    extensions.crypt('replace-with-device-secret', extensions.gen_salt('bf'))
 )
 on conflict (device_code) do update set
     display_name = excluded.display_name,

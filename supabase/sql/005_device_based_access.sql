@@ -41,7 +41,7 @@ $$;
 update public.devices
 set
     device_secret_hash = extensions.crypt(
-        'pad-001-device-secret-1234',
+        'replace-with-device-secret',
         extensions.gen_salt('bf')
     ),
     updated_at = now()

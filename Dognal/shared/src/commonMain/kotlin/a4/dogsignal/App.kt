@@ -6,6 +6,8 @@ import a4.dogsignal.data.network.SupabaseRecordDataSource
 import a4.dogsignal.data.repository.DeviceRepository
 import a4.dogsignal.data.repository.RecordRepository
 import a4.dogsignal.di.createSupabase
+import a4.dogsignal.push.NoOpPushTokenProvider
+import a4.dogsignal.push.PushTokenProvider
 import a4.dogsignal.ui.common.component.DognalTab
 import a4.dogsignal.ui.device.DeviceInfoScreen
 import a4.dogsignal.ui.home.HomeScreen
@@ -37,11 +39,18 @@ private object Route {
 }
 
 @Composable
-fun App() {
+fun App(pushTokenProvider: PushTokenProvider = NoOpPushTokenProvider) {
     val supabase = remember { createSupabase() }
     val deviceLocalDataSource = remember { DeviceLocalDataSource() }
     val deviceDataSource = remember { DeviceDataSource(supabase) }
-    val deviceRepository = remember { DeviceRepository(deviceLocalDataSource, deviceDataSource) }
+    val deviceRepository =
+        remember(pushTokenProvider) {
+            DeviceRepository(
+                localDataSource = deviceLocalDataSource,
+                networkDataSource = deviceDataSource,
+                pushTokenProvider = pushTokenProvider,
+            )
+        }
     val recordDataSource = remember { SupabaseRecordDataSource(supabase) }
     val recordRepository = remember { RecordRepository(recordDataSource) }
 

@@ -121,7 +121,7 @@ POST /rest/v1/rpc/ingest_sensor_event
 ```json
 {
   "p_device_code": "pad-001",
-  "p_device_secret": "pad-001-device-secret-1234",
+  "p_device_secret": "replace-with-device-secret",
   "p_seq": 1,
   "p_event_type": "DEVICE_READY",
   "p_schema_version": 1,
@@ -134,7 +134,7 @@ POST /rest/v1/rpc/ingest_sensor_event
 
 ```text
 device_code: pad-001
-device_secret_hash: pad-001-device-secret-1234의 hash 값
+device_secret_hash: replace-with-device-secret의 hash 값
 ```
 
 ESP32에는 원문 secret이 들어가지만, DB에는 원문이 아니라 `device_secret_hash`를 저장하는 방향으로 정리했다.

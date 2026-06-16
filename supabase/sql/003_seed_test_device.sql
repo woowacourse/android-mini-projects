@@ -18,7 +18,7 @@ values (
     'pad-001',
     'ESP32 초음파 테스트 기기',
     'stool-sensing-0.1.0',
-    extensions.crypt('pad-001-device-secret-1234', extensions.gen_salt('bf'))
+    extensions.crypt('replace-with-device-secret', extensions.gen_salt('bf'))
 )
 on conflict (device_code)
 do update set
@@ -26,5 +26,4 @@ do update set
     firmware_version = excluded.firmware_version,
     device_secret_hash = excluded.device_secret_hash,
     updated_at = now();
-
 
