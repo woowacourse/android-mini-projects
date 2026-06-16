@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: Mungjeok Supabase Read API
+  version: 0.1.0
+  description: |
+    CMP 앱이 Supabase REST API(PostgREST)를 통해 조회하는 View 계약입니다.
+    실제 호출 시 Authorization 헤더에 Supabase Auth access token을 넣어야 합니다.
+
+servers:
+  - url: https://scacdglkduegrohbkcak.supabase.co/rest/v1
+    description: Replace YOUR_PROJECT_REF with Supabase project ref
+
+security:
+  - bearerAuth: []
+    apiKey: []
+
+paths:
+  /v_daily_summaries:
+    get:
+      summary: Get daily potty summary
+      description: 홈 화면의 오늘 방문/소변/대변 횟수 조회
+      parameters:
+        - name: select
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "*"
+        - name: device_id
+          in: query
+          required: true
+          description: PostgREST filter. Example `eq.33333333-3333-3333-3333-333333333333`
+          schema:
+            type: string
+        - name: record_date
+          in: query
+          required: true
+          description: PostgREST filter. Example `eq.2026-06-04`
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Daily summary rows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailySummary"
+
+  /v_latest_potty_record:
+    get:
+      summary: Get latest potty record
+      description: 홈 화면의 마지막 감지 기록 조회
+      parameters:
+        - name: select
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "*"
+        - name: device_id
+          in: query
+          required: true
+          description: PostgREST filter. Example `eq.33333333-3333-3333-3333-333333333333`
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Latest record rows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LatestPottyRecord"
+
+  /v_device_connection_status:
+    get:
+      summary: Get device connection status
+      description: 기기 연결 화면의 기기/센서/보정 상태 조회
+      parameters:
+        - name: select
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "*"
+      responses:
+        "200":
+          description: Device connection status rows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceConnectionStatus"
+
+  /v_potty_record_timeline:
+    get:
+      summary: Get potty record timeline
+      description: 배변 기록 화면의 날짜별 타임라인 조회
+      parameters:
+        - name: select
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "*"
+        - name: device_id
+          in: query
+          required: true
+          description: PostgREST filter. Example `eq.33333333-3333-3333-3333-333333333333`
+          schema:
+            type: string
+        - name: record_date
+          in: query
+          required: true
+          description: PostgREST filter. Example `eq.2026-06-04`
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          description: Example `occurred_at.desc`
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Timeline rows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PottyRecordTimelineItem"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase Auth access token
+    apiKey:
+      type: apiKey
+      in: header
+      name: apikey
+      description: Supabase anon key
+
+  schemas:
+    RecordType:
+      type: string
+      enum:
+        - VISIT
+        - URINE
+        - FECES
+        - MIXED
+
+    ConfidenceLevel:
+      type: string
+      nullable: true
+      enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+        - USER_CONFIRMED
+
+    ConnectionState:
+      type: string
+      nullable: true
+      enum:
+        - SETUP_REQUIRED
+        - ONLINE
+        - OFFLINE
+        - ERROR
+
+    DailySummary:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          format: uuid
+        pet_id:
+          type: string
+          format: uuid
+          nullable: true
+        device_id:
+          type: string
+          format: uuid
+        record_date:
+          type: string
+          format: date
+        visit_count:
+          type: integer
+        urine_count:
+          type: integer
+        feces_count:
+          type: integer
+        first_record_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_record_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    LatestPottyRecord:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          format: uuid
+        pet_id:
+          type: string
+          format: uuid
+          nullable: true
+        device_id:
+          type: string
+          format: uuid
+        record_id:
+          type: string
+          format: uuid
+        record_type:
+          $ref: "#/components/schemas/RecordType"
+        occurred_at:
+          type: string
+          format: date-time
+        confidence:
+          $ref: "#/components/schemas/ConfidenceLevel"
+        note:
+          type: string
+          nullable: true
+        residual_delta_g:
+          type: number
+          nullable: true
+        height_delta_cm:
+          type: number
+          nullable: true
+
+    DeviceConnectionStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner_id:
+          type: string
+          format: uuid
+          nullable: true
+        pet_id:
+          type: string
+          format: uuid
+          nullable: true
+        device_code:
+          type: string
+        display_name:
+          type: string
+        firmware_version:
+          type: string
+          nullable: true
+        claimed_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_seen_at:
+          type: string
+          format: date-time
+          nullable: true
+        connection_state:
+          $ref: "#/components/schemas/ConnectionState"
+        loadcell_ok:
+          type: boolean
+          nullable: true
+        ultrasonic_ok:
+          type: boolean
+          nullable: true
+        calibrated_at:
+          type: string
+          format: date-time
+          nullable: true
+        current_weight_g:
+          type: number
+          nullable: true
+        current_distance_cm:
+          type: number
+          nullable: true
+        rssi:
+          type: integer
+          nullable: true
+        last_error:
+          type: string
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    PottyRecordTimelineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner_id:
+          type: string
+          format: uuid
+        pet_id:
+          type: string
+          format: uuid
+          nullable: true
+        device_id:
+          type: string
+          format: uuid
+          nullable: true
+        record_type:
+          $ref: "#/components/schemas/RecordType"
+        display_label:
+          type: string
+          enum:
+            - 패드 방문
+            - 소변
+            - 대변
+            - 소변+대변
+        display_color:
+          type: string
+          enum:
+            - green
+            - orange
+            - purple
+            - blue
+        source:
+          type: string
+          enum:
+            - DEVICE_AUTO
+        occurred_at:
+          type: string
+          format: date-time
+        display_time:
+          type: string
+          example: "15:22"
+        record_date:
+          type: string
+          format: date
+        duration_ms:
+          type: integer
+          nullable: true
+        residual_delta_g:
+          type: number
+          nullable: true
+        height_delta_cm:
+          type: number
+          nullable: true
+        confidence:
+          $ref: "#/components/schemas/ConfidenceLevel"
+        note:
+          type: string
+          nullable: true

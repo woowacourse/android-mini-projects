@@ -1,0 +1,23 @@
+# Arduino secrets
+arduino/stool-sensing/src/config/config.h
+
+# Arduino build outputs
+*.elf
+*.bin
+*.map
+*.hex
+arduino/stool-sensing/build/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local secrets
+.env
+*.env
+!*.env.example
+supabase/**/*.env
+!supabase/**/*.env.example
+supabase/**/*service-account*.json
+supabase/.temp/
