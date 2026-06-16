@@ -15,7 +15,9 @@ bool EventSender::hasPendingEvent() {
   return pendingEvent.active;
 }
 
-void EventSender::queueEvent(const char* eventType) {
+void EventSender::queueEvent(const char* eventType,
+                             float weightG, float distanceCm,
+                             float baselineWeightG, float baselineDistanceCm) {
   if (pendingEvent.active) {
     Serial.print("Cannot queue event. Pending event exists: ");
     Serial.println(pendingEvent.eventType);
@@ -26,6 +28,10 @@ void EventSender::queueEvent(const char* eventType) {
   pendingEvent.seq = sequenceStore.nextSeq();
   pendingEvent.eventType = String(eventType);
   pendingEvent.lastAttemptAt = 0;
+  pendingEvent.weightG = weightG;
+  pendingEvent.distanceCm = distanceCm;
+  pendingEvent.baselineWeightG = baselineWeightG;
+  pendingEvent.baselineDistanceCm = baselineDistanceCm;
 
   Serial.print("Queued event: ");
   Serial.print(pendingEvent.eventType);
@@ -52,7 +58,11 @@ bool EventSender::update(unsigned long now, bool canSend) {
 
   bool success = supabaseClient.sendEvent(
     pendingEvent.seq,
-    pendingEvent.eventType.c_str()
+    pendingEvent.eventType.c_str(),
+    pendingEvent.weightG,
+    pendingEvent.distanceCm,
+    pendingEvent.baselineWeightG,
+    pendingEvent.baselineDistanceCm
   );
 
   if (!success) {

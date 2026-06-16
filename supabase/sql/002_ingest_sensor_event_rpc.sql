@@ -85,7 +85,7 @@ execute function public.create_potty_record_from_sensor_event();
 -- payload 예시:
 -- {
 --   "p_device_code": "pad-001",
---   "p_device_secret": "pad-001-device-secret-1234",
+--   "p_device_secret": "replace-with-device-secret",
 --   "p_seq": 1,
 --   "p_event_type": "DEVICE_READY",
 --   "p_schema_version": 1,
@@ -113,7 +113,11 @@ create function public.ingest_sensor_event(
     p_occurred_at timestamptz default null,
     p_schema_version integer default 1,
     p_rssi integer default null,
-    p_ip_address inet default null
+    p_ip_address inet default null,
+    p_weight_g real default null,
+    p_distance_cm real default null,
+    p_baseline_weight_g real default null,
+    p_baseline_distance_cm real default null
 )
 returns jsonb
 language plpgsql
@@ -160,14 +164,22 @@ begin
             seq,
             schema_version,
             event_type,
-            occurred_at
+            occurred_at,
+            weight_g,
+            distance_cm,
+            baseline_weight_g,
+            baseline_distance_cm
         )
         values (
             v_device.id,
             p_seq,
             coalesce(p_schema_version, 1),
             p_event_type,
-            p_occurred_at
+            p_occurred_at,
+            p_weight_g,
+            p_distance_cm,
+            p_baseline_weight_g,
+            p_baseline_distance_cm
         )
         on conflict (device_id, seq)
         do nothing
@@ -258,7 +270,11 @@ revoke execute on function public.ingest_sensor_event(
     timestamptz,
     integer,
     integer,
-    inet
+    inet,
+    real,
+    real,
+    real,
+    real
 ) from public;
 
 revoke execute on function public.ingest_sensor_event(
@@ -269,7 +285,11 @@ revoke execute on function public.ingest_sensor_event(
     timestamptz,
     integer,
     integer,
-    inet
+    inet,
+    real,
+    real,
+    real,
+    real
 ) from anon;
 
 revoke execute on function public.ingest_sensor_event(
@@ -280,7 +300,11 @@ revoke execute on function public.ingest_sensor_event(
     timestamptz,
     integer,
     integer,
-    inet
+    inet,
+    real,
+    real,
+    real,
+    real
 ) from authenticated;
 
 grant execute on function public.ingest_sensor_event(
@@ -291,5 +315,9 @@ grant execute on function public.ingest_sensor_event(
     timestamptz,
     integer,
     integer,
-    inet
+    inet,
+    real,
+    real,
+    real,
+    real
 ) to anon;

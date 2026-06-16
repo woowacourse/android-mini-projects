@@ -29,7 +29,7 @@ App
 `device_secret`은 기기 접근 비밀번호다.
 
 ```text
-예: pad-001-device-secret-1234
+예: replace-with-device-secret
 ```
 
 DB에는 원문 secret을 저장하지 않고 hash만 저장한다.
@@ -112,13 +112,13 @@ supabase/sql/003_seed_test_device.sql
 
 ```text
 device_code: pad-001
-device_secret: pad-001-device-secret-1234
+device_secret: replace-with-device-secret
 ```
 
 DB에는 아래처럼 hash로 저장된다.
 
 ```sql
-extensions.crypt('pad-001-device-secret-1234', extensions.gen_salt('bf'))
+extensions.crypt('replace-with-device-secret', extensions.gen_salt('bf'))
 ```
 
 ### 4. Schema reload
@@ -138,7 +138,7 @@ notify pgrst, 'reload schema';
 ```sql
 select public.ingest_sensor_event(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     900001,
     'DEVICE_READY'
 );
@@ -149,7 +149,7 @@ select public.ingest_sensor_event(
 ```sql
 select public.ingest_sensor_event(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     900002,
     'VISIT_DETECTED'
 );
@@ -171,7 +171,7 @@ select public.ingest_sensor_event(
 select *
 from public.get_sensor_events_by_device(
     'pad-001',
-    'pad-001-device-secret-1234',
+    'replace-with-device-secret',
     20
 );
 ```
@@ -191,7 +191,7 @@ payload:
 ```json
 {
   "p_device_code": "pad-001",
-  "p_device_secret": "pad-001-device-secret-1234",
+  "p_device_secret": "replace-with-device-secret",
   "p_limit": 50
 }
 ```

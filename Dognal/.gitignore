@@ -10,6 +10,11 @@ local.properties
 captures
 .externalNativeBuild
 .cxx
+
+# Firebase local app config
+androidApp/google-services.json
+iosApp/iosApp/GoogleService-Info.plist
+
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/

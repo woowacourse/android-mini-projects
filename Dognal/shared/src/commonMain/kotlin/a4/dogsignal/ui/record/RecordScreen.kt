@@ -24,13 +24,148 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+
+@Composable
+internal fun RecordScreen(
+    viewModel: RecordViewModel,
+    onTabClick: (DognalTab) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var isManualRecordDialogVisible by remember { mutableStateOf(false) }
+    var editingRecord by remember { mutableStateOf<Record?>(null) }
+    var manualRecordDialogState by remember {
+        mutableStateOf(ManualRecordDialogState.initial(currentDateTime()))
+    }
+    var manualRecordDateTimePickerState by remember {
+        mutableStateOf<ManualRecordDateTimePickerState?>(null)
+    }
+
+    val hideManualRecordDialog = {
+        isManualRecordDialogVisible = false
+        editingRecord = null
+        manualRecordDateTimePickerState = null
+        viewModel.clearManualRecordError()
+    }
+
+    val hideManualRecordDateTimePicker = {
+        manualRecordDateTimePickerState = null
+    }
+
+    val confirmManualRecordDateTimePicker = {
+        manualRecordDateTimePickerState?.let { pickerState ->
+            manualRecordDialogState =
+                manualRecordDialogState.copy(dateTime = pickerState.dateTime)
+        }
+        manualRecordDateTimePickerState = null
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.manualRecordSavedEvent.collect {
+            hideManualRecordDialog()
+        }
+    }
+
+    RecordScreen(
+        state = state,
+        isManualRecordDialogVisible = isManualRecordDialogVisible,
+        manualRecordDialogState = manualRecordDialogState,
+        manualRecordDateTimePickerState = manualRecordDateTimePickerState,
+        onAddRecordClick = {
+            viewModel.clearManualRecordError()
+            editingRecord = null
+            manualRecordDialogState = ManualRecordDialogState.initial(currentDateTime())
+            manualRecordDateTimePickerState = null
+            isManualRecordDialogVisible = true
+        },
+        onEditRecordClick = { record ->
+            viewModel.clearManualRecordError()
+            editingRecord = record
+            manualRecordDialogState = ManualRecordDialogState(
+                selectedRecordType = record.type,
+                dateTime = record.dateTime,
+                memo = record.note ?: "",
+                isEditing = true,
+            )
+            manualRecordDateTimePickerState = null
+            isManualRecordDialogVisible = true
+        },
+        onManualRecordDismiss = hideManualRecordDialog,
+        onManualRecordTypeClick = { recordType ->
+            manualRecordDialogState =
+                manualRecordDialogState.copy(selectedRecordType = recordType)
+        },
+        onManualRecordDateClick = {
+            manualRecordDateTimePickerState =
+                ManualRecordDateTimePickerState.date(
+                    manualRecordDialogState.dateTime,
+                    maxDateTime = currentDateTime(),
+                )
+        },
+        onManualRecordTimeClick = {
+            manualRecordDateTimePickerState =
+                ManualRecordDateTimePickerState.time(
+                    manualRecordDialogState.dateTime,
+                    maxDateTime = currentDateTime(),
+                )
+        },
+        onManualRecordPickerDateChange = { date ->
+            manualRecordDateTimePickerState =
+                manualRecordDateTimePickerState?.updateDate(date)
+        },
+        onManualRecordPickerTimeChange = { time ->
+            manualRecordDateTimePickerState =
+                manualRecordDateTimePickerState?.updateTime(time)
+        },
+        onManualRecordPickerDismiss = hideManualRecordDateTimePicker,
+        onManualRecordPickerConfirm = confirmManualRecordDateTimePicker,
+        onManualRecordMemoChange = { memo ->
+            manualRecordDialogState =
+                manualRecordDialogState.copy(memo = memo)
+        },
+        onManualRecordDeleteClick = {
+            editingRecord?.let { record ->
+                viewModel.deleteRecord(record.id)
+            }
+        },
+        onManualRecordSaveClick = {
+            val record = editingRecord
+            if (record != null) {
+                viewModel.updateManualRecord(
+                    id = record.id,
+                    type = manualRecordDialogState.selectedRecordType,
+                    dateTime = manualRecordDialogState.dateTime,
+                    memo = manualRecordDialogState.memo,
+                )
+            } else {
+                viewModel.saveManualRecord(
+                    type = manualRecordDialogState.selectedRecordType,
+                    dateTime = manualRecordDialogState.dateTime,
+                    memo = manualRecordDialogState.memo,
+                )
+            }
+        },
+        onTabClick = onTabClick,
+        modifier = modifier,
+    )
+}
 
 @Composable
 internal fun RecordScreen(
@@ -127,6 +262,9 @@ internal fun RecordScreen(
     )
 }
 
+private fun currentDateTime(): LocalDateTime =
+    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
 @Preview(showBackground = true)
 @Composable
 private fun RecordScreenPreview() {
@@ -139,11 +277,11 @@ private fun RecordScreenPreview() {
                     dateLabel = "오늘",
                     dateValue = date.toString(),
                     recordList =
-                        listOf(
+                        persistentListOf(
                             Record(
                                 id = "1",
                                 dateTime = LocalDateTime(date, LocalTime(2, 5)),
-                                type = RecordType.PAD,
+                                type = RecordType.VISIT,
                                 note = "힘겨워 보였음"
                             ),
                             Record(

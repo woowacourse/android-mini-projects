@@ -123,9 +123,13 @@ void AppController::updateDeviceReadyEvent() {
   }
 
   if (isDetectorReady) {
-    eventSender.queueEvent(EVENT_DEVICE_READY);
+    eventSender.queueEvent(EVENT_DEVICE_READY,
+      lastWeightGram, lastDistanceCm,
+      stoolDetector.getBaselineWeightG(), stoolDetector.getBaselineDistanceCm());
   } else {
-    eventSender.queueEvent(EVENT_SENSOR_ERROR);
+    eventSender.queueEvent(EVENT_SENSOR_ERROR,
+      lastWeightGram, lastDistanceCm,
+      stoolDetector.getBaselineWeightG(), stoolDetector.getBaselineDistanceCm());
   }
 }
 
@@ -167,7 +171,9 @@ void AppController::handleSensorSample(float weightG, float distanceCm) {
   DetectionResult result = stoolDetector.update(weightG, distanceCm);
 
   if (result.hasEvent) {
-    eventSender.queueEvent(result.eventType);
+    eventSender.queueEvent(result.eventType,
+      weightG, distanceCm,
+      stoolDetector.getBaselineWeightG(), stoolDetector.getBaselineDistanceCm());
   }
 }
 

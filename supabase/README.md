@@ -17,8 +17,12 @@
 - `public.device_status`
 - `public.sensor_events`
 - `public.potty_records`
+- `public.device_push_tokens`
 - `public.ingest_sensor_event(...)`
 - `public.get_sensor_events_by_device(...)`
+- `public.verify_device(...)`
+- `public.register_device_push_token(...)`
+- `notify-potty-record-insert` Edge Function
 
 ## 실행 순서
 
@@ -32,6 +36,13 @@
 앱 화면 개발용 mock 데이터가 필요할 때만:
 
 - `sql/006_seed_mock_data.sql`
+
+푸시 알림을 사용할 때:
+
+1. `sql/008_device_push_tokens.sql`
+2. `sql/009_push_notification_permissions.sql`
+3. `functions/notify-potty-record-insert` 배포
+4. `sql/010_notify_potty_record_insert_webhook.sql`의 `replace-with-webhook-secret`을 실제 `WEBHOOK_SECRET` 값으로 바꿔 실행
 
 기존 user 기반 DB를 device 기반으로 바꿀 때:
 
@@ -53,7 +64,7 @@ payload:
 ```json
 {
   "p_device_code": "pad-001",
-  "p_device_secret": "pad-001-device-secret-1234",
+  "p_device_secret": "replace-with-device-secret",
   "p_limit": 50
 }
 ```
@@ -64,3 +75,68 @@ payload:
 - ESP32와 앱에는 anon key 또는 publishable key만 넣는다.
 - `device_secret` 원문은 ESP32와 사용자 입력값으로만 사용한다.
 - DB에는 `device_secret_hash`만 저장한다.
+- Firebase service account JSON은 Git에 올리지 않고 Supabase Edge Function secret으로만 등록한다.
+
+## 푸시 알림 Edge Function
+
+`potty_records`에 새 row가 INSERT되면 Database Webhook이
+`notify-potty-record-insert` Edge Function을 호출한다.
+
+필요한 Supabase secrets:
+
+```bash
+FCM_SERVICE_ACCOUNT_JSON='{"type":"service_account", ... }'
+FIREBASE_PROJECT_ID='your-firebase-project-id'
+WEBHOOK_SECRET='replace-with-long-random-string'
+```
+
+`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`는 Supabase Edge Functions 기본 secret을 사용한다.
+
+`FCM_SERVICE_ACCOUNT_JSON`은 Firebase Console에서 발급한다.
+
+1. Firebase Console > Project settings
+2. Service accounts
+3. Firebase Admin SDK
+4. Generate new private key
+5. 내려받은 JSON 전체를 Supabase secret으로 등록
+
+배포 예시:
+
+```bash
+supabase functions deploy notify-potty-record-insert --no-verify-jwt
+supabase secrets set FCM_SERVICE_ACCOUNT_JSON='{"type":"service_account", ... }'
+supabase secrets set FIREBASE_PROJECT_ID='your-firebase-project-id'
+supabase secrets set WEBHOOK_SECRET='replace-with-long-random-string'
+```
+
+DB Trigger 설정:
+
+Dashboard Database Webhook 생성이 실패하거나 보이지 않으면 `pg_net` 기반 trigger를 직접 만든다.
+`sql/010_notify_potty_record_insert_webhook.sql`의 아래 값은 실제 배포 환경에서만 바꿔 실행한다.
+
+```sql
+'x-webhook-secret', 'replace-with-webhook-secret'
+```
+
+실행 후 확인:
+
+```sql
+select
+    trigger_name,
+    event_manipulation,
+    event_object_table
+from information_schema.triggers
+where event_object_schema = 'public'
+  and event_object_table = 'potty_records';
+```
+
+`trg_notify_potty_record_insert`가 나오면 등록된 것이다.
+
+Dashboard Webhook을 사용할 수 있는 경우 설정:
+
+- Table: `public.potty_records`
+- Events: `Insert`
+- Type: HTTP Request
+- Method: `POST`
+- URL: `https://<project-ref>.supabase.co/functions/v1/notify-potty-record-insert`
+- Header: `x-webhook-secret: <WEBHOOK_SECRET 값>`

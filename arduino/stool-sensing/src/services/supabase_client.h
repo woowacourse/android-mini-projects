@@ -12,7 +12,9 @@ public:
     const char* deviceSecret
   );
 
-  bool sendEvent(int seq, const char* eventType);
+  bool sendEvent(int seq, const char* eventType,
+                 float weightG, float distanceCm,
+                 float baselineWeightG, float baselineDistanceCm);
 
 private:
   const char* url;

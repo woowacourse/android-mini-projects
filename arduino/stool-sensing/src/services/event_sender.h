@@ -10,7 +10,9 @@ public:
   EventSender(SequenceStore& sequenceStore, SupabaseClient& supabaseClient);
 
   bool hasPendingEvent();
-  void queueEvent(const char* eventType);
+  void queueEvent(const char* eventType,
+                  float weightG, float distanceCm,
+                  float baselineWeightG, float baselineDistanceCm);
   bool update(unsigned long now, bool canSend);
   const String& getPendingEventType();
   const String& getLastSentEventType();
