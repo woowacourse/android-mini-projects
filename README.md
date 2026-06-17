@@ -25,8 +25,8 @@ ESP32 하드웨어가 센서로 이벤트를 감지하면 Supabase를 거쳐 And
 
 | 담당 | 영역 |
 |------|------|
-| 허닛 - 팀장 [@BaekCCI](https://github.com/BaekCCI) | ESP32 펌웨어 |
-| 모스 [@katie0109](https://github.com/katie0109) | ESP32 펌웨어 |
+| 허닛 - 팀장 [@BaekCCI](https://github.com/BaekCCI) | 아두이노 회로 연결, 아두이노 센서 및 통신 로직 구현, supabase edge functions 구현  |
+| 모스 [@katie0109](https://github.com/katie0109) | 아두이노 회로 설계, 아두이노 센서 및 통신 로직 구현, supabase database 스키마 설계 구축  |
 | 별터 [@todays-sun-day](https://github.com/todays-sun-day) | Android/iOS 앱 UI 구현 (Compose Multiplatform), Supabase 연동 |
 | 로미 [@parkhyomi](https://github.com/parkhyomi) | Android/iOS 앱 UI 구현 (Compose Multiplatform), 기록 추가 시 Android 앱 푸시 알림 처리 (FCM 연동) |
 
