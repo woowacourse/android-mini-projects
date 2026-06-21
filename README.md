@@ -3,7 +3,7 @@
 강아지 배변패드 방문·소변·대변을 자동으로 감지하고 기록하는 IoT 앱 프로젝트입니다.
 ESP32 하드웨어가 센서로 이벤트를 감지하면 Supabase를 거쳐 Android/iOS 앱에 푸시 알림이 전송되고, 앱에서 기록을 조회·관리할 수 있습니다.
 
-> 우아한테크코스 8기 Android 미니 프로젝트 · 2026.05.28 ~ 진행 중
+> 우아한테크코스 8기 Android 미니 프로젝트 · 2026.05.28 ~ 2026.06.18 (4주)
 
 피그마 디자인: [링크 바로가기](https://www.figma.com/design/HtTu8krbr2kOYGiWt2uLZ9/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%AF%B8%EB%8B%88-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&t=bFMTjGwftHtI5Dw9-1)
 
@@ -17,6 +17,10 @@ ESP32 하드웨어가 센서로 이벤트를 감지하면 Supabase를 거쳐 And
 |---|---|---|
 | <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/be86ff42-e82d-4001-be78-5f27f3b29518" /> | <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/df6c3fb1-e262-45e0-b884-5b0dba2ca530" /> | <img width="180" height="405" alt="image" src="https://github.com/user-attachments/assets/99a2d338-ff9a-46aa-986b-09ea4b753841" /> |
 
+| 아두이노 기기 시연 | 푸시 알림 |
+| --- | --- |
+| <img width="4000" height="2252" alt="image" src="https://github.com/user-attachments/assets/83076804-f387-4e57-a8df-4e8a7d3ba86e" /> | <img width="1440" height="1041" alt="image" src="https://github.com/user-attachments/assets/99c64a08-4b6e-4f77-ae76-1d34f47d5170" /> |
+
 ---
 
 ## 팀 구성 및 담당
@@ -25,8 +29,8 @@ ESP32 하드웨어가 센서로 이벤트를 감지하면 Supabase를 거쳐 And
 
 | 담당 | 영역 |
 |------|------|
-| 허닛 - 팀장 [@BaekCCI](https://github.com/BaekCCI) | ESP32 펌웨어 |
-| 모스 [@katie0109](https://github.com/katie0109) | ESP32 펌웨어 |
+| 허닛 - 팀장 [@BaekCCI](https://github.com/BaekCCI) | 아두이노 회로 연결, 아두이노 센서 및 통신 로직 구현, supabase edge functions 구현  |
+| 모스 [@katie0109](https://github.com/katie0109) | 아두이노 회로 설계, 아두이노 센서 및 통신 로직 구현, supabase database 스키마 설계 구축  |
 | 별터 [@todays-sun-day](https://github.com/todays-sun-day) | Android/iOS 앱 UI 구현 (Compose Multiplatform), Supabase 연동 |
 | 로미 [@parkhyomi](https://github.com/parkhyomi) | Android/iOS 앱 UI 구현 (Compose Multiplatform), 기록 추가 시 Android 앱 푸시 알림 처리 (FCM 연동) |
 
@@ -111,14 +115,22 @@ Dognal/
 
 ### 로컬 빌드
 
-`Dognal/local.properties`에 Supabase 키를 추가합니다.
+#### 1. Supabase 키 설정
+`Dognal/local.properties`에 추가:
 
 ```properties
 SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_KEY=<anon-key>
 ```
 
-Android는 Android Studio에서 `androidApp` 모듈을 바로 실행합니다.
+2. Firebase 설정 (푸시 알림)
+
+Firebase Console에서 Android 앱을 등록하고 `google-services.json`을 다운로드한 뒤
+`Dognal/androidApp/google-services.json`에 위치시킵니다.
+
+3. Android 실행
+
+Android Studio에서 `androidApp` 모듈 실행
 
 ---
 
