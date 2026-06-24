@@ -50,19 +50,26 @@ cd impl && python3 crawl.py
 cd keybuddy/frontend && npm run sync:data   # output/keyboards.json -> 프론트 + Edge Function 사본
 ```
 
-## 아키텍처: 두 개의 추천 경로
+## 아키텍처: 추천 경로 (현행 + 레거시)
 
-keybuddy의 핵심은 **추천 엔진이 두 갈래로 존재**한다는 점이다. 혼동하지 말 것.
+> **2026-06 갱신**: 결정론 의도 하네스가 UI에 배선됐다. 현행 프로덕션은 "Edge Function 태그추출(OpenAI) + 클라이언트 결정론 검색" 하이브리드이고, 과거의 "Edge Function 전체 추천 생성"과 "클라이언트 claude 태그추출"은 코드만 남은 레거시다. 혼동하지 말 것.
 
-1. **현재 UI에 연결된 경로 (production)**: `App.tsx` → `lib/recommend.ts`(HTTP fetch) → Supabase Edge Function `recommend/index.ts`. Edge Function이 키워드 스코어링(`scoreKeyboard`)으로 후보를 40개 이하로 압축한 뒤 **OpenAI**(`gpt-5.4`)에 넘겨 추천 사유를 생성한다. `OPENAI_API_KEY`는 브라우저에 절대 내려가지 않고 Supabase secret에만 존재한다 (`recommend.ts`는 `apikey` 헤더만 보냄).
+**현행 프로덕션 경로 (UI 연결)**: `App.tsx` → `lib/recommend.ts`
 
-2. **결정론적 의도 하네스 (lib/, 테스트로만 검증됨 - 아직 UI 미연결)**: `extractRawTags.ts`(유일한 LLM 호출, `claude-sonnet-4-6`로 자연어→의도+명시제약 번역) → `intentProfile.ts`(의도를 차원별 태그로 정적 확장) → `intentSearch.ts`/`searchEngine.ts`(하드필터 + 소프트 스코어링 + 무결과 시 제약 완화). 설계 의도는 `docs/tag-extraction-flow.md` 참고. **"LLM은 번역만, 태그 확장·검색은 전부 결정론"**이 핵심 불변식이며, 같은 입력→같은 출력을 보장한다.
+- **freeform(자연어)**: `recommend.ts`가 `{mode:'extract'}`로 Edge Function `recommend/index.ts`를 호출하면, Edge Function이 **OpenAI**(`gpt-5.4`, `OPENAI_MODEL`로 override)로 자연어를 `{intents, hardConstraints, softIntentTags}`로 **태그추출만** 한다. 이후 클라이언트가 `expandIntents`(intentProfile) → `searchWithProfile`(intentSearch)로 **결정론 검색**하고 점수순 상위 3개로 압축한다.
+- **guided(단계선택)**: 네트워크 0회. `selectionOptionConverter`가 답변을 태그로 변환한 뒤 위와 동일한 결정론 검색을 탄다.
+- `OPENAI_API_KEY`는 브라우저에 절대 내려가지 않고 Supabase secret에만 존재한다(`recommend.ts`는 `apikey` 헤더만 보냄). 양쪽 모두 **"LLM은 번역(또는 0회)만, 태그 확장·검색·랭킹은 전부 결정론"**이라는 불변식을 지켜 같은 입력→같은 출력을 보장한다.
 
-`docs/tag-extraction-flow.md`는 경로 2를 "현재 흐름"으로 서술하지만 실제 `recommend.ts`는 경로 1(Edge Function)을 호출한다. 경로 2는 구축·테스트 완료됐으나 아직 `recommend.ts`에 배선되지 않았다 - 이 갭이 TODO의 "키보드 에이전트 직접 설계" 작업 대상이다.
+**레거시 (코드만 존재, 현 UI 미사용)**:
 
-### lib/ 파이프라인 핵심 모듈 (경로 2)
+- Edge Function 전체 추천 생성 모드: `scoreKeyboard`로 후보를 압축한 뒤 `gpt-5.4`가 후보 중 직접 선택·사유 생성 → `composeRecommendations`. `index.ts`에 남아있으나 현재 UI는 호출하지 않는다(해당 분기 주석 "현재 UI는 미사용" 참조).
+- 클라이언트 `extractRawTags.ts`의 LLM 호출(`claude-sonnet-4-6`, `dangerouslyAllowBrowser`). 프로덕션 추출은 Edge Function extract(OpenAI)가 담당하므로 이 함수들은 현재 직접 호출되지 않는다(타입·테스트용).
 
-- `extractRawTags.ts` - 자연어 → `ExtractedTags { hardConstraints, softIntentTags }` (LLM 1회)
+`docs/tag-extraction-flow.md`는 이 결정론 하네스의 설계를 서술한다(문서는 클라이언트 claude 추출 기준으로 작성됐고, 실제 프로덕션 추출은 Edge Function의 OpenAI extract가 대체한다). 과거 이 문서가 가리키던 "미연결" 갭은 해소됐다.
+
+### lib/ 결정론 파이프라인 핵심 모듈 (현행 검색 경로)
+
+- `extractRawTags.ts` - 태그 정제(`sanitizeTags`)와 타입 정의. 브라우저 LLM 추출 함수(`extractRawTags`/`extractIntentInput`, `claude-sonnet-4-6`)도 있으나 현행 프로덕션은 Edge Function extract를 쓰므로 미사용(테스트용)
 - `tagSchema.ts` - 소프트 의도 태그 어휘(controlled vocabulary)와 검증
 - `softTagRules.ts` - 소프트 태그 → 키보드 매칭 술어(규칙 맵)
 - `intentProfile.ts` - 고수준 의도(사무용/게이밍/휴대용)를 차원별 요구로 확장. 강도는 `필수`(하드 승격)/`선호`(소프트 점수)/`상관없음`. 명시 제약이 의도보다 우선.
@@ -70,11 +77,22 @@ keybuddy의 핵심은 **추천 엔진이 두 갈래로 존재**한다는 점이�
 - `softScorer.ts` - 소프트 태그 매칭 점수 → 랭킹
 - `searchEngine.ts`/`intentSearch.ts` - 무결과 시 제약을 우선순위 역순으로 1개씩 완화 후 재검색(`HARD_CONSTRAINT_RELAXATION_ORDER`). `searchKeyboards`는 LEGACY, `searchWithProfile`이 신규 진입점.
 
+### 이벤트 수집 (구매 클릭 / 추천 별점)
+
+추천 가설 검증용 데이터를 모으기 위해 두 가지 사용자 행동을 Supabase에 적재한다(커머스 아님, 실결제 없음).
+
+- `lib/session.ts` - 로그인 없는 익명 세션 식별자(localStorage UUID). 추천 -> 구매 클릭 -> 별점 흐름을 느슨하게 묶는다. PII 아님.
+- `lib/events.ts` - `purchase_click`('구매하기' 버튼 클릭, payload `{product_code}`)과 `rating`(추천 전체 별점, payload `{rating}`)을 anon key로 PostgREST `/rest/v1/events`에 직접 insert. **best-effort**라 설정 누락/네트워크 실패는 삼키고 `false`만 반환해 UX를 막지 않는다.
+- 스키마: `supabase/migrations/20260617000000_create_events.sql` - 단일 `events`(id, event_type, session_id, payload jsonb, created_at) + **insert-only RLS**(anon은 insert만, select/update/delete는 정책 부재로 기본 거부).
+- 검증: `__tests__/events.test.ts`가 payload 형태와 PostgREST 요청/실패 동작을 단위검증. 실제 적재는 라이브 Supabase에서 수동 확인(아래 README 참고).
+
 ## 데이터 파이프라인
 
 `crawl.py`는 다나와 **목록 페이지만** 조회한다(상세 페이지 요청 안 함, `DELAY_SEC` 레이트리밋 준수). 한 상품에 스위치 옵션이 여럿이면 제품-스위치 조합별 레코드로 펼치고 최종 **600개**로 제한(`TARGET_RECORDS`). 스위치 이름은 `src/data/switch_aliases.json` 규칙으로만 매칭하고, 매칭 실패는 추론하지 않고 `output/unmatched_switches.json`에 격리한다.
 
 카탈로그 `keyboards.json`은 **두 군데에 사본**으로 존재한다(프론트 표시용 + Edge Function 후보용). 반드시 `npm run sync:data`로 함께 갱신해야 둘이 엇갈리지 않는다.
+
+YouTube 타건 영상 링크는 공식 YouTube Data API로만 수집한다(YouTube HTML 검색/스크래핑 우회 금지). `impl/output/youtube_media_cache.json`은 누적 캐시이며, 다음 크롤링 때 캐시를 먼저 입히고 캐시 미스만 새로 검색한다. `keyboards.json`에는 영상 메타데이터 전체를 넣지 않고 `media_url`, `media_url_is_placeholder`만 반영한다. 제목·점수·채널 등 감사 정보는 `youtube_media_cache.json`/`youtube_media_report.json`에 둔다.
 
 ## 버전 관리
 
@@ -82,7 +100,7 @@ keybuddy의 핵심은 **추천 엔진이 두 갈래로 존재**한다는 점이�
 
 ## 테스트 규약
 
-`src/__tests__/`에 36개 vitest 스위트가 있다. 특징적인 패턴:
+`src/__tests__/`에 40개 vitest 스위트가 있다. 특징적인 패턴:
 
 - **`*LlmNoCall.test.ts`** - 결정론 경로가 실제로 LLM을 호출하지 않음을 강제하는 불변식 테스트. lib/ 검색 로직 수정 시 이 보증을 깨지 말 것.
 - **`*.goldset.test.ts`** - 정답셋 기반 정확도 회귀 테스트(하드제약/소프트의도 정확도).

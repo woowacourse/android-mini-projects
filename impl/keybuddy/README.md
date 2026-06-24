@@ -34,6 +34,7 @@ keybuddy/
 - `docs/tag-extraction-flow.md` - 자연어를 의도/제약 태그로 번역하고 결정론적으로 확장하는 흐름
 - `docs/intent-harness-before-after.md` - 의도 하네스 적용 전/후 정성 비교
 - `docs/deployment-version-management.md` - 배포 및 버전 관리 규칙
+- `docs/youtube-media-enrichment.md` - YouTube 타건 영상 링크 수집·캐시·동기화 운영 규칙
 
 ## 크롤링 데이터와 스위치 매칭
 
@@ -57,6 +58,19 @@ keybuddy/
 저장합니다. 옵션 링크가 없는 상품은 상품명 링크를 사용하며, 링크를 확인할 수 없으면
 `null`로 저장합니다. `media_url`은 실제 자료를 확보하기 전까지 `null`로 저장하고
 `media_url_is_placeholder`로 준비 중 상태를 표시합니다.
+
+타건 영상 링크는 기본 크롤링에는 포함하지 않고, 공식 YouTube Data API 키가 있을 때만
+선택적으로 보강합니다. 검색어는 `상품명 + raw_switch_name`(없으면 `switch_name`)이며,
+결과는 `../output/youtube_media_cache.json`에 누적합니다. 다음 실행에서는 캐시를 먼저
+입혀 이미 수집한 링크를 `keyboards.json`에 다시 반영하고, 캐시에 없는 항목만 새로
+검색합니다.
+
+```bash
+cd impl
+YOUTUBE_API_KEY=<key> python3 crawl.py --with-youtube --youtube-limit 90
+```
+
+`--youtube-limit 0`은 새 검색 없이 기존 캐시만 반영할 때 사용합니다.
 
 ## 요청 흐름
 
@@ -191,6 +205,33 @@ supabase functions deploy recommend --project-ref your-project-ref --use-api
 ```env
 VITE_SUPABASE_URL=https://your-project-ref.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-publishable-key
+```
+
+#### 이벤트 수집 테이블 적용
+
+구매 클릭/추천 별점을 수집하려면 `events` 테이블 마이그레이션을 한 번 적용해야 합니다.
+(같은 `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY`를 쓰는 프론트가 PostgREST로 직접 insert 합니다.)
+
+```bash
+cd impl/keybuddy
+supabase db push --project-ref your-project-ref
+```
+
+CLI를 쓰지 않는다면 Supabase 대시보드 SQL Editor에
+`supabase/migrations/20260617000000_create_events.sql` 내용을 붙여 실행해도 됩니다.
+이 마이그레이션은 anon에게 **insert만** 허용하는 RLS를 걸어, 이벤트는 적재만 되고
+브라우저로 다시 조회되지 않습니다.
+별점 이벤트는 한 추천 결과 화면에서 최초 1회만 적재하며, DB 정책에서도 `rating`
+payload가 `0.5` 이상 `5.0` 이하인 숫자인 경우만 허용합니다.
+
+**수동 적재 확인**: 프론트에서 추천을 받은 뒤 ① '구매하기' 버튼 클릭 ② 별점 클릭을 하고,
+대시보드 SQL Editor에서 다음으로 행이 쌓였는지 확인합니다.
+
+```sql
+select event_type, session_id, payload, created_at
+from public.events
+order by created_at desc
+limit 10;
 ```
 
 ## 로컬 실행
